@@ -1,0 +1,18 @@
+# Verificación de integridad de las imágenes (Tasca 5.1) — 17/11/2026 10:09
+# Comando: sha256sum <iso>  y comparación con el valor publicado por el fabricante
+
+IMAGEN                                   RESULTADO  SHA256 calculado
+mikrotik-7.24.5.iso                      COINCIDE   4bff16b8ee455eb00a0a5f183936fb0ecfd8f2bf3f5ba1ba64773d8375aaec02
+OPNsense-26.7-dvd-amd64.iso              N/C        1efd5dc9fa12a1f93571183fe5e3823e22e332872de8417fafb5e4e4d48d5dcd
+debian-13.1.0-amd64-netinst.iso          COINCIDE   658b28e209b578fe788ec5867deebae57b6aac5fce3692bbb116bab9c65568b3
+proxmox-ve_9.2-1.iso                     COINCIDE   4e88fe416df9b527624a175f24c9aa07c714d3332afb1ee3dbf3879573ef2c6c
+TrueNAS-SCALE-25.10.7.iso                COINCIDE   54ce9441ce66966a392e28f63604ca3c2c083d0bec4db7bb5af2f74f7a007c8e
+w2k25.iso                                N/C        b73c9688a4b8d165cadc8bf9a52d86d6483b397801b791ffd5e7d1be6cbd5d56
+win11.iso                                N/C        5f53774dcadf7f0aea1c6424a937fcfffe79b4d00aea83e17a5c5accd48cd6de
+
+# Fuentes de los valores oficiales
+MikroTik : https://download.mikrotik.com/routeros/7.24.5/mikrotik-7.24.5.iso.sha256
+Debian   : https://cdimage.debian.org/cdimage/archive/13.1.0/amd64/iso-cd/SHA256SUMS
+TrueNAS  : https://download.sys.truenas.net/TrueNAS-SCALE-Goldeye/25.10.7/TrueNAS-SCALE-25.10.7.iso.sha256
+Proxmox  : https://enterprise.proxmox.com/iso/SHA256SUMS
+OPNsense : https://pkg.opnsense.org/releases/26.7/OPNsense-26.7-checksums-amd64.sha256 (solo publica el hash del .bz2)

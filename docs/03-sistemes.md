@@ -18,7 +18,7 @@
 | Cliente Windows | Windows 11 Pro 25H2 (26200.6584) | `win11.iso` | https://www.microsoft.com/software-download/windows11 | Propietaria; sin activar en el laboratorio | `5f53774dcadf7f0aea1c6424a937fcfffe79b4d00aea83e17a5c5accd48cd6de` (N/C²) |
 | Cliente Linux | Debian 13.1 (GNOME) | `debian-13.1.0-amd64-netinst.iso` | https://www.debian.org/distrib/netinst | Libre (DFSG) | `658b28e209b578fe788ec5867deebae57b6aac5fce3692bbb116bab9c65568b3` |
 
-Resultado completo con los hashes y las URL de los valores oficiales: [`evidencies/logs/sha256-isos.txt`](../evidencies/logs/sha256-isos.txt).
+Resultado completo con los hashes y las URL de los valores oficiales: [`evidencias/logs/sha256-isos.txt`](../evidencias/logs/sha256-isos.txt).
 
 ¹ **OPNsense** publica el SHA256 del archivo comprimido (`.iso.bz2`), no de la ISO ya descomprimida. Por tanto, no se puede comparar directamente con el hash de la ISO. Se conserva el valor calculado para futuras comprobaciones.
 

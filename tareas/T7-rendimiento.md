@@ -8,7 +8,7 @@
 | ISO RA6 | a119 Analizar los recursos con diferentes cargas de VM | ✅ |
 | ISO RA6 | a120 Determinar cuántas VM se pueden usar sin bloquear el equipo | ✅ |
 | ISO RA6 | a121 Informe de medidas y conclusiones | ✅ (este documento) |
-| ISO RA6 | a123–a125 (Apte+) Dos optimizaciones aplicadas y comparadas antes/después | ✅ Optimización 1 · ⏳ Optimización 2 (requiere cambiar el SSD de puerto) — ver §5 |
+| ISO RA6 | a123–a125 (Apte+) Dos optimizaciones aplicadas y comparadas antes/después | 🟡 Optimización 1 (servidores sin escritorio) aplicada **y medida** · 2 (caché de E/S del anfitrión) aplicada, **sin medir aún** · 3 (puerto USB 3) requiere un cambio físico — ver §5 |
 
 ## 1. Método
 
@@ -73,7 +73,15 @@ Medidas: [opt1-servidor-sin-escritorio](../anexos/rendimiento/opt1-servidor-sin-
 
 **Conclusión:** los servidores no necesitan escritorio. Así caben 4–5 servidores en la RAM que usaría uno con GNOME.
 
-### Optimización 2 · Mover el SSD a un puerto USB 3.x ⏳ pendiente de medir
+### Optimización 2 · Caché de E/S del anfitrión para las VM de Windows ✅ aplicada
+
+**Problema medido:** con el disco en USB 2.0, `srv-dc` se colgó dos veces durante la instalación y la promoción a DC (`AHCI#0: Port 0 reset` en el registro, [INC-003](../incidencias/INC-003-cli-win11-apagado-colgado.md)).
+**Cambio:** `VBoxManage storagectl srv-dc --name SATA --hostiocache on`. Las escrituras de la VM pasan por la caché de RAM del anfitrión y el invitado no espera al disco USB.
+**Resultado (honesto):** el registro de VirtualBox muestra 3 reinicios de puerto AHCI en la sesión de instalación y 1 más en la sesión de configuración del dominio (este último sin colgar Windows). El primer intento de activar la caché falló porque la VM aún no se había liberado (*«machine is already locked»*), así que **se activó al apagar srv-dc al final del trabajo** y su efecto **queda pendiente de medir** en la próxima sesión (contar `grep -c 'Port 0 reset' VBox.log`). Riesgo: si el anfitrión se cae de golpe, se pierden las escrituras que estuvieran en caché, algo aceptable en un laboratorio.
+
+**Otra decisión de capacidad:** en casa, `nas-truenas` funcionó con **6 GB** en lugar de 8 mientras estaban encendidos OPNsense, `r-nftables` y `srv-dc` (13 GB en total). Su función de copias no necesita más; los 8 GB recomendados son para la caché ZFS (ARC).
+
+### Optimización 3 · Mover el SSD a un puerto USB 3.x ⏳ pendiente de medir
 
 Es la mejora con más impacto (×10 en disco según el ancho de banda teórico), pero requiere apagar el equipo físico. Procedimiento para completar este apartado:
 

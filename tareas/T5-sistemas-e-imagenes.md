@@ -2,10 +2,12 @@
 
 Este documento recoge lo **común** a todas las instalaciones. El detalle de cada sistema está en la ficha de su máquina ([`maquinas/`](../maquinas/)).
 
+Documentos relacionados: [comparación de los tres routers](T5-comparacion-routers.md) · [plan de copias de seguridad](T5-plan-de-copias.md).
+
 | RA | Criterio | Estado |
 |---|---|---|
 | ISO RA1 | a78 Requisitos y origen de las imágenes; verificar su integridad | ✅ §1 y §2 |
-| ISO RA1 | a79 Actualizar y comprobar antes de poner en producción | ✅ `r-nftables`, `srv-linux` · ⏳ resto |
+| ISO RA1 | a79 Actualizar y comprobar antes de poner en producción | ✅ `r-nftables`, `srv-linux`, `cli-linux` (13.8), `r-opnsense` (26.7 → 26.7.9_3) · ⏳ Proxmox |
 | ISO RA1 | a258 Posibles problemas, configuraciones críticas y tiempos de respuesta | ✅ §4 |
 | ISO RA1 | a259 Preparar el espacio de copias en TrueNAS: qué, cómo y dónde | ✅ [nas-truenas §2](../maquinas/nas-truenas/README.md) |
 | ISO RA3 | a105 (Apte+) Automatizar las copias | ✅ §3 |
@@ -17,14 +19,14 @@ Este documento recoge lo **común** a todas las instalaciones. El detalle de cad
 | Función | Máquina | Sistema y versión | Licencia | Estado |
 |---|---|---|---|---|
 | Router 1 | [`r-mikrotik`](../maquinas/r-mikrotik/README.md) | MikroTik RouterOS **CHR 7.24.5** | Propietaria; CHR *free* (1 Mbit/s de subida por interfaz) | ✅ Instalado y configurado |
-| Router 2 | [`r-opnsense`](../maquinas/r-opnsense/README.md) | OPNsense **26.7** | BSD-2 | ⏳ ISO verificada y montada |
+| Router 2 | [`r-opnsense`](../maquinas/r-opnsense/README.md) | OPNsense **26.7.9_3** | BSD-2 | ✅ Instalado y configurado |
 | Router 3 | [`r-nftables`](../maquinas/r-nftables/README.md) | Debian **13.8** sin escritorio + nftables + dnsmasq | Libre (DFSG) | ✅ Instalado y configurado |
 | NAS / copias | [`nas-truenas`](../maquinas/nas-truenas/README.md) | TrueNAS **25.10.7** Community «Goldeye» | GPL; soporte de pago opcional | ✅ Instalado y configurado |
 | Virtualización | [`pve1-3`](../maquinas/pve1/README.md) | Proxmox VE **9.2-1** | AGPLv3; repositorio *enterprise* de pago | ⏳ ISO verificada y montada (clúster en el equipo de clase) |
-| Dominio | [`srv-dc`](../maquinas/srv-dc/README.md) | Windows Server 2025 Standard Evaluation | Propietaria; evaluación 180 días | ⏳ Falta la ISO |
+| Dominio | [`srv-dc`](../maquinas/srv-dc/README.md) | Windows Server 2025 Standard Evaluation (26100) | Propietaria; evaluación 180 días | ✅ DC de `iso29.lan` |
 | Servidor Linux | [`srv-linux`](../maquinas/srv-linux/README.md) | Debian **13.8** sin escritorio | Libre (DFSG) | ✅ Instalado, configurado, RAID |
 | Cliente Windows | [`cli-win11`](../maquinas/cli-win11/README.md) | Windows 11 (`w11.iso`) | Propietaria; sin activar | ✅ Instalado · ⏳ configurar |
-| Cliente Linux | [`cli-linux`](../maquinas/cli-linux/README.md) | Debian **13.7** con GNOME | Libre (DFSG) | ✅ Instalado y reparado ([INC-001](../incidencias/INC-001-cli-linux-pantalla-negra-sin-grub.md)) · ⏳ configurar |
+| Cliente Linux | [`cli-linux`](../maquinas/cli-linux/README.md) | Debian **13.8** con GNOME | Libre (DFSG) | ✅ Reparado ([INC-001](../incidencias/INC-001-cli-linux-pantalla-negra-sin-grub.md)) y configurado |
 
 ### Requisitos mínimos oficiales frente a lo asignado
 
@@ -54,6 +56,7 @@ Todas descargadas **por HTTPS de la web oficial** del fabricante. Se calcula `sh
 | `OPNsense-26.7-dvd-amd64.iso.bz2` | `95cafedd…186bfb` | `checksums-amd64.sha256` de pkg.opnsense.org | ✅ Coincide (OPNsense publica la suma del `.bz2`) |
 | `OPNsense-26.7-dvd-amd64.iso` (descomprimida) | `1efd5dc9…d5dcd` | — | Igual al valor anotado el 17/11 |
 | `w11.iso` (usada en `cli-win11`) | `5210deed…89119dc8` | Microsoft no publica la suma de esta imagen | ⚠️ **N/C** |
+| `26100.1742…SERVER_EVAL_x64FRE_en-us.iso` (Evaluation Center, 6,0 GB) | `d0ef4502…9b23d` | Microsoft no publica la suma | ⚠️ **N/C** (descargada de `go.microsoft.com` por HTTPS) |
 
 > **Corrección:** el 17/11 figuraba para Windows 11 la suma `5f53774d…`, de otro fichero (`win11.iso` 25H2). La imagen con la que está instalada `cli-win11` es la `w11.iso` del disco, cuya suma es `5210deed…`. No se puede comparar con un valor oficial.
 

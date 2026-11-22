@@ -19,7 +19,7 @@
 | **a226** Parámetros de red | ✅ | IP fija con *commit/checkin* · [03-red-ip-fija.txt](salidas/03-red-ip-fija.txt) · [tn-10](capturas/tn-10-web-red-ip-fija.png) · [INC-005](../../incidencias/INC-005-truenas-cambio-de-ip-revertido.md) |
 | **a227** Disco adicional para las copias de los equipos críticos | ✅ | Disco de 20 GB separado del sistema → pool `copias` · [tn-07](capturas/tn-07-web-almacenamiento-pool.png) |
 | **a259** Preparar el espacio de copias y justificar qué, cómo y dónde | ✅ | Datasets y usuarios por máquina · [01-pool-datasets.txt](salidas/01-pool-datasets.txt) · [02-usuarios-y-ssh.txt](salidas/02-usuarios-y-ssh.txt) · [tn-08](capturas/tn-08-web-datasets.png) · [tn-09](capturas/tn-09-web-usuarios.png) |
-| Recibe copias reales | ✅ | `r-mikrotik`, `r-nftables` y `srv-linux` · [04-copias-recibidas.txt](salidas/04-copias-recibidas.txt) |
+| Recibe copias reales | ✅ | `r-mikrotik`, `r-nftables`, `srv-linux`, `r-opnsense`, `srv-dc` y `cli-linux` · [04-copias-recibidas.txt](salidas/04-copias-recibidas.txt) y las salidas de cada máquina |
 
 ## 1. Instalación
 
@@ -41,7 +41,10 @@ Instalador de texto ([capturas tn-01…05](capturas/)): *Install/Upgrade* → di
 | `r-mikrotik` | Backup cifrado + export | `/tool fetch` SFTP (contraseña) | Diario 02:30 (`/system scheduler`) |
 | `r-nftables` | Configuración del router (4 KB) | `copia-config.sh` → SFTP (clave) | Diario 02:00 (systemd) |
 | `srv-linux` | `/etc` + paquetes + RAID (408 KB) | `copia-config.sh` → SFTP (clave) | Diario 02:00 (systemd) |
-| `cli-win11`, `cli-linux`, `srv-dc`, `r-opnsense`, `proxmox` | Ver la ficha de cada uno | Carpeta y usuario por crear | ⏳ |
+| `r-opnsense` | `config.xml` **cifrado AES-256** (44 KB) | `copia-opnsense.sh` → SFTP (clave) | Bajo demanda / antes de cada cambio |
+| `srv-dc` | AD (`ntdsutil ifm`) + SYSVOL + GPO + CSV (4,7 MB) | `copia-ad.ps1` → SCP (clave) | Diario 02:30 (tarea programada, SYSTEM) |
+| `cli-linux` | `/etc` + paquetes + `/home/mauro` (1,1 MB) | `copia-config.sh` → SFTP (clave) | Diario 02:00 (systemd) |
+| `cli-win11`, `proxmox`, `srv-linux2` | — | Carpeta creada; usuario pendiente | ⏳ |
 
 ## 3. Limitaciones (honestas)
 

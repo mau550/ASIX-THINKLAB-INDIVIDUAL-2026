@@ -1,26 +1,87 @@
 # `r-opnsense` · Router 2 · OPNsense
 
-> **Estado: ⏳ VM creada y con la ISO verificada montada. Falta instalar y configurar** (el instalador y la configuración inicial necesitan la consola y la web).
-
 | Dato | Valor |
 |---|---|
-| Función | Router y cortafuegos de la LAN (alternativa 2 de 3), administrado por web |
-| Sistema | OPNsense 26.7 (FreeBSD) |
-| Imagen | `OPNsense-26.7-dvd-amd64.iso.bz2`: SHA256 `95cafedd…186bfb` = **coincide** con `OPNsense-26.7-checksums-amd64.sha256` oficial. ISO descomprimida: `1efd5dc9…d5dcd`, igual al valor anotado el 17/11 |
-| Recursos | 2 vCPU · 2 GB RAM · 20 GB VDI · BIOS |
-| Red | Adaptador 1 = WAN (NAT) → `em0` · Adaptador 2 = LAN `lan-iso` → `em1` = **192.168.29.1/24** |
-| Configuración VirtualBox | [config/virtualbox-showvminfo.txt](config/virtualbox-showvminfo.txt) |
+| Función | Router y cortafuegos de la LAN (alternativa 2 de 3), administrado por web y API REST |
+| Sistema | **OPNsense 26.7.9_3** (FreeBSD 15), instalado desde 26.7 y actualizado |
+| Imagen | `OPNsense-26.7-dvd-amd64.iso.bz2` SHA256 `95cafedd…186bfb` = **coincide** con el valor oficial; ISO descomprimida `1efd5dc9…d5dcd` |
+| Recursos | 2 vCPU · 2 GB RAM (**3 GB solo durante la instalación**, ver §1) · 20 GB · BIOS · sistema de ficheros UFS |
+| Red | `em0` = WAN (NAT, DHCP 10.0.2.15) · `em1` = LAN `lan-iso` **192.168.29.1/24**, DHCP .100–.200 |
+| Usuarios | `root` (consola) y **`mauro`** (grupo `admins`) · clave de API de `root` para la automatización (fuera del repositorio) |
+| Configuración | [VirtualBox](config/virtualbox-showvminfo.txt) · copia cifrada: [scripts/copia-opnsense.sh](../../scripts/copia-opnsense.sh) |
 
-## Criterios pendientes: a210 a a216 (y a105)
+## Estado por criterio
 
-## Guía para completarla (≈ 40 min)
+| Criterio | Estado | Evidencia |
+|---|---|---|
+| **a210** Instalar, versión y funcionamiento | ✅ | [opn-01…04](capturas/) (instalador) · [opn-13 panel](capturas/opn-13-panel.png) · [01-usuario-y-version.txt](salidas/01-usuario-y-version.txt) |
+| **a79** Actualizar antes de producción | ✅ | 26.7 con **96 actualizaciones pendientes** ([opn-08](capturas/opn-08-actualizaciones-pendientes.png)) → **26.7.9_3** ([opn-12](capturas/opn-12-version-actualizada.png)) |
+| **a211** Usuarios de administración | ✅ | `mauro` en `admins` · [opn-11](capturas/opn-11-usuarios-root-y-mauro.png) |
+| **a212** Red WAN y LAN | ✅ | Consola: asignación `em0`/`em1` e IP de la LAN · [opn-06](capturas/opn-06-asignar-wan-em0-lan-em1.png) · [opn-07](capturas/opn-07-lan-192.168.29.1-dhcp.png) |
+| **a213** Acceso a Internet desde la LAN | ✅ | NAT de salida automático; `srv-linux`, `srv-dc` y `cli-linux` salen a Internet |
+| **a214** Conexión permitida y bloqueada; registro | ✅ | [02-reglas-y-orden.txt](salidas/02-reglas-y-orden.txt) · [opn-09](capturas/opn-09-reglas-lan-orden-correcto.png) · [opn-10 Live View](capturas/opn-10-registro-permitido-y-bloqueado.png) |
+| **a215** Copia en el servidor de copias | ✅ | `config.xml` **cifrado AES-256** → SFTP con clave a `c-opnsense` · [03-copia-al-nas.txt](salidas/03-copia-al-nas.txt) |
+| **a216** Fallo provocado y recuperación | ✅ | Reglas borradas → restaurado desde el NAS en **69 s** · [04-fallo-y-recuperacion.txt](salidas/04-fallo-y-recuperacion.txt) · [opn-14…17](capturas/) |
 
-1. **Instalar:** `VBoxManage startvm r-opnsense`. Entrar como `installer` / `opnsense` → *Install (UFS)* → disco `ada0` → contraseña de root → *Complete Install*. Después, apagar y quitar la ISO:
-   `VBoxManage storageattach r-opnsense --storagectl SATA --port 1 --medium emptydrive`
-2. **Interfaces (consola, opción 1 y 2):** WAN = `em0` por DHCP; LAN = `em1` → `192.168.29.1/24`, DHCP .100–.200. 📸 consola con las dos IP.
-3. **Solo un router a la vez:** `VBoxManage controlvm r-mikrotik setlinkstate2 off` y lo mismo con `r-nftables`.
-4. **Web** desde un cliente de la LAN (`https://192.168.29.1`): asistente inicial, zona horaria `Europe/Madrid`, **System → Firmware → Updates** (a79). 📸 versión antes y después.
-5. **Usuario propio (a211):** *System → Access → Users* → `mauro`, grupo `admins`. 📸
-6. **Reglas (a214):** *Firewall → Rules → LAN*: Pass TCP 443 con *Log*; Block TCP 80 con *Log*; **por encima** de la regla *Default allow LAN*. Prueba desde `srv-linux` con `curl` y 📸 de *Firewall → Log Files → Live View* con las dos líneas.
-7. **Copia (a215):** *System → Configuration → Backups* → descargar el XML (cifrado) → subirlo con `scp` a `c-opnsense@192.168.29.10:/mnt/copias/r-opnsense/`. Antes hay que crear el usuario `c-opnsense` en TrueNAS como los demás ([nas-truenas](../nas-truenas/README.md)).
-8. **Fallo y recuperación (a216):** borrar la regla de NAT de salida o las reglas LAN → el cliente se queda sin Internet → *Backups → Restore* con el XML bajado del NAS → el cliente vuelve a tener Internet. 📸 de cada paso y anotar el tiempo.
+## 1. Instalación
+
+1. Arranque de la ISO en modo *live* ([opn-01](capturas/opn-01-arranque-live-26.7.png)); por defecto asigna `em0` = LAN y `em1` = WAN, al revés que en mi diseño.
+2. Login `installer` → teclado por defecto → **Install (UFS)** ([opn-02](capturas/opn-02-instalador-ufs.png)). Elijo UFS en vez de ZFS porque ZFS gasta más RAM y un router de 2 GB no necesita instantáneas.
+3. El instalador avisa: *«detected only 2047MB of RAM … requires at least 3000MB»* (copia el sistema *live* a la RAM). **Decisión:** apagar, subir la RAM a 3 GB solo para instalar y volver a dejarla en 2 GB después.
+4. Disco `ada0` ([opn-03](capturas/opn-03-disco-ada0.png)) → contraseña de root → *Complete Install* → quitar la ISO.
+5. Consola, **opción 1** (asignar interfaces): WAN = `em0`, LAN = `em1` ([opn-06](capturas/opn-06-asignar-wan-em0-lan-em1.png)). **Opción 2**: LAN 192.168.29.1/24, sin IPv6, DHCP .100–.200 ([opn-07](capturas/opn-07-lan-192.168.29.1-dhcp.png)).
+6. Como en las otras alternativas, **un solo router a la vez**: se desconecta la LAN de los demás (`VBoxManage controlvm r-mikrotik setlinkstate2 off`).
+
+## 2. Administración por API REST
+
+Desde la sesión web de `root` se generó una clave de API (`/api/auth/user/add_api_key/root`). Con ella todo lo demás se hizo **por API**, que es reproducible y queda registrado:
+
+| Acción | Llamada |
+|---|---|
+| Comprobar y aplicar actualizaciones | `POST /api/core/firmware/check` · `POST /api/core/firmware/update` |
+| Crear el usuario `mauro` | `POST /api/auth/user/add` (grupo 1999 = `admins`) |
+| Reglas | `POST /api/firewall/filter/add_rule` · `set_rule` · `del_rule` · `apply` |
+| Registro del cortafuegos | `GET /api/diagnostics/firewall/log` |
+| Copia de la configuración | `GET /api/core/backup/download/this` |
+
+## 3. Reglas y **orden de evaluación** (a214)
+
+| Prueba | Reglas | `curl http://` desde srv-linux | Registro |
+|---|---|---|---|
+| 1 | Mis reglas con secuencia 50 y 51, **detrás** de *Default allow LAN to any* (secuencia 1) | **302: pasa** ❌ | Nada: coincide antes la regla por defecto, que no registra |
+| 2 | *Default allow* movidas a la secuencia 100 y 101 | **Bloqueado** ✅ | 7 × `block … :80 … BLOQUEO-HTTP` |
+
+**Lección:** igual que en MikroTik y nftables, las reglas se evalúan **en orden y gana la primera que coincide**. Una regla de bloqueo colocada detrás de un «permitir todo» no sirve de nada.
+
+| Secuencia | Acción | Qué | Registro |
+|---|---|---|---|
+| 50 | pass | TCP LAN → any:443 | `PERMITIDO-HTTPS` |
+| 51 | block | TCP LAN → any:80 | `BLOQUEO-HTTP` |
+| 100 | pass | LAN → any (por defecto) | — |
+
+![Registro en vivo](capturas/opn-10-registro-permitido-y-bloqueado.png)
+
+**Interpretación:** las líneas rojas son SYN de `192.168.29.14` hacia `130.89.148.77:80`, descartados por `BLOQUEO-HTTP` (`curl` reintenta cada segundo). La línea verde `PERMITIDO-HTTPS` de `192.168.29.13` es el controlador de dominio saliendo por HTTPS. Las líneas `anti-lockout rule` hacia 192.168.29.1:443 son mi propia sesión web, que esa regla protege para no quedarme sin acceso.
+
+> Efecto secundario descubierto: al bloquear HTTP, Windows no puede comprobar la revocación de certificados (CRL/OCSP van por el puerto 80) → [INC-008](../../incidencias/INC-008-windows-crl-bloqueada-por-http.md).
+
+## 4. Copia de seguridad (a215)
+
+[`scripts/copia-opnsense.sh`](../../scripts/copia-opnsense.sh):
+
+1. Descarga `config.xml` por la API.
+2. Lo **cifra con AES-256-CBC + PBKDF2 (200 000 iteraciones)**, porque contiene los hashes de contraseñas y los secretos de la API.
+3. Calcula el SHA256 y lo sube por **SFTP con clave ed25519** al usuario `c-opnsense` del NAS, que solo ve `/mnt/copias/r-opnsense`.
+
+| Qué se copia | Qué no | Por qué |
+|---|---|---|
+| `config.xml` (44 KB): interfaces, reglas, NAT, DHCP, usuarios y certificados | El sistema (se reinstala en 15 min) y los gráficos RRD | Toda la configuración de OPNsense está en ese único fichero |
+
+## 5. Fallo provocado y recuperación (a216)
+
+| Paso | Qué | Resultado |
+|---|---|---|
+| Fallo | Borrar mis reglas y **desactivar** las *Default allow LAN* por API → la LAN no tiene ninguna regla de paso | [opn-14](capturas/opn-14-fallo-reglas-borradas.png) |
+| Efecto | `srv-dc` → **SIN INTERNET** | |
+| Recuperación | `sftp get` del NAS → `sha256sum -c` (coincide) → `openssl enc -d` → *System › Configuration › Backups › Restore* con reinicio ([opn-15](capturas/opn-15-restaurar-config-desde-nas.png), [opn-16](capturas/opn-16-restaurada-reiniciando.png)) | |
+| Después | Reglas 50/51/100/101 de vuelta y activas ([opn-17](capturas/opn-17-recuperado-reglas.png)) · `srv-dc` → **HTTPS 200** | **69 s** |

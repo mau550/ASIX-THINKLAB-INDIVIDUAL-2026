@@ -2,6 +2,8 @@
 
 La T8 es un caso práctico **presencial** (25/11/2026) sobre este entorno, así que no se puede «hacer» de antemano. Aquí está lo necesario para resolverlo rápido y con método.
 
+Material de repaso: [chuleta de las máquinas](../defensa/resumen-por-vm.md) · [banco de preguntas por RA](../defensa/preguntas.md).
+
 | RA | Criterios | Cómo llego preparado |
 |---|---|---|
 | FDM RA1 | a25 · a26 Diagnosticar y resolver la incidencia de hardware, justificarla y comprobarla | Método de §1 + herramientas de la [T2](T2-equipos-clase-y-casa.md) y la [T7](T7-rendimiento.md). Ensayo real: [INC-002](../incidencias/INC-002-ssd-portatil-en-usb2.md) |

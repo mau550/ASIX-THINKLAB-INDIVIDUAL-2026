@@ -5,7 +5,7 @@
 | ISO RA3 | a102 Crear y verificar al menos tres tipos de RAID | ✅ RAID 0, 1 y 5 en [`srv-linux`](../maquinas/srv-linux/README.md), con fallo y reconstrucción |
 | ISO RA3 | a103 Explicar qué aporta cada tipo de RAID | ✅ §1 |
 | ISO RA3 | a107 (Apte+) Investigar y justificar el espejo entre discos de dos equipos | ✅ §4 |
-| ISO RA3 | a108 · a109 (Apte+) Implementarlo, verificarlo y explicar un caso de uso | ⏳ Diseño hecho; falta un segundo servidor Debian (se puede clonar `srv-linux`) |
+| ISO RA3 | a108 · a109 (Apte+) Implementarlo, verificarlo y explicar un caso de uso | ✅ DRBD entre `srv-linux` y `srv-linux2`: caída del primario, relevo en 3,5 s y cero pérdida ([§5](#5-espejo-drbd-implementado-a108-a109)) |
 
 ## 1. Qué aporta cada RAID
 
@@ -97,7 +97,7 @@ Un RAID 1 protege contra la avería de un **disco**, pero no contra la caída de
 
 **Caso de uso:** el servidor de ficheros de *Administración* replicado entre dos servidores. Si el primario se apaga, el secundario se promueve a primario (`drbdadm primary`), se montan los datos y el servicio sigue con **cero pérdida** de lo ya escrito.
 
-**Implementación prevista (a108, a109):**
+**Órdenes de la implementación (a108, a109):**
 
 ```bash
 # 1. Clonar srv-linux como srv-linux2 (192.168.29.16) y añadir un disco de 1 GB a cada uno
@@ -110,3 +110,15 @@ sudo drbdadm create-md espejo && sudo drbdadm up espejo
 sudo drbdadm primary --force espejo && sudo mkfs.ext4 /dev/drbd0 && sudo mount /dev/drbd0 /srv/espejo
 # 4. Prueba: escribir datos → apagar srv-linux → en srv-linux2: drbdadm primary espejo; mount; sha256sum -c
 ```
+
+## 5. Espejo DRBD implementado (a108, a109)
+
+| Prueba | Resultado |
+|---|---|
+| Sincronización inicial (1 GB, protocolo C) | 55 s → `UpToDate/UpToDate` |
+| Caída del primario (`poweroff` de srv-linux) | srv-linux2 promovido a primario y datos montados en **3,5 s** |
+| Integridad | `sha256sum -c` → **La suma coincide** en srv-linux2 |
+| Trabajo durante la caída | Fichero nuevo creado en srv-linux2 |
+| Vuelta del nodo caído | Entra como secundario, recibe los cambios y vuelve a ser primario **con el fichero nuevo** |
+
+Detalle completo, capturas y caso de uso: [`maquinas/srv-linux2`](../maquinas/srv-linux2/README.md).

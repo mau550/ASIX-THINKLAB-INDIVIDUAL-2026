@@ -2,7 +2,7 @@
 
 | RA | Criterio | Estado |
 |---|---|---|
-| FDM RA1 | a17 Preparar el entorno propio de pruebas | ✅ 11 VM creadas; 6 instaladas y 4 configuradas por completo |
+| FDM RA1 | a17 Preparar el entorno propio de pruebas | ✅ 12 VM creadas (11 del diseño + `srv-linux2` para el espejo); 9 instaladas y configuradas |
 | FDM RA1 | a18 Identificar los recursos físicos y justificar sus limitaciones | ✅ §2 y §4 (medido en [T7](T7-rendimiento.md)) |
 | FDM RA1 | a127 (Apte+) Documentar en Markdown y Git: esquema de VM, recursos y problemas resueltos | ✅ Este repositorio |
 
@@ -36,17 +36,18 @@ Todas en el grupo de VirtualBox `/ISO-individual`, con discos VDI **dinámicos**
 | VM | Función | Sistema | vCPU | RAM | Disco | Firmware | Red | Estado |
 |---|---|---|---:|---:|---|---|---|---|
 | [`r-mikrotik`](../maquinas/r-mikrotik/README.md) | Router 1 | RouterOS CHR 7.24.5 | 1 | 256 MB | 89 MB (imagen CHR) | BIOS | NAT + `lan-iso` | ✅ Configurado y probado |
-| [`r-opnsense`](../maquinas/r-opnsense/README.md) | Router 2 | OPNsense 26.7 | 2 | 2 GB | 20 GB | BIOS | NAT + `lan-iso` | ⏳ ISO montada |
+| [`r-opnsense`](../maquinas/r-opnsense/README.md) | Router 2 | OPNsense 26.7.9_3 | 2 | 2 GB | 20 GB | BIOS | NAT + `lan-iso` | ✅ Configurado y probado |
 | [`r-nftables`](../maquinas/r-nftables/README.md) | Router 3 | Debian 13.8 + nftables | 1 | 1 GB | 8 GB | BIOS | NAT + `lan-iso` | ✅ Configurado y probado |
 | [`nas-truenas`](../maquinas/nas-truenas/README.md) | NAS / copias | TrueNAS 25.10.7 | 2 | 8 GB | 20 + 20 GB | BIOS | `lan-iso` | ✅ Configurado; recibe copias |
 | [`pve1`](../maquinas/pve1/README.md) | Nodo Proxmox | Proxmox VE 9.2 | 2 | 4 GB | 32 GB | UEFI, VT-x anidada | `lan-iso` | ⏳ ISO montada |
 | [`pve2`](../maquinas/pve2/README.md) | Nodo Proxmox | Proxmox VE 9.2 | 2 | 4 GB | 32 GB | UEFI, VT-x anidada | `lan-iso` | ⏳ ISO montada |
 | [`pve3`](../maquinas/pve3/README.md) | Nodo Proxmox | Proxmox VE 9.2 | 2 | 4 GB | 32 GB | UEFI, VT-x anidada | `lan-iso` | ⏳ ISO montada |
-| [`srv-dc`](../maquinas/srv-dc/README.md) | Dominio | Windows Server 2025 Eval. | 2 | 4 GB | 50 GB | UEFI + TPM 2.0 | `lan-iso` | ⏳ Falta la ISO |
-| [`srv-linux`](../maquinas/srv-linux/README.md) | Servidor Linux + RAID | Debian 13.8 sin escritorio | 1 | 1 GB | 10 GB + 4 × 1 GB | BIOS | `lan-iso` | ✅ Configurado; RAID 0/1/5 |
+| [`srv-dc`](../maquinas/srv-dc/README.md) | Dominio `iso29.lan` | Windows Server 2025 Eval. | 2 | 4 GB | 50 GB | UEFI + TPM 2.0 | `lan-iso` | ✅ DC, OU, GPO y copias |
+| [`srv-linux`](../maquinas/srv-linux/README.md) | Servidor Linux + RAID | Debian 13.8 sin escritorio | 1 | 1 GB | 10 GB + 5 × 1 GB | BIOS | `lan-iso` | ✅ RAID 0/1/5 y DRBD |
+| [`srv-linux2`](../maquinas/srv-linux2/README.md) | Espejo DRBD (T6) | Debian 13.8 (clon) | 1 | 1 GB | 10 GB + 1 GB | BIOS | `lan-iso` | ✅ Relevo probado |
 | [`cli-win11`](../maquinas/cli-win11/README.md) | Cliente Windows | Windows 11 | 2 | 4 GB | 80 GB | UEFI + SB + TPM 2.0 | NAT → `lan-iso` | ✅ Instalado · ⏳ configurar |
-| [`cli-linux`](../maquinas/cli-linux/README.md) | Cliente Linux | Debian 13.7 + GNOME | 1 | 2 GB | 20 GB | BIOS | NAT → `lan-iso` | ✅ Reparado · ⏳ configurar |
-| | | | **18** | **34,25 GB** | | | | |
+| [`cli-linux`](../maquinas/cli-linux/README.md) | Cliente Linux | Debian 13.8 + GNOME | 1 | 2 GB | 20 GB | BIOS | `lan-iso` (DHCP) | ✅ Reparado y configurado |
+| | | | **19** | **35,25 GB** | | | | |
 
 ## 3. Esquema
 

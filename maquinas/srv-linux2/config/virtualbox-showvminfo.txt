@@ -1,0 +1,17 @@
+name="srv-linux2"
+groups="/ISO-individual"
+ostype="Debian (64-bit)"
+memory=1024
+firmware="BIOS"
+cpus=1
+rtcuseutc="on"
+"SATA-0-0"="~/VirtualBox VMs/ISO-individual/ISO-individual/srv-linux2/srv-linux2.vdi"
+"SATA-1-0"="~/VirtualBox VMs/ISO-individual/ISO-individual/srv-linux2/drbd.vdi"
+"SATA-2-0"="none"
+"SATA-3-0"="none"
+"SATA-4-0"="none"
+"SATA-5-0"="none"
+"SATA-6-0"="none"
+"SATA-7-0"="none"
+intnet1="lan-iso"
+nic1="intnet"

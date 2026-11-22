@@ -6,7 +6,7 @@
 | Sistema | Debian GNU/Linux **13.8** «trixie», **sin entorno gráfico**, núcleo 6.12.117 |
 | Imagen | `debian-13.1.0-amd64-netinst.iso` (SHA256 verificado, ver [T5](../../tareas/T5-sistemas-e-imagenes.md)) |
 | Instalación | Desatendida (`VBoxManage unattended install`) → [INC-004](../../incidencias/INC-004-instalacion-desatendida-postinstall-fallido.md) |
-| Recursos | 1 vCPU · 1 GB RAM · disco de sistema 10 GB · **4 discos de 1 GB** para RAID (`raid1…4.vdi`) · BIOS · RTC en UTC |
+| Recursos | 1 vCPU · 1 GB RAM · disco de sistema 10 GB · **4 discos de 1 GB** para RAID (`raid1…4.vdi`) + **1 disco de 1 GB para DRBD** · BIOS · RTC en UTC |
 | Red | `enp0s3` en `lan-iso`, **IP fija 192.168.29.14/24**, pasarela y DNS 192.168.29.1 |
 | Usuario | `mauro` (grupos `sudo`, `adm`; `sudo` **pide contraseña**), SSH solo con clave. El `sudo` sin contraseña temporal de la configuración automatizada se retiró al terminar |
 | Paquetes añadidos | `openssh-server`, `sudo`, `mdadm`, `rsync`, `curl`, `traceroute`, `dnsutils` |
@@ -24,6 +24,7 @@
 | **a246** Software necesario para su función | ✅ | Base mínima + SSH + `mdadm`; sin software adicional, como pide el enunciado |
 | **a102** Crear y verificar **3 tipos de RAID** | ✅ | RAID 0, 1 y 5 · [T6](../../tareas/T6-almacenamiento-y-recuperacion.md) |
 | a105 (Apte+) Automatizar las copias | ✅ | `copia-config.timer` diario a las 02:00 |
+| **a107–a109** (Apte+) Espejo entre discos de **dos equipos** | ✅ | DRBD con [`srv-linux2`](../srv-linux2/README.md): caída del primario y relevo en 3,5 s sin pérdida |
 | T4 (Apte+) `ping`, `traceroute` y rutas desde la LAN | ✅ | Con los dos routers · [06](salidas/06-red-y-cortafuegos-mikrotik.txt) · [07](salidas/07-red-y-cortafuegos-nftables.txt) |
 
 ## 1. ¿Por qué sin escritorio?
@@ -59,3 +60,9 @@ El original queda en `/etc/apt/sources.list.orig` para poder volver atrás.
 | `/etc` completo (408 KB comprimido) | El sistema operativo | Debian se reinstala en 15 min; la configuración es lo que no se puede recuperar |
 | Lista de paquetes (`dpkg --get-selections`) | `/var/cache`, `/tmp`, registros | Con la lista, `dpkg --set-selections` + `apt-get dselect-upgrade` reinstala los mismos programas |
 | Estado de los RAID (`/proc/mdstat`, `mdadm --detail --scan`) | El contenido de `/srv/raid*` (datos de prueba) | Para reconstruir los arrays con la misma definición. Los datos de una empresa tendrían su propia copia (un RAID **no es una copia**) |
+
+## 5. Espejo DRBD con `srv-linux2` (T6, Apte+)
+
+`srv-linux` es el **primario** del recurso `espejo` (`/dev/drbd0` montado en `/srv/espejo`). Detalle y prueba de caída: [`srv-linux2`](../srv-linux2/README.md).
+
+![DRBD primario con datos](capturas/srv-09-espejo-drbd-primario-con-datos.png)

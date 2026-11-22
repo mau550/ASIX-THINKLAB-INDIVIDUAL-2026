@@ -9,5 +9,9 @@
 | [INC-005](INC-005-truenas-cambio-de-ip-revertido.md) | `nas-truenas` | Red | El cambio a IP fija se revierte solo por falta de *checkin* | ✅ |
 | [INC-006](INC-006-mikrotik-sftp-status-4.md) | `r-mikrotik` | Copias | `/tool fetch` SFTP falla con ruta relativa (`status 4`) | ✅ |
 | [INC-007](INC-007-debian-hora-y-dns-tras-cambiar-red.md) | `srv-linux`, `r-nftables` | Configuración | Hora +1 h (RTC) y `resolv.conf` vacío al pasar a IP fija | ✅ |
+| [INC-008](INC-008-windows-crl-bloqueada-por-http.md) | `srv-dc` / `r-opnsense` | Red | Windows no valida certificados: la CRL/OCSP va por HTTP y está bloqueado | 🔎 Explicada |
+| [INC-009](INC-009-scp-como-system-clave-desprotegida.md) | `srv-dc` | Copias | `scp` como SYSTEM rechaza la clave: propietario incorrecto | ✅ |
+| [INC-010](INC-010-opnsense-regla-de-bloqueo-que-no-bloquea.md) | `r-opnsense` | Cortafuegos | La regla de bloqueo estaba detrás de *Default allow* | ✅ |
+| [INC-011](INC-011-ad-samaccountname-20-caracteres.md) | `srv-dc` | Dominio | `sAMAccountName` de más de 20 caracteres | ✅ |
 
 Plantilla: [plantilla.md](plantilla.md).

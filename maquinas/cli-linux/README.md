@@ -3,10 +3,10 @@
 | Dato | Valor |
 |---|---|
 | Función | Cliente de escritorio GNU/Linux de la empresa |
-| Sistema | Debian GNU/Linux **13.7** «trixie» con GNOME (núcleos 6.12.43 y 6.12.107) |
+| Sistema | Debian GNU/Linux **13.8** «trixie» con GNOME, núcleo 6.12.117 (era 13.7 antes de actualizar) |
 | Recursos | 1 vCPU · 2 GB RAM · disco VDI dinámico de 20 GB (7,8 GB ocupados) · BIOS |
-| Red | Adaptador 1: NAT (hoy) → previsto `lan-iso` por DHCP (.100–.200) |
-| Usuario | `mauro bas` (creado en la instalación de septiembre) |
+| Red | `lan-iso` por DHCP (192.168.29.105) · nombre de equipo `debian-mauro` |
+| Usuarios | `mauro` («mauro bas», uso diario, sin sudo) · **`adminlab`** (administración, sudo) |
 | Nombre anterior | «Debian 13.1» (renombrada el 22/11 para seguir la nomenclatura del laboratorio) |
 | Configuración VirtualBox | [config/virtualbox-showvminfo.txt](config/virtualbox-showvminfo.txt) |
 
@@ -16,11 +16,12 @@
 
 | Criterio | Estado | Evidencia |
 |---|---|---|
-| a252 Instalar y comprobar versión y funcionamiento | ✅ | Arranca hasta GDM tras [INC-001](../../incidencias/INC-001-cli-linux-pantalla-negra-sin-grub.md); `/etc/debian_version` = 13.7 ([captura](capturas/inc001-13.png)) |
-| a80 · a26 Resolver una incidencia de instalación/arranque | ✅ | [INC-001](../../incidencias/INC-001-cli-linux-pantalla-negra-sin-grub.md): GRUB no instalado → modo rescate → `grub-install /dev/sda` |
-| a253 Usuario de administración | ⏳ | Falta comprobar con `id mauro` y `sudo -l` (necesita la contraseña del usuario) |
-| a254 Parámetros de red | ⏳ | Pasar el adaptador a `lan-iso` y comprobar la IP por DHCP del router |
-| a255 Copiar la configuración al servidor de copias | ⏳ | Ver «Pasos pendientes» |
+| a252 Instalar, versión y funcionamiento | ✅ | Arranca hasta GDM tras [INC-001](../../incidencias/INC-001-cli-linux-pantalla-negra-sin-grub.md) · ahora **Debian 13.8**, núcleo 6.12.117 |
+| a80 · a26 Incidencia de instalación/arranque | ✅ | [INC-001](../../incidencias/INC-001-cli-linux-pantalla-negra-sin-grub.md): GRUB no instalado → modo rescate → `grub-install /dev/sda` |
+| **a253** Usuario de administración | ✅ | **`adminlab`** (grupos `sudo` y `adm`, SSH con clave), creado desde el modo rescate. La cuenta personal `mauro` («mauro bas») **no se tocó** y queda como usuario sin privilegios · [cl-01](capturas/cl-01-rescate-crear-adminlab.png) · [01-version-usuarios-red.txt](salidas/01-version-usuarios-red.txt) |
+| **a254** Parámetros de red | ✅ | `lan-iso` por **DHCP** de r-opnsense: 192.168.29.105/24, pasarela .1 (NetworkManager) · ping a la pasarela e Internet correcto |
+| a79 Actualizar | ✅ | Repositorios a **HTTPS** (el router bloquea el puerto 80) + `full-upgrade` de 121 paquetes → 13.8 · [02-repos-https-actualizacion.txt](salidas/02-repos-https-actualizacion.txt) |
+| **a255** Copia al servidor de copias | ✅ | `copia-config.timer` diario → SFTP con clave a `c-clilinux` · [03-copia-automatica-al-nas.txt](salidas/03-copia-automatica-al-nas.txt) |
 
 ## Capturas
 
@@ -30,23 +31,15 @@
 | [inc001-01…12](capturas/) | Arranque de la ISO en modo rescate, paso a paso |
 | [inc001-13](capturas/inc001-13.png) | Sistema completo: Debian 13.7, núcleos y `grub-pc` instalados |
 | [inc001-14](capturas/inc001-14.png) | `grub-install /dev/sda` + `update-grub` sin errores |
-| [inc001-16](capturas/inc001-16.png) | El núcleo carga desde el disco |
 | [inc001-17](capturas/inc001-17.png) | Pantalla de inicio de sesión de GNOME |
+| [cl-01](capturas/cl-01-rescate-crear-adminlab.png) | Creación del administrador `adminlab` desde el modo rescate |
 
-## Pasos pendientes (con la sesión gráfica iniciada)
+## ¿Por qué un administrador aparte?
 
-```bash
-# 1. Usuario administrador
-id mauro ; sudo -l
+La cuenta personal (`mauro`) no estaba en `sudo` y no conozco su contraseña. En lugar de cambiarla, se creó desde el modo rescate de la ISO (como en [INC-001](../../incidencias/INC-001-cli-linux-pantalla-negra-sin-grub.md)) una cuenta **`adminlab`** solo para administrar. Es la práctica habitual en empresa: **separar la cuenta de uso diario de la de administración** (privilegio mínimo).
 
-# 2. Red: apagar la VM y, en el anfitrión:
-VBoxManage modifyvm cli-linux --nic1 intnet --intnet1 lan-iso
-#    Al arrancar, comprobar la concesión DHCP del router:
-ip -br a ; ip route ; resolvectl status | grep 'DNS Servers'
+## Copia: qué se copia y qué no
 
-# 3. Copia de la configuración y de los documentos al NAS (SFTP con clave, usuario cli-linux)
-tar czf /tmp/cli-linux-$(date +%F).tar.gz /etc /home/mauro/Documentos
-sftp cli-linux@192.168.29.10 <<< 'put /tmp/cli-linux-*.tar.gz'
-```
-
-**Qué se copia y qué no:** se copian `/etc` (configuración) y los documentos del usuario. **No** se copia el sistema entero (7,8 GB): Debian se reinstala en 15 minutos desde la ISO y los programas se recuperan con la lista de `dpkg --get-selections`.
+| Se copia | No se copia | Motivo |
+|---|---|---|
+| `/etc` + lista de paquetes (`dpkg --get-selections`) + `/home/mauro` (1,1 MB) | El sistema (7,8 GB) | Debian se reinstala en 15 min; la configuración y los datos del usuario son lo único que no se recupera de otra forma |

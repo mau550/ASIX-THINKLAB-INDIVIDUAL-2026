@@ -38,3 +38,7 @@ Se volvió a arrancar la VM (escenario E2a de la [T7](../tareas/T7-rendimiento.m
 - Arreglar la causa: el SSD en un puerto USB 3.x ([INC-002](INC-002-ssd-portatil-en-usb2.md)).
 - Apagar Windows **desde dentro** (`shutdown /s /t 0`) con la sesión iniciada. En la pantalla de bloqueo, el botón ACPI no siempre se atiende.
 - Antes de cambios grandes, tomar una **instantánea** de la VM (`VBoxManage snapshot cli-win11 take antes-de-X`).
+
+## 6. Se repitió en `srv-dc` (22/11, durante la instalación y la promoción a DC)
+
+Con la actualización de OPNsense y la instalación de Windows Server escribiendo a la vez en el SSD USB 2.0, el registro de `srv-dc` volvió a mostrar `AHCI#0: Port 0 reset` dos veces: Windows quedó en pantalla negra. Se recuperó con un reinicio en frío. Hubo un reinicio AHCI más durante la configuración del dominio, del que Windows sí se recuperó solo. **Mitigación aplicada al final** (con la VM apagada): caché de E/S del anfitrión en el controlador SATA (`VBoxManage storagectl srv-dc --name SATA --hostiocache on`), para que las escrituras se acumulen en la RAM del anfitrión en lugar de esperar al disco. Su efecto queda por medir en la próxima sesión. La solución de fondo sigue siendo [INC-002](INC-002-ssd-portatil-en-usb2.md).

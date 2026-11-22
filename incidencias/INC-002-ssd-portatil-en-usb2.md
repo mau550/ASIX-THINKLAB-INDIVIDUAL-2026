@@ -1,6 +1,6 @@
 # INC-002 · El SSD portátil del laboratorio funciona a velocidad USB 2.0 en el equipo de casa
 
-> **Estado: DIAGNOSTICADA, solución física pendiente** (cambiar de puerto). Tipo: incidencia de **hardware / rendimiento** (FDM RA1, ISO RA6).
+> **Estado: DIAGNOSTICADA y mitigada** (optimizaciones de la [T7](../tareas/T7-rendimiento.md)); solución definitiva propuesta: cambiar de puerto. Tipo: incidencia de **hardware / rendimiento** (FDM RA1, ISO RA6).
 > Equipo: casa (Gigabyte H510M H · i5-11400F) · Dispositivo: SanDisk Portable SSD 931,5 GB (`sda`)
 
 ## 1. Síntoma
@@ -33,11 +33,11 @@ Salidas completas: [casa-disco-fio](../anexos/pruebas-hardware/casa-disco-fio-20
 
 | Opción | Esfuerzo | Mejora esperada | Estado |
 |---|---|---|---|
-| **A. Enchufar el SSD a un puerto USB 3.x** (azul/rojo o marcado SS10/SS20; en la H510M H, los traseros USB 3.2) | Nulo | ×10 en secuencial (de ~40 a ~400+ MB/s) | **Pendiente**: hay que apagar el equipo, porque el sistema arranca desde ese disco |
+| **A. Enchufar el SSD a un puerto USB 3.x** (azul/rojo o marcado SS10/SS20; en la H510M H, los traseros USB 3.2) | Nulo | ×10 en secuencial (de ~40 a ~400+ MB/s) | **Propuesta**: requiere apagar el equipo, porque el sistema arranca desde ese disco |
 | B. Mover las VM más usadas al NVMe interno (970 EVO Plus) | Medio | Máxima | Descartada: ese disco es del sistema Windows de casa y el enunciado pide que el entorno viaje en el disco USB |
-| C. Reducir la E/S de las VM: servidores sin escritorio, desactivar indexación/actualizaciones de Windows en las pruebas | Bajo | Moderada | Aplicada en parte: `r-nftables` y `srv-linux` se instalan sin escritorio |
+| C. Reducir la E/S de las VM: servidores sin escritorio, desactivar indexación/actualizaciones de Windows en las pruebas | Bajo | Moderada | ✅ Aplicada: servidores Linux sin escritorio, escenarios con un solo router y caché de E/S del anfitrión (optimizaciones 1 y 2 de la [T7](../tareas/T7-rendimiento.md)) |
 
-## 4. Verificación (a completar tras cambiar el puerto)
+## 4. Verificación (cuando se cambie el puerto)
 
 ```bash
 lsusb -t | grep -i 'Mass Storage'        # debe salir 5000M, 10000M o 20000M

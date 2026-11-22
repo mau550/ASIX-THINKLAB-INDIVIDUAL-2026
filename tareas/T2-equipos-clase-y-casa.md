@@ -106,7 +106,7 @@ Resultado: `passed: 12, failed: 0`. No hay *thermal throttling*: la refrigeraci�
 
 | Problema | Solución | Coste | Estado |
 |---|---|---|---|
-| SSD en USB 2.0 (casa) | Conectarlo a un puerto **USB 3.2** trasero de la H510M H | 0 € | ⏳ Pendiente (requiere apagar el equipo) |
+| SSD en USB 2.0 (casa) | Conectarlo a un puerto **USB 3.2** trasero de la H510M H | 0 € | Propuesta (el SSD es el disco de arranque; se aplica con el equipo apagado, ver [T7](T7-rendimiento.md)) |
 | 16 GB de RAM en casa | Trabajar **por escenarios**, con un solo router encendido; los servidores Linux **sin escritorio** (1 GB); `nas-truenas` solo cuando haga falta copiar | 0 € | ✅ Aplicado |
 | 16 GB de RAM en casa | Ampliar a 32 GB (la H510M H admite 2 × 32 GB DDR4) | ~60 € | Propuesta |
 | Escenarios grandes (clúster Proxmox) | Hacerlos en el **portátil de clase** (30 GiB) | 0 € | ✅ Planificado |

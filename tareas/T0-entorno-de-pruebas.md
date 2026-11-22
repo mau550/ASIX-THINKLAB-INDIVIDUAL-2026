@@ -103,7 +103,7 @@ Detalle de direcciones e interfaces: [T4](T4-red-individual.md).
 | # | Problema | Estado |
 |---|---|---|
 | [INC-001](../incidencias/INC-001-cli-linux-pantalla-negra-sin-grub.md) | Debian arranca en pantalla negra: GRUB no instalado | ✅ Resuelta |
-| [INC-002](../incidencias/INC-002-ssd-portatil-en-usb2.md) | SSD del laboratorio en un puerto USB 2.0 en casa | 🔎 Diagnosticada; falta cambiar de puerto |
+| [INC-002](../incidencias/INC-002-ssd-portatil-en-usb2.md) | SSD del laboratorio en un puerto USB 2.0 en casa | ✅ Mitigada (T7) · cambio de puerto propuesto |
 | [INC-003](../incidencias/INC-003-cli-win11-apagado-colgado.md) | Windows 11 colgado al apagarse | ✅ Recuperada |
 | [INC-004](../incidencias/INC-004-instalacion-desatendida-postinstall-fallido.md) | Instalación desatendida: falla el *post-install* | ✅ Resuelta |
 | [INC-005](../incidencias/INC-005-truenas-cambio-de-ip-revertido.md) | TrueNAS deshace el cambio de IP | ✅ Resuelta |

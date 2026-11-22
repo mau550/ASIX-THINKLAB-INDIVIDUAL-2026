@@ -43,6 +43,7 @@ a { color: #0b5cad; text-decoration: none; }
 .portada { border: 2px solid #0b5cad; border-radius: 6px; padding: 10px 14px; margin-bottom: 14px; background: #f3f8fe; font-size: 10pt; }
 .portada b { color: #0b3d75; }
 .parte { page-break-before: always; }
+.indice li { margin: 2px 0; } .indice > li { margin-top: 8px; }
 .mermaid { text-align: center; margin: 10px 0; page-break-inside: avoid; }
 """
 
@@ -82,14 +83,15 @@ def convertir(md_path):
     return cuerpo
 
 
-def pdf(grupo, salida):
-    partes = []
+def pdf(grupo, salida, titulo=None, intro=""):
+    partes = [intro] if intro else []
     for i, md in enumerate(grupo):
         rel = os.path.relpath(md, RAIZ).replace(os.sep, "/")
-        clase = ' class="parte"' if i else ""
-        partes.append(f"<section{clase}><p style='font-size:8.5pt;color:#57606a'>Documento en el repositorio: "
+        clase = ' class="parte"' if (i or intro) else ""
+        ancla = f" id='d{i}'"
+        partes.append(f"<section{clase}{ancla}><p style='font-size:8.5pt;color:#57606a'>Documento en el repositorio: "
                       f"<a href='{url_repo(rel, False)}'>{url_repo(rel, False)}</a></p>{convertir(md)}</section>")
-    titulo = re.sub(r"^#\s*", "", open(grupo[0], encoding="utf-8").readline()).strip()
+    titulo = titulo or re.sub(r"^#\s*", "", open(grupo[0], encoding="utf-8").readline()).strip()
     portada = (f"<div class='portada'><b>ASIX ThinkLab · Laboratorio individual</b> — {ALUMNO}<br>"
                f"<b>Repositorio con toda la documentación y las evidencias:</b> "
                f"<a href='{REPO}'>{REPO}</a><br>"
@@ -106,22 +108,69 @@ def pdf(grupo, salida):
     subprocess.run(["google-chrome", "--headless=new", "--disable-gpu", "--no-sandbox",
                     "--allow-file-access-from-files", "--virtual-time-budget=15000",
                     "--no-pdf-header-footer", f"--print-to-pdf={salida}", f"file://{tmp}"],
-                   check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=180)
+                   check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=900)
     os.unlink(tmp)
 
 
 def main():
-    destino = os.path.abspath(sys.argv[1] if len(sys.argv) > 1 else os.path.join(RAIZ, "entregas", "pdf"))
+    destino = os.path.abspath(sys.argv[1] if len(sys.argv) > 1 else os.path.join(RAIZ, "entregas"))
     os.makedirs(destino, exist_ok=True)
     grupos = {}
     for md in sorted(glob.glob(os.path.join(RAIZ, "tareas", "T*.md"))):
         t = re.match(r"(T\d+)", os.path.basename(md)).group(1)
         grupos.setdefault(t, []).append(md)
     for t, mds in sorted(grupos.items(), key=lambda x: int(x[0][1:])):
-        nombre = os.path.basename(mds[0])[:-3] if len(mds) == 1 else f"{t}-completa"
+        nombre = os.path.basename(mds[0])[:-3] if len(mds) == 1 else f"{t}-instalacion-comunicaciones-y-copias"
         out = os.path.join(destino, f"{nombre}.pdf")
         pdf(mds, out)
         print(f"{out}  ({os.path.getsize(out) // 1024} KB, {len(mds)} documento/s)")
+    memoria(destino, grupos)
+
+
+def primera_linea(md):
+    return html.escape(re.sub(r"^#\s*", "", open(md, encoding="utf-8").readline()).strip())
+
+
+def memoria(destino, grupos):
+    """Un único PDF con todo: presentación, tareas, máquinas, incidencias y autoevaluación."""
+    orden = [("Presentación y estado del laboratorio", [os.path.join(RAIZ, "README.md")])]
+    orden.append(("Tareas", [m for _, ms in sorted(grupos.items(), key=lambda x: int(x[0][1:])) for m in ms]))
+    orden.append(("Máquinas virtuales (configuración, pruebas y galería de evidencias)",
+                  sorted(glob.glob(os.path.join(RAIZ, "maquinas", "*", "README.md")))))
+    inc = os.path.join(RAIZ, "incidencias")
+    orden.append(("Incidencias resueltas", [os.path.join(inc, "README.md")] +
+                  sorted(f for f in glob.glob(os.path.join(inc, "INC-*.md")))))
+    orden.append(("Autoevaluación con la rúbrica", [os.path.join(RAIZ, "rubrica", "autoevaluacion.md")]))
+    defensa = sorted(glob.glob(os.path.join(RAIZ, "defensa", "*.md")))
+    if defensa:
+        orden.append(("Preparación de la prueba presencial", defensa))
+    docs, indice, n = [], [], 0
+    for bloque, mds in orden:
+        indice.append(f"<li><b>{html.escape(bloque)}</b><ol>")
+        for md in mds:
+            indice.append(f"<li><a href='#d{n}'>{primera_linea(md)}</a></li>")
+            docs.append(md)
+            n += 1
+        indice.append("</ol></li>")
+    intro = ("<section><h1>ASIX ThinkLab · «Naix un sistema» — Memoria completa del laboratorio individual</h1>"
+             f"<p><b>{ALUMNO}</b> · ISO y FDM · Curso 2026-27</p>"
+             "<h2>Qué es este documento</h2>"
+             "<p>Reúne en un solo PDF todo el trabajo del laboratorio individual: el estado general, las tareas T0–T8, "
+             "la documentación de cada máquina virtual con <b>todas sus capturas y salidas de comandos</b>, las incidencias "
+             "resueltas y la autoevaluación criterio a criterio con la rúbrica. Cada apartado indica su ruta en el "
+             "repositorio; las salidas completas de los comandos (texto literal con fecha y hora) están enlazadas y se "
+             "abren en GitHub.</p>"
+             "<h2>Cómo se hizo</h2>"
+             "<p>Un entorno de pruebas propio en VirtualBox, en un SSD portátil que funciona en el equipo de clase y en el "
+             "de casa, con la LAN del puesto 29 (192.168.29.0/24): tres routers alternativos (MikroTik, nftables y OPNsense), "
+             "un NAS TrueNAS que recibe las copias de todas las máquinas, un clúster Proxmox de tres nodos, un dominio "
+             "Active Directory (iso29.lan), servidores Debian con RAID y espejo DRBD, y clientes Debian y Windows 11 "
+             "unido al dominio. Cada afirmación del documento está respaldada por una captura o por la salida literal del comando.</p>"
+             f"<p><b>Repositorio:</b> <a href='{REPO}'>{REPO}</a></p>"
+             f"<h2>Índice</h2><ol class='indice'>{''.join(indice)}</ol></section>")
+    out = os.path.join(destino, "MEMORIA-COMPLETA-ASIX-ThinkLab-individual.pdf")
+    pdf(docs, out, titulo="Memoria completa · ASIX ThinkLab individual", intro=intro)
+    print(f"{out}  ({os.path.getsize(out) // 1024} KB, {len(docs)} documentos)")
 
 
 if __name__ == "__main__":

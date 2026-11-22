@@ -89,9 +89,9 @@ Con la caché, el arranque hasta NTDS en marcha tardó 72 s y la copia de AD 16 
 
 **Otra decisión de capacidad:** en casa, `nas-truenas` funcionó con **6 GB** en lugar de 8 mientras estaban encendidos OPNsense, `r-nftables` y `srv-dc` (13 GB en total). Su función de copias no necesita más; los 8 GB recomendados son para la caché ZFS (ARC).
 
-### Optimización 3 · Mover el SSD a un puerto USB 3.x ⏳ pendiente de medir
+### Mejora propuesta (fuera de las dos optimizaciones medidas) · Mover el SSD a un puerto USB 3.x
 
-Es la mejora con más impacto (×10 en disco según el ancho de banda teórico), pero requiere apagar el equipo físico. Procedimiento para completar este apartado:
+La rúbrica pide **dos** optimizaciones medidas, y son las dos anteriores. Esta tercera es una **propuesta**: es la de más impacto (×10 en disco según el ancho de banda teórico; hoy `lsusb -t` muestra el SSD a **480M**), pero no se aplica durante el trabajo porque el SSD es el **disco de arranque del anfitrión** y moverlo obliga a apagar todo el laboratorio. Cómo se comprobaría al aplicarla:
 
 ```bash
 lsusb -t | grep -i 'Mass Storage'                 # comprobar 5000M/10000M/20000M

@@ -25,15 +25,16 @@ flowchart TB
     HOST --- NAT["NAT de VirtualBox<br/>10.0.2.0/24 · pasarela 10.0.2.2"]
     NAT -- "WAN DHCP 10.0.2.15" --> MK["r-mikrotik<br/>ether1 WAN · ether2 LAN<br/>192.168.29.1"]
     NAT -. "WAN DHCP 10.0.2.15" .-> NFT["r-nftables<br/>enp0s3 WAN · enp0s8 LAN<br/>192.168.29.1"]
-    NAT -. "WAN" .-> OPN["r-opnsense<br/>192.168.29.1<br/>(pendiente)"]
+    NAT -. "WAN" .-> OPN["r-opnsense 26.7.9<br/>em0 WAN · em1 LAN<br/>192.168.29.1"]
     MK --- SW{{"switch virtual · red interna lan-iso<br/>192.168.29.0/24"}}
     NFT -. "un router a la vez" .- SW
     OPN -.- SW
     SW --- NAS["nas-truenas<br/>192.168.29.10"]
     SW --- SRV["srv-linux<br/>192.168.29.14<br/>RAID 0/1/5"]
     SW --- DC["srv-dc<br/>192.168.29.13"]
+    SW --- SRV2["srv-linux2<br/>192.168.29.16<br/>espejo DRBD"]
     SW --- PVE["pve1 .11 · pve2 .12 · pve3 .15"]
-    SW --- CW["cli-win11<br/>DHCP .100–.200"]
+    SW --- CW["cli-win11<br/>192.168.29.17 · iso29.lan"]
     SW --- CL["cli-linux<br/>DHCP .100–.200"]
 ```
 
@@ -43,7 +44,7 @@ flowchart TB
 |---|---|
 | .1 | Puerta de enlace (el router activo) |
 | .2 – .9 | Reservado (infraestructura de red) |
-| .10 – .19 | Servidores con IP fija |
+| .10 – .19 | Servidores y equipos con IP fija (`cli-win11` .17, por ser miembro del dominio) |
 | .20 – .29 | Contenedores y VM dentro de Proxmox |
 | .100 – .200 | DHCP para clientes |
 

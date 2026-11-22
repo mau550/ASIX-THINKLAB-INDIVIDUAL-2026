@@ -12,7 +12,7 @@ Leyenda: ✅ hecho y con evidencia · 🟡 parcial · ⏳ pendiente (con guía) 
 | Apte+ | 11 | 2 | 0 | 5 | 18 |
 | **Total** | **80** | **2** | **0** | **14** | **96** |
 
-**Lo que queda pendiente:** solo lo que no se puede hacer desde este equipo: los tests de hardware en el ordenador de clase (a27/a28) y la optimización del puerto USB 3 (cambio físico). Los 14 criterios 📅 se evalúan en la prueba presencial y están preparados en [`defensa/`](../defensa/).
+**Lo único no completado:** los tests de hardware en el **ordenador de clase** (a27/a28, Apte+): en casa están hechos y registrados; en clase solo hay que ejecutar `./scripts/pruebas-hardware.sh todo anexos/pruebas-hardware/` (unos 3 minutos). Los 14 criterios 📅 se evalúan en la prueba presencial y están preparados en [`defensa/`](../defensa/).
 
 ## T0 · Entorno de pruebas
 

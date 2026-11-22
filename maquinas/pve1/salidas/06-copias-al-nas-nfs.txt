@@ -1,0 +1,42 @@
+# Clúster Proxmox · copias al NAS por NFS — 2026-11-22T21:46:39+01:00
+
+root@pve1:~# pvesm add nfs nas-copias --server 192.168.29.10 --export /mnt/copias/proxmox --content backup,vztmpl --prune-backups keep-last=7
+
+root@pve1:~# pvesm status
+Name              Type     Status     Total (KiB)      Used (KiB) Available (KiB)        %
+local              dir     active        15165320         5008096         9365060   33.02%
+local-lvm      lvmthin     active        13410304               0        13410304    0.00%
+nas-copias         nfs     active        19789312               0        19789312    0.00%
+
+root@pve2:~# vzdump 100 --storage nas-copias --mode stop --compress zstd 2>&1 | grep -E 'archive|size|Finished|ERROR'
+INFO: creating vzdump archive '/mnt/pve/nas-copias/dump/vzdump-lxc-100-2026_11_22-21_46_44.tar.zst'
+INFO: archive file size: 160MB
+INFO: Finished Backup of VM 100 (00:04:26)
+
+root@pve3:~# vzdump 101 --storage nas-copias --mode snapshot --compress zstd 2>&1 | grep -E 'archive|size|Finished|ERROR'
+INFO: creating vzdump archive '/mnt/pve/nas-copias/dump/vzdump-qemu-101-2026_11_22-21_52_05.vma.zst'
+INFO: archive file size: 549MB
+INFO: Finished Backup of VM 101 (00:02:26)
+
+root@pve1:~# tar czf /mnt/pve/nas-copias/pve-etc-$(date +%Y%m%d-%H%M).tar.gz -C / etc/pve etc/network/interfaces etc/hosts 2>/dev/null; ls -lh /mnt/pve/nas-copias/ /mnt/pve/nas-copias/dump/
+/mnt/pve/nas-copias/:
+total 9.5K
+drwxr-xr-x 2 root root   6 Nov 22 21:54 dump
+-rw-r--r-- 1 root root 21K Nov 22 21:54 pve-etc-20261122-2154.tar.gz
+drwxr-xr-x 3 root root   3 Nov 22 21:46 template
+
+/mnt/pve/nas-copias/dump/:
+total 711M
+-rw-r--r-- 1 root root  735 Nov 22 21:51 vzdump-lxc-100-2026_11_22-21_46_44.log
+-rw-r--r-- 1 root root 161M Nov 22 21:50 vzdump-lxc-100-2026_11_22-21_46_44.tar.zst
+-rw-r--r-- 1 root root 4.1K Nov 22 21:54 vzdump-qemu-101-2026_11_22-21_52_05.log
+-rw-r--r-- 1 root root 550M Nov 22 21:54 vzdump-qemu-101-2026_11_22-21_52_05.vma.zst
+
+root@pve1:~# pvesh create /cluster/backup --id copia-diaria-nas --schedule '03:00' --storage nas-copias --all 1 --mode snapshot --compress zstd --prune-backups keep-last=7
+      "all" : 1,
+      "enabled" : 1,
+      "id" : "copia-diaria-nas",
+      "mode" : "snapshot",
+      "next-run" : 1795399200,
+      "schedule" : "03:00",
+      "storage" : "nas-copias",

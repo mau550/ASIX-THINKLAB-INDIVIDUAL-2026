@@ -1,0 +1,5 @@
+# nas-truenas · recurso NFS para las copias del clúster Proxmox — 2026-11-22T21:46:28+01:00
+truenas_admin@nas-truenas:~$ midclt call sharing.nfs.create {path: /mnt/copias/proxmox, hosts: [192.168.29.11, .12, .15], maproot_user: root}
+  -> id 1 /mnt/copias/proxmox hosts ['192.168.29.11', '192.168.29.12', '192.168.29.15'] maproot root
+truenas_admin@nas-truenas:~$ midclt call service.update nfs {enable: true}; service.start nfs
+  servicio nfs: RUNNING | arranque automático: True

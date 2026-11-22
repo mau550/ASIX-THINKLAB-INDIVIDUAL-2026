@@ -1,0 +1,58 @@
+# Red individual con r-mikrotik como router — pruebas desde srv-linux (192.168.29.14) — 2026-11-22T17:44:15+01:00
+
+mauro@srv-linux:~$ ip -br a; ip route
+lo               UNKNOWN        127.0.0.1/8 ::1/128 
+enp0s3           UP             192.168.29.14/24 fe80::a00:27ff:fe51:18e1/64 
+default via 192.168.29.1 dev enp0s3 onlink 
+192.168.29.0/24 dev enp0s3 proto kernel scope link src 192.168.29.14 
+
+mauro@srv-linux:~$ cat /etc/resolv.conf
+# Configuración estática (srv-linux)
+nameserver 192.168.29.1
+search iso29.lan
+
+mauro@srv-linux:~$ ping -c 4 192.168.29.1
+PING 192.168.29.1 (192.168.29.1) 56(84) bytes of data.
+64 bytes from 192.168.29.1: icmp_seq=1 ttl=64 time=0.740 ms
+64 bytes from 192.168.29.1: icmp_seq=2 ttl=64 time=0.701 ms
+64 bytes from 192.168.29.1: icmp_seq=3 ttl=64 time=0.788 ms
+64 bytes from 192.168.29.1: icmp_seq=4 ttl=64 time=0.831 ms
+
+--- 192.168.29.1 ping statistics ---
+4 packets transmitted, 4 received, 0% packet loss, time 3033ms
+rtt min/avg/max/mdev = 0.701/0.765/0.831/0.049 ms
+
+mauro@srv-linux:~$ ping -c 4 1.1.1.1
+PING 1.1.1.1 (1.1.1.1) 56(84) bytes of data.
+64 bytes from 1.1.1.1: icmp_seq=1 ttl=61 time=11.1 ms
+64 bytes from 1.1.1.1: icmp_seq=2 ttl=61 time=11.2 ms
+64 bytes from 1.1.1.1: icmp_seq=3 ttl=61 time=11.7 ms
+64 bytes from 1.1.1.1: icmp_seq=4 ttl=61 time=11.7 ms
+
+--- 1.1.1.1 ping statistics ---
+4 packets transmitted, 4 received, 0% packet loss, time 3004ms
+rtt min/avg/max/mdev = 11.059/11.410/11.704/0.285 ms
+
+mauro@srv-linux:~$ traceroute -n -m 8 1.1.1.1
+traceroute to 1.1.1.1 (1.1.1.1), 8 hops max, 60 byte packets
+ 1  192.168.29.1  0.216 ms  0.175 ms  0.141 ms
+ 2  10.0.2.2  0.228 ms  0.193 ms  0.228 ms
+ 3  * * *
+ 4  10.0.10.58  5.278 ms  5.411 ms  5.371 ms
+ 5  172.16.27.193  5.357 ms  5.319 ms  5.306 ms
+ 6  10.220.99.128  7.152 ms  6.767 ms 10.220.127.173  6.732 ms
+ 7  10.220.107.105  13.646 ms  13.633 ms  14.765 ms
+ 8  82.77.228.132  14.200 ms  10.446 ms 82.77.228.136  10.308 ms
+
+mauro@srv-linux:~$ dig +short www.debian.org @192.168.29.1
+130.89.148.77
+
+# ---- Cortafuegos: conexión permitida (HTTPS) y bloqueada (HTTP) ----
+
+mauro@srv-linux:~$ curl -4 -sS -o /dev/null -w "HTTPS -> código %{http_code} en %{time_total} s\n" --max-time 10 https://www.debian.org
+HTTPS -> código 200 en 0.899280 s
+
+mauro@srv-linux:~$ curl -4 -sS -o /dev/null -w "HTTP -> código %{http_code}\n" --max-time 8 http://www.debian.org || echo "HTTP BLOQUEADO (sin respuesta en 8 s)"
+curlHTTP -> código 000
+: (28) Connection timed out after 8002 milliseconds
+HTTP BLOQUEADO (sin respuesta en 8 s)

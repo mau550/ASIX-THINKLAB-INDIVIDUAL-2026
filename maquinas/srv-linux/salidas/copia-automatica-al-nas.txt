@@ -1,0 +1,39 @@
+# srv-linux · copia automática de la configuración al NAS — 2026-11-22T18:22:26+01:00
+
+mauro@srv-linux:~$ sudo cat /etc/copia-config.conf
+USUARIO_NAS=c-srvlinux
+NAS=192.168.29.10
+RUTAS="etc"
+EXTRA="dpkg --get-selections; echo; cat /proc/mdstat; mdadm --detail --scan"
+
+mauro@srv-linux:~$ sudo systemctl start copia-config.service; systemctl status copia-config.service --no-pager | sed -n '1,3p;6p'
+○ copia-config.service - Copia de la configuración al NAS (nas-truenas)
+     Loaded: loaded (/etc/systemd/system/copia-config.service; static)
+     Active: inactive (dead) since Sun 2026-11-22 18:22:25 CET; 7ms ago
+    Process: 1455 ExecStart=/usr/local/sbin/copia-config.sh (code=exited, status=0/SUCCESS)
+
+mauro@srv-linux:~$ sudo journalctl -t copia-config --no-pager | tail -1
+nov 22 18:22:25 srv-linux copia-config[1482]: OK: srv-linux-20261122-1822.tar.gz (408K) subida a c-srvlinux@192.168.29.10
+
+mauro@srv-linux:~$ systemctl list-timers copia-config.timer --no-pager | head -2
+NEXT                        LEFT LAST PASSED UNIT               ACTIVATES
+Mon 2026-11-23 02:04:34 CET   7h -         - copia-config.timer copia-config.service
+
+mauro@srv-linux:~$ ls -l /var/backups/copia-config/
+total 412
+-rw-r--r-- 1 root root 414015 nov 22 18:22 srv-linux-20261122-1822.tar.gz
+-rw-r--r-- 1 root root     97 nov 22 18:22 srv-linux-20261122-1822.tar.gz.sha256
+
+mauro@srv-linux:~$ sudo tar tzf /var/backups/copia-config/*.tar.gz | head -12
+etc/
+etc/udev/
+etc/udev/iocost.conf
+etc/udev/udev.conf
+etc/udev/rules.d/
+etc/udev/hwdb.d/
+etc/shadow-
+etc/ld.so.conf.d/
+etc/ld.so.conf.d/x86_64-linux-gnu.conf
+etc/ld.so.conf.d/libc.conf
+etc/ld.so.conf.d/fakeroot-x86_64-linux-gnu.conf
+etc/gss/

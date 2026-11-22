@@ -1,0 +1,52 @@
+# Red individual con r-nftables como router — pruebas desde srv-linux (192.168.29.14) — 2026-11-22T17:49:43+01:00
+# En el anfitrión: VBoxManage controlvm r-mikrotik setlinkstate2 off; VBoxManage controlvm r-nftables setlinkstate2 on
+
+mauro@srv-linux:~$ ip neigh show 192.168.29.1
+192.168.29.1 dev enp0s3 lladdr 08:00:27:42:ef:10 DELAY 
+
+mauro@srv-linux:~$ ping -c 4 192.168.29.1
+PING 192.168.29.1 (192.168.29.1) 56(84) bytes of data.
+64 bytes from 192.168.29.1: icmp_seq=1 ttl=64 time=0.205 ms
+64 bytes from 192.168.29.1: icmp_seq=2 ttl=64 time=0.733 ms
+64 bytes from 192.168.29.1: icmp_seq=3 ttl=64 time=0.507 ms
+64 bytes from 192.168.29.1: icmp_seq=4 ttl=64 time=0.368 ms
+
+--- 192.168.29.1 ping statistics ---
+4 packets transmitted, 4 received, 0% packet loss, time 3068ms
+rtt min/avg/max/mdev = 0.205/0.453/0.733/0.193 ms
+
+mauro@srv-linux:~$ ping -c 4 1.1.1.1
+PING 1.1.1.1 (1.1.1.1) 56(84) bytes of data.
+64 bytes from 1.1.1.1: icmp_seq=1 ttl=61 time=11.1 ms
+64 bytes from 1.1.1.1: icmp_seq=2 ttl=61 time=11.7 ms
+64 bytes from 1.1.1.1: icmp_seq=3 ttl=61 time=11.9 ms
+64 bytes from 1.1.1.1: icmp_seq=4 ttl=61 time=11.2 ms
+
+--- 1.1.1.1 ping statistics ---
+4 packets transmitted, 4 received, 0% packet loss, time 3004ms
+rtt min/avg/max/mdev = 11.118/11.498/11.947/0.342 ms
+
+mauro@srv-linux:~$ traceroute -n -m 6 1.1.1.1
+traceroute to 1.1.1.1 (1.1.1.1), 6 hops max, 60 byte packets
+ 1  192.168.29.1  0.250 ms  0.229 ms  0.291 ms
+ 2  10.0.2.2  0.393 ms  0.377 ms  0.365 ms
+ 3  * * *
+ 4  10.0.10.58  4.316 ms  4.265 ms  4.239 ms
+ 5  172.16.27.193  4.212 ms  4.237 ms  4.194 ms
+ 6  10.220.127.173  6.475 ms 10.220.99.128  6.497 ms 10.220.127.173  6.461 ms
+
+mauro@srv-linux:~$ dig +short www.debian.org @192.168.29.1
+130.89.148.77
+
+mauro@srv-linux:~$ curl -4 -sS -o /dev/null -w "HTTPS -> código %{http_code} en %{time_total} s\n" --max-time 10 https://www.debian.org
+HTTPS -> código 200 en 1.855726 s
+
+mauro@srv-linux:~$ curl -4 -sS -o /dev/null -w "HTTP -> código %{http_code}\n" --max-time 8 http://www.debian.org || echo "HTTP BLOQUEADO (sin respuesta en 8 s)"
+curl:HTTP -> código 000
+HTTP BLOQUEADO (sin respuesta en 8 s)
+ (28) Connection timed out after 8002 milliseconds
+
+mauro@srv-linux:~$ dig +short +time=3 +tries=1 www.debian.org @8.8.8.8 || echo "DNS EXTERNO BLOQUEADO"
+;; communications error to 8.8.8.8#53: timed out
+;; no servers could be reached
+DNS EXTERNO BLOQUEADO

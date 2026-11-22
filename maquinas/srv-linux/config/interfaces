@@ -1,0 +1,11 @@
+# /etc/network/interfaces — srv-linux (servidor de infraestructura, IP fija)
+source /etc/network/interfaces.d/*
+auto lo
+iface lo inet loopback
+
+auto enp0s3
+iface enp0s3 inet static
+    address 192.168.29.14/24
+    gateway 192.168.29.1
+    dns-nameservers 192.168.29.1
+    dns-search iso29.lan

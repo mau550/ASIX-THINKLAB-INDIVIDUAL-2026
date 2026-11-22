@@ -1,0 +1,19 @@
+# srv-linux · datos de prueba y velocidad de escritura — 2026-11-22T17:37:13+01:00
+
+mauro@srv-linux:~$ sudo sh -c 'head -c 100M /dev/urandom > /srv/raid0/datos-empresa.bin; date > /srv/raid0/LEEME.txt; cd /srv/raid0 && sha256sum datos-empresa.bin > datos.sha256 && cat datos.sha256'
+6a977faa1c1845e67404419df8044865907d60cfd4f42dc122b9a23f1a4f9559  datos-empresa.bin
+
+mauro@srv-linux:~$ sudo sh -c 'head -c 100M /dev/urandom > /srv/raid1/datos-empresa.bin; date > /srv/raid1/LEEME.txt; cd /srv/raid1 && sha256sum datos-empresa.bin > datos.sha256 && cat datos.sha256'
+10574c8f416ebcbeb3f0f8585fed13c296d1daff8916173b20b747f4dd5a121b  datos-empresa.bin
+
+mauro@srv-linux:~$ sudo sh -c 'head -c 100M /dev/urandom > /srv/raid5/datos-empresa.bin; date > /srv/raid5/LEEME.txt; cd /srv/raid5 && sha256sum datos-empresa.bin > datos.sha256 && cat datos.sha256'
+e270bade4328e85c97b37848113471a3bc958f59da9d953ef1e5b94dedf0e1ea  datos-empresa.bin
+
+mauro@srv-linux:~$ sudo dd if=/dev/zero of=/srv/raid0/prueba.dd bs=1M count=150 oflag=direct 2>&1 | tail -1; sudo rm /srv/raid0/prueba.dd
+157286400 bytes (157 MB, 150 MiB) copied, 4,80944 s, 32,7 MB/s
+
+mauro@srv-linux:~$ sudo dd if=/dev/zero of=/srv/raid1/prueba.dd bs=1M count=150 oflag=direct 2>&1 | tail -1; sudo rm /srv/raid1/prueba.dd
+157286400 bytes (157 MB, 150 MiB) copied, 0,133199 s, 1,2 GB/s
+
+mauro@srv-linux:~$ sudo dd if=/dev/zero of=/srv/raid5/prueba.dd bs=1M count=150 oflag=direct 2>&1 | tail -1; sudo rm /srv/raid5/prueba.dd
+157286400 bytes (157 MB, 150 MiB) copied, 0,211438 s, 744 MB/s

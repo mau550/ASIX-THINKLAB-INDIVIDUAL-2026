@@ -37,6 +37,7 @@ tr { page-break-inside: avoid; }
 code { font-family: 'DejaVu Sans Mono', monospace; font-size: 8.8pt; background: #f3f5f7; padding: 0 3px; border-radius: 3px; }
 pre { background: #f6f8fa; border: 1px solid #d0d7de; padding: 8px; white-space: pre-wrap; word-break: break-word; font-size: 8.5pt; }
 pre code { background: none; padding: 0; }
+details > summary { list-style: none; font-size: 9.5pt; margin-top: 6px; }
 img { max-width: 100%; max-height: 120mm; display: block; margin: 8px auto; border: 1px solid #d0d7de; page-break-inside: avoid; }
 blockquote { border-left: 4px solid #0b5cad; margin: 8px 0; padding: 4px 10px; background: #f3f8fe; }
 a { color: #0b5cad; text-decoration: none; }
@@ -63,6 +64,8 @@ def convertir(md_path):
         bloques.append(m.group(1))
         return f"\n\nMERMAIDBLOQUE{len(bloques) - 1}\n\n"
     texto = re.sub(r"```mermaid\n(.*?)```", guarda, texto, flags=re.S)
+    # Imágenes Markdown -> <img> (también dentro de bloques HTML como <details>, que markdown no procesa)
+    texto = re.sub(r"!\[([^\]]*)\]\(([^)\s]+)\)", lambda m: f'<img alt="{html.escape(m.group(1))}" src="{m.group(2)}">', texto)
     cuerpo = markdown.markdown(texto, extensions=["tables", "fenced_code", "sane_lists", "md_in_html"])
     for i, b in enumerate(bloques):
         cuerpo = cuerpo.replace(f"<p>MERMAIDBLOQUE{i}</p>", f'<div class="mermaid">{html.escape(b)}</div>')

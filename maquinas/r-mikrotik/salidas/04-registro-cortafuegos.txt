@@ -1,0 +1,34 @@
+# r-mikrotik · registro y contadores tras las pruebas desde srv-linux — 2026-11-22T17:44:35+01:00
+[mauro@r-mikrotik] > /log print where message~"HTTP"
+ 2026-11-22 17:45:07 firewall,info BLOQUEO-HTTP forward: in:ether2 out:ether1, connection-state:new src-mac 08:00:27:51:18:E1, proto TCP (SYN), 192.168.29.14:51754->130.89.148.77:80, len 60
+ 2026-11-22 17:45:08 firewall,info BLOQUEO-HTTP forward: in:ether2 out:ether1, connection-state:new src-mac 08:00:27:51:18:E1, proto TCP (SYN), 192.168.29.14:51754->130.89.148.77:80, len 60
+ 2026-11-22 17:45:09 firewall,info BLOQUEO-HTTP forward: in:ether2 out:ether1, connection-state:new src-mac 08:00:27:51:18:E1, proto TCP (SYN), 192.168.29.14:51754->130.89.148.77:80, len 60
+ 2026-11-22 17:45:10 firewall,info BLOQUEO-HTTP forward: in:ether2 out:ether1, connection-state:new src-mac 08:00:27:51:18:E1, proto TCP (SYN), 192.168.29.14:51754->130.89.148.77:80, len 60
+ 2026-11-22 17:45:11 firewall,info BLOQUEO-HTTP forward: in:ether2 out:ether1, connection-state:new src-mac 08:00:27:51:18:E1, proto TCP (SYN), 192.168.29.14:51754->130.89.148.77:80, len 60
+ 2026-11-22 17:45:12 firewall,info BLOQUEO-HTTP forward: in:ether2 out:ether1, connection-state:new src-mac 08:00:27:51:18:E1, proto TCP (SYN), 192.168.29.14:51754->130.89.148.77:80, len 60
+ 2026-11-22 17:45:14 firewall,info BLOQUEO-HTTP forward: in:ether2 out:ether1, connection-state:new src-mac 08:00:27:51:18:E1, proto TCP (SYN), 192.168.29.14:51754->130.89.148.77:80, len 60
+
+
+[mauro@r-mikrotik] > /ip firewall filter print stats
+Columns: CHAIN, ACTION, BYTES, PACKETS
+# CHAIN    ACTION  BYTES  PACKETS
+;;; No-DNS-desde-WAN
+0 input    drop        0        0
+;;; Permitir-HTTPS
+1 forward  accept  2 783       22
+;;; Bloquear-HTTP
+2 forward  drop      420        7
+
+
+[mauro@r-mikrotik] > /ip firewall nat print stats
+Columns: CHAIN, ACTION, BYTES, PACKETS
+# CHAIN   ACTION      BYTES  PACKETS
+;;; NAT-salida-LAN
+0 srcnat  masquerade  1 800       29
+
+
+[mauro@r-mikrotik] > /log print where message~"PERMITIDO"
+ 2026-11-22 17:15:14 system,info filter rule added by ssh-cmd:admin@10.0.2.2 (*2 = /ip firewall filter add action=accept chain=forward comment=Permitir-HTTPS dst-port=443 in-interface=ether2 log=yes log-prefix=PERMITIDO-HTTPS protocol=tcp)
+ 2026-11-22 17:44:17 firewall,info PERMITIDO-HTTPS forward: in:ether2 out:ether1, connection-state:new src-mac 08:00:27:51:18:E1, proto TCP (SYN), 192.168.29.14:51560->151.101.134.132:443, len 60
+ 2026-11-22 17:44:17 firewall,info PERMITIDO-HTTPS forward: in:ether2 out:ether1, connection-state:established,snat src-mac 08:00:27:51:18:E1, proto TCP (ACK), 192.168.29.14:51560->151.101.134.132:443, NAT (192.168.29.14:51560->10.0.2.15:51560)->151.101.134.132:443, len 40
+ 2026-11-22 17:44:17 firewall,info PERMITIDO-HTTPS forward: in:ether2 out:ether1, connection-state:established,snat src-mac 08:00:27:51:18:E1, proto TCP (ACK,PSH), 192.168.29.14:51560->151.101.134.132:443, NAT (192.168.29.14:51560->10.0.2.15:51560)->151.101.134.132:443, len 1596

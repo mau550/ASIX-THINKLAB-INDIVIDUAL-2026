@@ -1,0 +1,9 @@
+# r-mikrotik · copias locales — 2026-11-22T17:59:17+01:00
+[mauro@r-mikrotik] > /system backup save name=r-mikrotik-20261122 password=********   (binaria, cifrada)
+[mauro@r-mikrotik] > /export file=r-mikrotik-20261122                          (texto, sin contraseñas)
+[mauro@r-mikrotik] > /file print where name~"r-mikrotik"
+Columns: NAME, TYPE, SIZE, LAST-MODIFIED
+# NAME                        TYPE    SIZE     LAST-MODIFIED      
+0 r-mikrotik-20261122.rsc     script  1392     2026-11-22 17:59:56
+1 r-mikrotik-20261122.backup  backup  21.6KiB  2026-11-22 17:59:54
+

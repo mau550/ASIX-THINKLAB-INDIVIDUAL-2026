@@ -1,0 +1,14 @@
+# r-mikrotik · configuración de red, DHCP, DNS, NAT y cortafuegos — 2026-11-22T17:14:30+01:00
+[admin@r-mikrotik] > /system identity set name=r-mikrotik
+[admin@r-mikrotik] > /system clock set time-zone-name=Europe/Madrid
+[admin@r-mikrotik] > /interface ethernet set ether1 comment=WAN-NAT-VirtualBox
+[admin@r-mikrotik] > /interface ethernet set ether2 comment=LAN-lan-iso
+[admin@r-mikrotik] > /ip address add address=192.168.29.1/24 interface=ether2 comment=LAN
+[admin@r-mikrotik] > /ip pool add name=pool-lan ranges=192.168.29.100-192.168.29.200
+[admin@r-mikrotik] > /ip dhcp-server add name=dhcp-lan interface=ether2 address-pool=pool-lan lease-time=8h
+[admin@r-mikrotik] > /ip dhcp-server network add address=192.168.29.0/24 gateway=192.168.29.1 dns-server=192.168.29.1 domain=iso29.lan
+[admin@r-mikrotik] > /ip dns set allow-remote-requests=yes
+[admin@r-mikrotik] > /ip firewall nat add chain=srcnat out-interface=ether1 action=masquerade comment=NAT-salida-LAN
+[admin@r-mikrotik] > /ip firewall filter add chain=input in-interface=ether1 protocol=udp dst-port=53 action=drop comment=No-DNS-desde-WAN
+[admin@r-mikrotik] > /ip firewall filter add chain=forward in-interface=ether2 protocol=tcp dst-port=443 action=accept log=yes log-prefix=PERMITIDO-HTTPS comment=Permitir-HTTPS
+[admin@r-mikrotik] > /ip firewall filter add chain=forward in-interface=ether2 protocol=tcp dst-port=80 action=drop log=yes log-prefix=BLOQUEO-HTTP comment=Bloquear-HTTP

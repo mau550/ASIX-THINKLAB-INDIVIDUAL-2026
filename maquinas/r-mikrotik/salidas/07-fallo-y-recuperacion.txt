@@ -1,0 +1,36 @@
+# r-mikrotik · fallo provocado y recuperación desde el NAS — 2026-11-22T18:27:25+01:00
+
+## 1. Antes del fallo (desde srv-linux)
+mauro@srv-linux:~$ curl -4 -sS -o /dev/null -w "HTTPS %{http_code}\n" --max-time 8 https://www.debian.org 2>&1 || echo "SIN INTERNET"
+HTTPS 200
+
+## 2. Fallo provocado: se borra la regla NAT y las copias locales del router
+[mauro@r-mikrotik] > /ip firewall nat remove [find]; /file remove [find name~"r-mikrotik"]; /ip firewall nat print; /file print
+
+Columns: NAME, TYPE, LAST-MODIFIED
+# NAME   TYPE       LAST-MODIFIED      
+0 skins  directory  2026-11-22 17:13:28
+
+
+## 3. Efecto (desde srv-linux)
+mauro@srv-linux:~$ curl -4 -sS -o /dev/null -w "HTTPS %{http_code}\n" --max-time 8 https://www.debian.org 2>&1 || echo "SIN INTERNET"
+curl: (28) Connection timed out after 8002 milliseconds
+HTTPS 000
+SIN INTERNET
+
+## 4. Recuperación desde el NAS
+[mauro@r-mikrotik] > /tool fetch mode=sftp address=192.168.29.10 user=c-mikrotik password=******** src-path=/mnt/copias/r-mikrotik/r-mikrotik-20261122.backup dst-path=r-mikrotik-20261122.backup
+    status: finished
+[admin@r-mikrotik] > /system backup load name=r-mikrotik-20261122.backup password=********
+Restore and reboot? [y/N]: y
+
+# Tiempo total (bajar la copia + cargarla + reinicio del router + primera conexión correcta desde srv-linux): 39 s
+
+## 5. Comprobación tras el reinicio
+[mauro@r-mikrotik] > /system resource print (uptime) ; /ip firewall nat print
+uptime: 00:00:23
+0  ;;; NAT-salida-LAN
+   chain=srcnat action=masquerade out-interface=ether1
+
+mauro@srv-linux:~$ curl -4 -sS -o /dev/null -w "HTTPS %{http_code}\n" --max-time 8 https://www.debian.org 2>&1 || echo "SIN INTERNET"
+HTTPS 200

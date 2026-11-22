@@ -1,0 +1,52 @@
+# r-mikrotik · versión y recursos — 2026-11-22T17:14:18+01:00
+
+[admin@CHR] > /system resource print
+                   uptime: 1m41s                      
+                  version: 7.24.5 (stable)            
+               build-time: 2026-09-29 14:21:27        
+          minimum-version: 7.1                        
+              free-memory: 54.7MiB                    
+             total-memory: 256.0MiB                   
+                      cpu: 11th                       
+                cpu-count: 1                          
+            cpu-frequency: 2592MHz                    
+                 cpu-load: 0%                         
+           free-hdd-space: 69.1MiB                    
+          total-hdd-space: 89.2MiB                    
+  write-sect-since-reboot: 1328                       
+         write-sect-total: 1328                       
+        architecture-name: x86_64                     
+               board-name: CHR innotek GmbH VirtualBox
+                 platform: MikroTik                   
+
+
+[admin@CHR] > /system package print
+Columns: NAME, VERSION, BUILD-TIME, SIZE
+# NAME      VERSION  BUILD-TIME           SIZE   
+0 routeros  7.24.5   2026-09-29 14:21:27  19.9MiB
+
+
+[admin@CHR] > /system routerboard print
+bad command name routerboard (line 1 column 9)
+
+[admin@CHR] > /interface print
+Flags: R - RUNNING
+Columns: NAME, TYPE, ACTUAL-MTU, MAC-ADDRESS
+#   NAME    TYPE      ACTUAL-MTU  MAC-ADDRESS      
+0 R ether1  ether           1500  08:00:27:7C:0F:9B
+1 R ether2  ether           1500  08:00:27:B3:DA:A5
+2 R lo      loopback       65536  00:00:00:00:00:00
+
+
+[admin@CHR] > /ip address print
+Flags: D - DYNAMIC
+Columns: ADDRESS, NETWORK, INTERFACE, VRF
+#   ADDRESS       NETWORK   INTERFACE  VRF 
+0 D 10.0.2.15/24  10.0.2.0  ether1     main
+
+
+[admin@CHR] > /ip dhcp-client print
+Columns: NAME, INTERFACE, USE-PEER-DNS, ADD-DEFAULT-ROUTE, STATUS, ADDRESS
+# NAME     INTERFACE  USE-PEER-DNS  ADD-DEFAULT-ROUTE  STATUS  ADDRESS     
+0 client1  ether1     yes           yes                bound   10.0.2.15/24
+

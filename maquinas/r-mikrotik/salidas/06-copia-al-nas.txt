@@ -1,0 +1,28 @@
+# r-mikrotik · copia al NAS (script + planificador) — 2026-11-22T18:27:10+01:00
+# Script: maquinas/r-mikrotik/config/copia-al-nas.rsc (en el repo las contraseñas son marcadores)
+
+# 1.er intento con dst-path relativa → falló (INC-006):
+#   fetch,info Upload to 192.168.29.10 FAILED: closing connection: <sftp status: 4> 192.168.29.10:22 (16) (6)
+# Causa: /tool fetch no parte del home del usuario SFTP → se cambia a ruta absoluta /mnt/copias/r-mikrotik/…
+
+[mauro@r-mikrotik] > /system script run copia-al-nas
+    status: finished   (backup)
+    status: finished   (export)
+
+[mauro@r-mikrotik] > /log print where message~"copia-al-nas"
+ 2026-11-22 18:27:42 script,info copia-al-nas: r-mikrotik-20261122 subida a nas-truenas
+
+
+[mauro@r-mikrotik] > /system scheduler print
+Columns: NAME, START-DATE, START-TIME, INTERVAL, ON-EVENT, RUN-COUNT
+# NAME          START-DATE  START-TIME  IN  ON-EVENT                       R
+;;; Copia diaria al NAS
+0 copia-diaria  2026-11-22  02:30:00    1d  /system script run copia-al-n  0
+                                            as                              
+
+
+# En el NAS:
+truenas_admin@nas-truenas:~$ midclt call filesystem.listdir /mnt/copias/r-mikrotik
+  r-mikrotik-20261122.backup           24728 B  uid=3000
+  r-mikrotik-20261122.rsc               2559 B  uid=3000
+  prueba.rsc                            2500 B  uid=3000

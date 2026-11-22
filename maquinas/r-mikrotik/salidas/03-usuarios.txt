@@ -1,0 +1,21 @@
+# r-mikrotik · usuarios de administración — 2026-11-22T18:29:23+01:00
+[admin] > /user add name=mauro group=full password=******** comment="Administrador personal"
+[admin] > /user ssh-keys import public-key-file=lab.pub user=mauro
+[mauro] > /user disable admin          # el usuario por defecto queda desactivado
+
+[mauro@r-mikrotik] > /user print detail where name=admin or name=mauro
+Flags: X - DISABLED
+Columns: NAME, GROUP, LAST-LOGGED-IN, INACTIVITY-POLICY
+#   NAME   GROUP  LAST-LOGGED-IN       INACTIVITY-POLICY
+;;; system default user
+0 X admin  full   2026-11-22 17:15:16  none             
+;;; Administrador personal
+1   mauro  full   2026-11-22 18:29:28  none             
+
+
+[mauro@r-mikrotik] > /user ssh-keys print
+Columns: USER, KEY-TYPE, BITS, INFO
+#  USER   KEY-TYPE  BITS  INFO     
+0  admin  ed25519    256  lab-mauro
+1  mauro  ed25519    256  lab-mauro
+

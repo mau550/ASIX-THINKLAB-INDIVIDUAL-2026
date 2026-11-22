@@ -1,0 +1,14 @@
+# r-opnsense · excepción: HTTP permitido solo a los nodos Proxmox — 2026-11-22T21:06:42+01:00
+# Motivo: Proxmox descarga plantillas (download.proxmox.com) y paquetes por HTTP (puerto 80), que la LAN tiene bloqueado.
+
+$ POST /api/firewall/alias/add_item  {name: nodos_proxmox, type: host, content: 192.168.29.11, .12, .15}
+{"result":"saved","uuid":"4c147370-802c-4588-833c-4f0b373c6eb4"}
+{"status":"ok"}
+$ POST /api/firewall/filter/add_rule  {sequence 49, pass, lan, TCP, nodos_proxmox → any :80, log, "PERMITIDO-HTTP-PROXMOX"}
+{"result":"saved","uuid":"6a1e234c-2ad3-441a-b31c-026edcec791e"}
+{"status":"OK\n\n"}
+  seq   49 pass  TCP  nodos_proxmox  -> :80  PERMITIDO-HTTP-PROXMOX
+  seq   50 pass  TCP  lan            -> :443  PERMITIDO-HTTPS
+  seq   51 block TCP  lan            -> :80  BLOQUEO-HTTP
+  seq  100 pass  any  lan            -> :*  Default allow LAN to any rule
+  seq  101 pass  any  lan            -> :*  Default allow LAN IPv6 to any rule

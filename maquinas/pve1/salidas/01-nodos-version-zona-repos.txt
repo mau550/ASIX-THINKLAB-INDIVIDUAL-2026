@@ -1,0 +1,55 @@
+# Clúster Proxmox · preparación de los 3 nodos por la API REST (/api2/json) — 2026-11-22T21:14:10+01:00
+
+########## pve1 ##########
+$ GET /version
+  {'repoid': 'b9984c6d90a4bd80', 'release': '9.2', 'version': '9.2.2'}
+$ GET /nodes/pve1/network (vmbr0)
+   vmbr0 192.168.29.11/24 gw 192.168.29.1 puertos nic0
+$ PUT /nodes/pve1/time timezone=Europe/Madrid   (el instalador puso Europe/Bucharest o Vienna)
+   Europe/Madrid 21:14:11
+$ Repositorios: desactivar enterprise (de pago) y añadir no-subscription
+   desactivado: /etc/apt/sources.list.d/ceph.sources [0]
+   desactivado: /etc/apt/sources.list.d/pve-enterprise.sources [0]
+   ON  https://enterprise.proxmox.com/debian/ceph-squid trixie enterprise
+   ON  http://deb.debian.org/debian/ trixie trixie-updates main contrib non-free-firmware
+   ON  http://security.debian.org/debian-security/ trixie-security main contrib non-free-firmware
+   ON  https://enterprise.proxmox.com/debian/pve trixie pve-enterprise
+   ON  http://download.proxmox.com/debian/pve trixie pve-no-subscription
+$ POST /nodes/pve1/apt/update   → paquetes actualizables
+   229 paquetes pendientes
+
+########## pve2 ##########
+$ GET /version
+  {'version': '9.2.2', 'release': '9.2', 'repoid': 'b9984c6d90a4bd80'}
+$ GET /nodes/pve2/network (vmbr0)
+   vmbr0 192.168.29.12/24 gw 192.168.29.1 puertos nic0
+$ PUT /nodes/pve2/time timezone=Europe/Madrid   (el instalador puso Europe/Bucharest o Vienna)
+   Europe/Madrid 21:14:40
+$ Repositorios: desactivar enterprise (de pago) y añadir no-subscription
+   desactivado: /etc/apt/sources.list.d/ceph.sources [0]
+   desactivado: /etc/apt/sources.list.d/pve-enterprise.sources [0]
+   ON  http://deb.debian.org/debian/ trixie trixie-updates main contrib non-free-firmware
+   ON  http://security.debian.org/debian-security/ trixie-security main contrib non-free-firmware
+   ON  http://download.proxmox.com/debian/pve trixie pve-no-subscription
+   ON  https://enterprise.proxmox.com/debian/ceph-squid trixie enterprise
+   ON  https://enterprise.proxmox.com/debian/pve trixie pve-enterprise
+$ POST /nodes/pve2/apt/update   → paquetes actualizables
+   229 paquetes pendientes
+
+########## pve3 ##########
+$ GET /version
+  {'release': '9.2', 'repoid': 'b9984c6d90a4bd80', 'version': '9.2.2'}
+$ GET /nodes/pve3/network (vmbr0)
+   vmbr0 192.168.29.15/24 gw 192.168.29.1 puertos nic0
+$ PUT /nodes/pve3/time timezone=Europe/Madrid   (el instalador puso Europe/Bucharest o Vienna)
+   Europe/Madrid 21:15:08
+$ Repositorios: desactivar enterprise (de pago) y añadir no-subscription
+   desactivado: /etc/apt/sources.list.d/ceph.sources [0]
+   desactivado: /etc/apt/sources.list.d/pve-enterprise.sources [0]
+   ON  http://download.proxmox.com/debian/pve trixie pve-no-subscription
+   ON  http://deb.debian.org/debian/ trixie trixie-updates main contrib non-free-firmware
+   ON  http://security.debian.org/debian-security/ trixie-security main contrib non-free-firmware
+   ON  https://enterprise.proxmox.com/debian/ceph-squid trixie enterprise
+   ON  https://enterprise.proxmox.com/debian/pve trixie pve-enterprise
+$ POST /nodes/pve3/apt/update   → paquetes actualizables
+   229 paquetes pendientes

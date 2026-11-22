@@ -1,0 +1,23 @@
+# Clúster Proxmox cluster-iso29 — 2026-11-22T21:15:48+01:00
+
+$ POST /cluster/config  clustername=cluster-iso29   (en pve1)
+{"data":"UPID:pve1:00000ACB:0000FC10:6B034D74:clustercreate:cluster-iso29:root@pam:"}
+$ GET /cluster/config/join   (huella del certificado de pve1, necesaria para unirse)
+  pve_fp = 53:41:04:29:B9:75:A7:7F…
+
+$ POST /cluster/config/join en pve2  hostname=192.168.29.11 fingerprint=… password=********
+{"data":"UPID:pve2:000006AE:000055C7:6B034D8D:clusterjoin::root@pam:"}
+
+$ POST /cluster/config/join en pve3  hostname=192.168.29.11 fingerprint=… password=********
+{"data":"UPID:pve3:000006CE:00005BB9:6B034DC0:clusterjoin::root@pam:"}
+
+$ GET /cluster/status   (quórum y nodos)
+  clúster cluster-iso29: 3 nodos, quorate=1, versión 3
+  nodo pve2  id=2 ip=192.168.29.12 online=1 local=0
+  nodo pve3  id=3 ip=192.168.29.15 online=1 local=0
+  nodo pve1  id=1 ip=192.168.29.11 online=1 local=1
+
+# Usuario de administración (se replica a todo el clúster porque /etc/pve es compartido)
+$ POST /access/users userid=mauro@pve password=******** ; PUT /access/acl path=/ roles=Administrator users=mauro@pve
+   mauro@pve Administrator / (leído desde pve2)
+   login de mauro@pve en pve3: mauro@pve

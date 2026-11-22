@@ -1,0 +1,15 @@
+# Optimización 1 · consumo de un servidor sin escritorio — 2026-11-22T17:56:30+01:00
+$ free -m; systemd-analyze; df -h /
+               total       usado       libre  compartido   búf/caché  disponible
+Mem:             967         211         576           0         311         756
+Inter:           582           0         582
+Startup finished in 4.866s (kernel) + 2.648s (userspace) = 7.514s 
+graphical.target reached after 2.647s in userspace.
+S.ficheros     Tamaño Usados  Disp Uso% Montado en
+/dev/sda1        9,2G   1,5G  7,3G  17% /
+
+# Anfitrión: memoria real (RSS) de cada VM en ejecución — ps -o rss
+r-nftables   RSS =  1212 MB
+r-mikrotik   RSS =   183 MB
+srv-linux    RSS =   871 MB
+nas-truenas  RSS =  2007 MB

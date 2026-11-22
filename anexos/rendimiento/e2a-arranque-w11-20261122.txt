@@ -1,0 +1,77 @@
+# Escenario: E2a · Debian 13 (reposo) + W11 arrancando — 2026-11-22T16:52:34+01:00 — duración 120s (muestras cada 5 s)
+## VMs en ejecución
+"Debian 13.1" {692dfd03-396e-4a5b-b1dc-558cc9cf3a7b}
+"W11" {55a464c5-3114-4422-81aa-f5b32b85e851}
+## free -m (inicio)
+               total        used        free      shared  buff/cache   available
+Mem:           15859        6311        2935         129        7081        9548
+Swap:          12156           1       12155
+## vmstat -w 5
+--procs-- -----------------------memory---------------------- ---swap-- -----io---- -system-- ----------cpu----------
+   r    b         swpd         free         buff        cache   si   so    bi    bo   in   cs  us  sy  id  wa  st  gu
+   3    0         1536      3005480       201876      7049196    0  485  9073  7455 28912   44   3   5  89   3   0   0
+   1    1         1536       226672       201892      5948480    0    0 16658    34 19323 32590   1  10  89   0   0   0
+   1    1         1536       177400       201944      5672696    0    0 21297    79 35517 66914   1   4  95   0   0   0
+   0    0         1536       183088       202048      5672668    0    0 25853   150 42025 79222   1   3  96   0   0   0
+   1    0         1536       205540       202064      5615320    0    0 30815    50 39663 73530   1   2  97   0   0   0
+   0    0         1536       236396       202088      5615336    0    0 30543   114 38727 71839   1   2  96   0   0   0
+   1    0         1536       232188       202256      5615324    0    0 24883  6065 33259 60729   1   3  96   0   0   0
+   2    3         1536       240040       202580      5616072    0    0 27166  3114 38493 65328   1   8  91   1   0   0
+   1    0         1536       232592       203288      5616080    0    0 22610  4098 44233 64815   1  12  86   1   0   0
+   0    4         1536       230620       203396      5616120    0    0 29169   747 44371 81342   1   9  90   0   0   0
+   1    0         1536       231824       203488      5616076    0    0 11028   465 41838 78973   1   4  95   0   0   0
+   4    0         1536       220048       203512      5616092    0    0     0   104 23742 44843   1   2  97   0   0   0
+   0    0         1536       212620       203528      5616104    0    0     0     8 27170 51875   1   2  97   0   0   0
+   0    1         1536       232984       203556      5616092    0    0     0   129 27877 52952   1   2  97   0   0   0
+   1    2         1536       232964       203596      5616088    0    0     7    84 15037 27637   1   2  97   0   0   0
+   1    0         1536       233324       203640      5616104    0    0   899   127 32114 61106   1   3  96   0   0   0
+   0    0         1536       227820       203664      5616092    0    0 26340   259 41420 78288   1   4  96   0   0   0
+   4    0         1536       215704       203680      5616116    0    0  1361    14 34052 64781   1   3  96   0   0   0
+   1    0         1536       205944       203736      5616104    0    0 12902   660 32798 62134   1   4  95   0   0   0
+   2    0         1536       224520       203880      5616096    0    0    36   478 23096 43920   1   3  96   0   0   0
+   1    0         1536       225272       204136      5616104    0    0   140   480 25864 48997   1   2  97   0   0   0
+--procs-- -----------------------memory---------------------- ---swap-- -----io---- -system-- ----------cpu----------
+   r    b         swpd         free         buff        cache   si   so    bi    bo   in   cs  us  sy  id  wa  st  gu
+   0    0         1536       226412       204184      5616128    0    0    40   140 29018 54648   1   2  97   0   0   0
+   0    0         1536       223732       204208      5616112    0    0     0    17 34845 66089   1   2  96   0   0   0
+   0    0         1536       222468       204232      5616112    0    0    11    12 31656 60199   1   2  97   0   0   0
+## iostat -dxm sda 5 (resumen)
+media lectura=11.8 MB/s  escritura=1.0 MB/s  %util=42.3  (n=24)
+  %util=44.51  r_await=12.49  w_await=20.80
+  %util=52.80  r_await=1.59  w_await=2.38
+  %util=78.68  r_await=0.78  w_await=1.88
+  %util=85.02  r_await=1.37  w_await=1.44
+  %util=97.46  r_await=1.42  w_await=3.49
+  %util=97.18  r_await=1.43  w_await=4.95
+  %util=95.56  r_await=1.77  w_await=19.96
+  %util=82.56  r_await=4.59  w_await=9.90
+  %util=85.42  r_await=1.63  w_await=9.96
+  %util=88.92  r_await=3.33  w_await=6.44
+  %util=44.46  r_await=0.71  w_await=5.09
+  %util=1.62  r_await=1.00  w_await=9.65
+  %util=0.46  r_await=0.00  w_await=5.75
+  %util=1.32  r_await=3.25  w_await=10.26
+  %util=0.98  r_await=0.80  w_await=8.03
+  %util=4.16  r_await=2.88  w_await=3.06
+  %util=86.52  r_await=1.44  w_await=6.26
+  %util=5.92  r_await=0.86  w_await=3.50
+  %util=52.66  r_await=0.75  w_await=10.74
+  %util=3.54  r_await=2.04  w_await=4.74
+  %util=3.40  r_await=1.45  w_await=5.01
+  %util=1.66  r_await=4.30  w_await=5.80
+  %util=0.52  r_await=11.00  w_await=6.57
+  %util=0.74  r_await=2.67  w_await=1.42
+## sar -n DEV (enp3s0, media)
+Average:       enp3s0      3.39      3.26      0.75      1.06      0.00      0.00      0.19      0.00
+## pidstat VBoxHeadless (media)
+Average:      UID       PID    %usr %system  %guest   %wait    %CPU   CPU  Command
+Average:     1000     55555    0.37    1.49    0.00    0.00    1.87     -  VBoxHeadless
+Average:     1000     59426    1.52   30.51    0.00    0.00   32.03     -  VBoxHeadless
+Average:      UID       PID  minflt/s  majflt/s     VSZ     RSS   %MEM  Command
+Average:     1000     59426     50.60      0.09 3309872 1615424   9.95  VBoxHeadless
+## free -m (fin)
+               total        used        free      shared  buff/cache   available
+Mem:           15859       10413         229         129        5683        5446
+Swap:          12156           1       12155
+## temperatura
+Package id 0:  +41.0 C  (high = +100.0 C, crit = +100.0 C)

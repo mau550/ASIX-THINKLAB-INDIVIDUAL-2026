@@ -1,0 +1,51 @@
+# Escenario: E2b · Debian 13 + W11 (ambas en reposo, pantalla de login) — 2026-11-22T16:54:47+01:00 — duración 60s (muestras cada 5 s)
+## VMs en ejecución
+"Debian 13.1" {692dfd03-396e-4a5b-b1dc-558cc9cf3a7b}
+"W11" {55a464c5-3114-4422-81aa-f5b32b85e851}
+## free -m (inicio)
+               total        used        free      shared  buff/cache   available
+Mem:           15859       10411         230         129        5685        5448
+Swap:          12156           1       12155
+## vmstat -w 5
+--procs-- -----------------------memory---------------------- ---swap-- -----io---- -system-- ----------cpu----------
+   r    b         swpd         free         buff        cache   si   so    bi    bo   in   cs  us  sy  id  wa  st  gu
+   2    0         1536       235716       204336      5617400    0  475  9103  7318 28971   44   3   5  89   2   0   0
+   1    1         1536       228600       204380      5617432    0    0    15    38 33402 63013   1   2  96   0   0   0
+   2    0         1536       225244       204400      5617508    0    0     0    43 28449 53603   1   2  96   0   0   0
+   1    0         1536       231424       204440      5617436    0    0     1    43 34839 66717   1   2  96   0   0   0
+   2    0         1536       229224       204484      5617424    0    0    50   356 17716 32931   1   2  97   0   0   0
+   2    0         1536       223916       204540      5617424    0    0  7568   195 36647 69806   1   4  95   0   0   0
+   2    0         1536       226788       204892      5617388    0    0 16098   664 40771 76461   1   7  92   0   0   0
+   1    0         1536       220484       204956      5617444    0    0  1001  1450 28629 53879   1   3  96   0   0   0
+   1    0         1536       215008       204996      5617444    0    0     3   114 34919 65979   1   2  97   0   0   0
+   2    0         1536       232632       205020      5617408    0    0     0    51 34455 66051   1   2  97   0   0   0
+   3    0         1536       232192       205036      5617444    0    0     1    64 32045 60624   1   2  96   0   0   0
+   3    0         1536       233364       205180      5617316    0    0  5249   133 36161 67224   1   4  94   0   0   0
+## iostat -dxm sda 5 (resumen)
+media lectura=3.2 MB/s  escritura=0.8 MB/s  %util=13.2  (n=12)
+  %util=44.35  r_await=11.98  w_await=20.73
+  %util=1.30  r_await=5.75  w_await=5.35
+  %util=0.78  r_await=11.00  w_await=9.21
+  %util=1.04  r_await=12.00  w_await=3.14
+  %util=2.52  r_await=2.62  w_await=4.09
+  %util=27.92  r_await=2.54  w_await=18.04
+  %util=52.84  r_await=3.89  w_await=2.00
+  %util=9.48  r_await=0.93  w_await=13.49
+  %util=1.30  r_await=5.00  w_await=5.67
+  %util=0.82  r_await=0.00  w_await=4.55
+  %util=0.86  r_await=11.00  w_await=8.20
+  %util=15.28  r_await=2.98  w_await=2.22
+## sar -n DEV (enp3s0, media)
+Average:       enp3s0      8.47      9.13      4.54      2.47      0.00      0.00      0.10      0.00
+## pidstat VBoxHeadless (media)
+Average:      UID       PID    %usr %system  %guest   %wait    %CPU   CPU  Command
+Average:     1000     55555    0.33    1.92    0.00    0.00    2.25     -  VBoxHeadless
+Average:     1000     59426    1.05   19.47    0.00    0.00   20.52     -  VBoxHeadless
+Average:      UID       PID  minflt/s  majflt/s     VSZ     RSS   %MEM  Command
+Average:     1000     59426     30.47      0.00 3883591 2133773  13.14  VBoxHeadless
+## free -m (fin)
+               total        used        free      shared  buff/cache   available
+Mem:           15859       10416         224         129        5686        5443
+Swap:          12156           1       12155
+## temperatura
+Package id 0:  +40.0 C  (high = +100.0 C, crit = +100.0 C)

@@ -1,0 +1,52 @@
+# Escenario: E3 · Debian 13 + W11 + carga simulada de 5 GB (equivale a una 3.ª VM tipo TrueNAS/Proxmox) — 2026-11-22T16:55:52+01:00 — duración 60s (muestras cada 5 s)
+## VMs en ejecución
+"Debian 13.1" {692dfd03-396e-4a5b-b1dc-558cc9cf3a7b}
+"W11" {55a464c5-3114-4422-81aa-f5b32b85e851}
+## free -m (inicio)
+               total        used        free      shared  buff/cache   available
+Mem:           15859       14854         160          76        1266        1005
+Swap:          12156        1219       10937
+## vmstat -w 5
+--procs-- -----------------------memory---------------------- ---swap-- -----io---- -system-- ----------cpu----------
+   r    b         swpd         free         buff        cache   si   so    bi    bo   in   cs  us  sy  id  wa  st  gu
+   3    0      1248256       164212       118200      1179056    0  657  9037  7435 29006   44   3   5  90   2   0   0
+   1    1      1248256       167384       102996      1183804    3    0  1385    46 36927 67669   9   2  88   1   0   0
+   1    1      1248256       158888       103036      1183800    2    0    36    24 30707 55644   9   2  89   0   0   0
+   1    2      1248256       169304        76168      1180640    0    0     0    19 25384 46006   9   1  90   0   0   0
+   1    3      1248768       175232        54736      1178708    2  102   399   246 24130 42627   9   2  89   0   0   0
+   3    0      1248768       226840        54780      1178708    0    0   120    67 38066 70623   9   2  89   0   0   0
+   1    1      1248768       226152        54788      1178712    0    0     0    29 37912 70378   9   2  89   0   0   0
+   2    1      1248768       227836        54812      1178708    0    0     1    43 23108 41608   9   1  89   0   0   0
+   2    0      1248768       227816        54852      1178708   14    0  1744   112 13116 21252   9   2  89   0   0   0
+   2    0      1248768       228228        54876      1178712    0    0   165    59 28929 52914   9   1  90   0   0   0
+   3    0      1744640       267436         4776       898792   17 99126   594 99132 37830 69295   9   3  88   0   0   0
+   2    0      1744640       260936         4968       900560    2    0   389   116 39189 72892   9   2  89   0   0   0
+## iostat -dxm sda 5 (resumen)
+media lectura=1.1 MB/s  escritura=0.6 MB/s  %util=5.9  (n=12)
+  %util=44.01  r_await=11.93  w_await=20.70
+  %util=4.44  r_await=45.28  w_await=11.18
+  %util=1.32  r_await=3.25  w_await=3.37
+  %util=0.48  r_await=1.00  w_await=7.57
+  %util=2.92  r_await=4.46  w_await=6.20
+  %util=2.42  r_await=1.81  w_await=7.29
+  %util=0.32  r_await=0.00  w_await=4.39
+  %util=1.02  r_await=0.50  w_await=8.26
+  %util=7.24  r_await=1.36  w_await=3.07
+  %util=1.68  r_await=1.96  w_await=5.21
+  %util=2.96  r_await=10.37  w_await=5.75
+  %util=2.56  r_await=13.13  w_await=7.72
+## sar -n DEV (enp3s0, media)
+Average:       enp3s0      2.42      1.73      0.44      0.41      0.00      0.00      0.25      0.00
+## pidstat VBoxHeadless (media)
+Average:      UID       PID    %usr %system  %guest   %wait    %CPU   CPU  Command
+Average:     1000     55555    0.28    0.88    0.00    0.00    1.17     -  VBoxHeadless
+Average:     1000     59426    0.52    6.68    0.00    0.00    7.20     -  VBoxHeadless
+Average:      UID       PID  minflt/s  majflt/s     VSZ     RSS   %MEM  Command
+Average:     1000     55555      0.00      0.00 2987752 1308420   8.06  VBoxHeadless
+Average:     1000     59426      1.87      0.00 3902225 2153944  13.26  VBoxHeadless
+## free -m (fin)
+               total        used        free      shared  buff/cache   available
+Mem:           15859       15100         238          51         890         759
+Swap:          12156        1703       10453
+## temperatura
+Package id 0:  +47.0 C  (high = +100.0 C, crit = +100.0 C)

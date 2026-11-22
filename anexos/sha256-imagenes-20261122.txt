@@ -1,0 +1,19 @@
+# Verificación de integridad de las imágenes — 2026-11-22T18:34:39+01:00
+# Equipo de casa. Comando: sha256sum <fichero>; se compara con el valor que publica el fabricante (descargado por HTTPS de su web).
+
+IMAGEN                                   RESULTADO  SHA256 calculado
+chr-7.24.5.vdi.zip                       COINCIDE   c5e33cbcc006c1ac4ce3bfa977283c7ea084624723b1c80da51ea08f643c4c66
+TrueNAS-SCALE-25.10.7.iso                COINCIDE   54ce9441ce66966a392e28f63604ca3c2c083d0bec4db7bb5af2f74f7a007c8e
+proxmox-ve_9.2-1.iso                     COINCIDE   4e88fe416df9b527624a175f24c9aa07c714d3332afb1ee3dbf3879573ef2c6c
+debian-13.1.0-amd64-netinst.iso          COINCIDE   658b28e209b578fe788ec5867deebae57b6aac5fce3692bbb116bab9c65568b3
+OPNsense-26.7-dvd-amd64.iso.bz2          COINCIDE   95cafedda6d5b22ce832e249dc2309110fbee19f813ad78cf28bb3d387186bfb
+OPNsense-26.7-dvd-amd64.iso              COINCIDE   1efd5dc9fa12a1f93571183fe5e3823e22e332872de8417fafb5e4e4d48d5dcd
+w11.iso                                  N/C        5210deedb54d373dccbf4a164be9d8a010ef867af4fc66856443450e89119dc8
+
+# Valores oficiales:
+MikroTik : https://download.mikrotik.com/routeros/7.24.5/chr-7.24.5.vdi.zip.sha256
+TrueNAS  : https://download.sys.truenas.net/TrueNAS-SCALE-Goldeye/25.10.7/TrueNAS-SCALE-25.10.7.iso.sha256
+Proxmox  : https://enterprise.proxmox.com/iso/SHA256SUMS
+Debian   : https://cdimage.debian.org/cdimage/archive/13.1.0/amd64/iso-cd/SHA256SUMS
+OPNsense : https://pkg.opnsense.org/releases/26.7/OPNsense-26.7-checksums-amd64.sha256 (publica el del .bz2; el de la ISO descomprimida (1efd5dc9…) coincide con el anotado el 17/11)
+Windows  : Microsoft no publica la suma de esta w11.iso → N/C (se anota para detectar cambios)

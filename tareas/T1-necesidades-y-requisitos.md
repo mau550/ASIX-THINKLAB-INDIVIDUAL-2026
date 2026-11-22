@@ -32,17 +32,19 @@ La empresa contempla cinco departamentos funcionales: Dirección, Administració
 
 | Recurso | Necesario | Mi equipo individual | Valoración |
 |---|---|---|---|
-| CPU y virtualización | Procesador de 64 bits y soporte de virtualización; VT-x para virtualización Intel | Intel Core Ultra 5 125H, 14 núcleos físicos y 18 hilos lógicos | Cumple. VT-x disponible. |
-| RAM | Memoria suficiente para el anfitrión y las máquinas virtuales activas | 30 GiB | Atención: será necesario distribuir los recursos y trabajar por escenarios. |
-| Disco | Espacio suficiente para sistemas, discos virtuales e imágenes | SSD externo de 931,5 GB | Aproximadamente 695 GB disponibles en `/home` según el inventario realizado. |
+| CPU y virtualización | Procesador de 64 bits y soporte de virtualización; VT-x para virtualización Intel | Clase: Core Ultra 5 125H (14 núcleos / 18 hilos). Casa: Core i5-11400F (6 / 12) | Cumple en los dos. VT-x + EPT; virtualización anidada activada en `pve1-3` |
+| RAM | Memoria suficiente para el anfitrión y las máquinas virtuales activas | Clase: 30 GiB · Casa: 16 GB | ⚠️ Limita, sobre todo en casa: se trabaja por escenarios ([T7](T7-rendimiento.md)) |
+| Disco | Espacio suficiente y velocidad para sistemas, discos virtuales e imágenes | SSD externo USB de 931,5 GB (común a los dos equipos) | 689 GB libres en `/home` (22/11). ⚠️ En casa está en un puerto USB 2.0 → 41 MB/s ([INC-002](../incidencias/INC-002-ssd-portatil-en-usb2.md)) |
 | Sistema anfitrión | Sistema operativo compatible con el hipervisor | Linux Mint 22.3 | Instalado y operativo. |
-| Red | Conectividad para descargar imágenes y actualizar los sistemas | Conectividad del equipo anfitrión | Velocidad y características de la conexión pendientes de comprobar. |
+| Red | Conectividad para descargar imágenes y actualizar los sistemas | Casa: Ethernet Gigabit | ✅ Medido: 456 Mbit/s de descarga y 10 ms a Internet ([T2](T2-equipos-clase-y-casa.md)) |
 | Firmware | Compatibilidad con los requisitos de arranque de los sistemas invitados | Configuración virtual mediante VirtualBox 7.0.20 | Windows 11 tiene EFI, Secure Boot y TPM 2.0 configurados en su máquina virtual. |
-| Virtualización anidada | Necesaria para ejecutar determinados hipervisores dentro de VirtualBox | Intel VT-x disponible; virtualización anidada pendiente de habilitar y verificar | Pendiente de prueba para Proxmox VE. |
+| Virtualización anidada | Necesaria para ejecutar determinados hipervisores dentro de VirtualBox | Activada en `pve1`, `pve2` y `pve3` (`--nested-hw-virt on`) | Falta comprobarla al instalar Proxmox |
 
-**Almacenamiento:** Linux Mint 22.3 está instalado en el SSD externo. El NVMe Samsung interno de aproximadamente 953,9 GB no se utilizará ni modificará en esta fase.
+**Almacenamiento:** Linux Mint 22.3 está instalado en el SSD externo. Los discos internos (NVMe Samsung de 953,9 GB en clase y 970 EVO Plus de 500 GB en casa) no se usan ni se modifican.
 
-**Limitación principal:** los 30 GiB de RAM disponibles no permiten mantener todas las máquinas virtuales previstas encendidas simultáneamente. Se utilizarán diferentes escenarios de ejecución, asignando recursos según las necesidades de cada prueba.
+> **Corrección:** la versión anterior solo recogía el equipo de clase. El entorno funciona en **dos equipos** con el mismo SSD USB ([T2](T2-equipos-clase-y-casa.md)).
+
+**Limitación principal:** ni los 30 GiB del equipo de clase ni los 16 GB del de casa permiten mantener todas las máquinas virtuales previstas encendidas simultáneamente. Se utilizarán diferentes escenarios de ejecución, asignando recursos según las necesidades de cada prueba.
 
 ## 3. Requisitos mínimos oficiales frente a recursos propuestos
 

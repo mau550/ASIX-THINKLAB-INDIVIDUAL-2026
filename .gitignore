@@ -1,0 +1,25 @@
+# Imágenes de instalación y discos virtuales (pesan GB y no son documentación)
+*.iso
+*.iso.bz2
+*.img
+*.vdi
+*.vmdk
+*.vhd
+*.qcow2
+*.ova
+*.zip
+*.nvram
+*.sav
+
+# Copias binarias de equipos (contienen configuración sensible)
+*.backup
+*.db
+pwenc_secret
+
+# Secretos
+credenciales*
+*.key
+*.pem
+id_ed25519*
+copia_nas*
+.env

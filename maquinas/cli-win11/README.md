@@ -37,3 +37,31 @@ scp C:\Temp\cli-win11-docs.zip cli-win11@192.168.29.10:/mnt/copias/cli-win11/
 ```
 
 **Qué se copia y qué no:** solo los **datos del usuario** (Documentos, Escritorio). No se copia la imagen de 32 GB: Windows y las aplicaciones se reinstalan. En una empresa la reinstalación se automatizaría con una imagen maestra o Intune.
+
+<!-- GALERIA:inicio -->
+
+## Galería de evidencias
+
+Todas las pruebas de esta máquina, en el orden en que se hicieron. Las capturas son de la propia VM; las salidas son el texto literal de los comandos ejecutados, con fecha y hora en la primera línea.
+
+### Capturas
+
+<details open><summary><b>01. Arranca pantalla bloqueo</b> · <code>w11-01-arranca-pantalla-bloqueo.png</code></summary>
+
+![01. Arranca pantalla bloqueo](capturas/w11-01-arranca-pantalla-bloqueo.png)
+
+</details>
+
+<details open><summary><b>02. Arranque tras apagado forzado</b> · <code>w11-02-arranque-tras-apagado-forzado.png</code></summary>
+
+![02. Arranque tras apagado forzado](capturas/w11-02-arranque-tras-apagado-forzado.png)
+
+</details>
+
+<details open><summary><b>03. Apagado colgado pantalla negra</b> · <code>w11-03-apagado-colgado-pantalla-negra.png</code></summary>
+
+![03. Apagado colgado pantalla negra](capturas/w11-03-apagado-colgado-pantalla-negra.png)
+
+</details>
+
+<!-- GALERIA:fin -->

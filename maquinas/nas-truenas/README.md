@@ -51,3 +51,89 @@ Instalador de texto ([capturas tn-01…05](capturas/)): *Install/Upgrade* → di
 - **Un solo disco** (*stripe*): ZFS detecta errores pero no puede repararlos. En producción harían falta dos discos en espejo.
 - El NAS está **en el mismo equipo físico** que lo que protege. La regla **3-2-1** pide además una copia fuera, por ejemplo otro disco o la nube.
 - En casa (16 GB), TrueNAS con 8 GB obliga a apagar otras VM ([T7](../../tareas/T7-rendimiento.md)).
+
+<!-- GALERIA:inicio -->
+
+## Galería de evidencias
+
+Todas las pruebas de esta máquina, en el orden en que se hicieron. Las capturas son de la propia VM; las salidas son el texto literal de los comandos ejecutados, con fecha y hora en la primera línea.
+
+### Salidas de comandos
+
+| # | Fichero | Qué demuestra |
+|---|---|---|
+| 1 | [`01-pool-datasets.txt`](salidas/01-pool-datasets.txt) | nas-truenas · zona horaria, pool y datasets con la API (midclt) — 2026-11-22T18:05:17+01:00 |
+| 2 | [`02-usuarios-y-ssh.txt`](salidas/02-usuarios-y-ssh.txt) | nas-truenas · un usuario por máquina para las copias por SFTP — 2026-11-22T18:06:11+01:00 |
+| 3 | [`03-red-ip-fija.txt`](salidas/03-red-ip-fija.txt) | nas-truenas · red con IP fija (commit + checkin) — 2026-11-22T18:06:28+01:00 |
+| 4 | [`04-copias-recibidas.txt`](salidas/04-copias-recibidas.txt) | nas-truenas · copias recibidas en cada carpeta — 2026-11-22T18:22:35+01:00 |
+| 5 | [`05-nfs-para-proxmox.txt`](salidas/05-nfs-para-proxmox.txt) | nas-truenas · recurso NFS para las copias del clúster Proxmox — 2026-11-22T21:46:28+01:00 |
+
+### Capturas
+
+<details open><summary><b>01. Instalador menu</b> · <code>tn-01-instalador-menu.png</code></summary>
+
+![01. Instalador menu](capturas/tn-01-instalador-menu.png)
+
+</details>
+
+<details open><summary><b>02. Disco sistema sda</b> · <code>tn-02-disco-sistema-sda.png</code></summary>
+
+![02. Disco sistema sda](capturas/tn-02-disco-sistema-sda.png)
+
+</details>
+
+<details open><summary><b>03. Usuario truenas admin</b> · <code>tn-03-usuario-truenas-admin.png</code></summary>
+
+![03. Usuario truenas admin](capturas/tn-03-usuario-truenas-admin.png)
+
+</details>
+
+<details open><summary><b>04. Instalando</b> · <code>tn-04-instalando.png</code></summary>
+
+![04. Instalando](capturas/tn-04-instalando.png)
+
+</details>
+
+<details open><summary><b>05. Instalacion correcta</b> · <code>tn-05-instalacion-correcta.png</code></summary>
+
+![05. Instalacion correcta](capturas/tn-05-instalacion-correcta.png)
+
+</details>
+
+<details open><summary><b>06. Web panel</b> · <code>tn-06-web-panel.png</code></summary>
+
+![06. Web panel](capturas/tn-06-web-panel.png)
+
+</details>
+
+<details open><summary><b>07. Web almacenamiento pool</b> · <code>tn-07-web-almacenamiento-pool.png</code></summary>
+
+![07. Web almacenamiento pool](capturas/tn-07-web-almacenamiento-pool.png)
+
+</details>
+
+<details open><summary><b>08. Web datasets</b> · <code>tn-08-web-datasets.png</code></summary>
+
+![08. Web datasets](capturas/tn-08-web-datasets.png)
+
+</details>
+
+<details open><summary><b>09. Web usuarios</b> · <code>tn-09-web-usuarios.png</code></summary>
+
+![09. Web usuarios](capturas/tn-09-web-usuarios.png)
+
+</details>
+
+<details open><summary><b>10. Web red ip fija</b> · <code>tn-10-web-red-ip-fija.png</code></summary>
+
+![10. Web red ip fija](capturas/tn-10-web-red-ip-fija.png)
+
+</details>
+
+<details open><summary><b>11. Web servicios ssh</b> · <code>tn-11-web-servicios-ssh.png</code></summary>
+
+![11. Web servicios ssh](capturas/tn-11-web-servicios-ssh.png)
+
+</details>
+
+<!-- GALERIA:fin -->

@@ -92,3 +92,72 @@ Las dos respondieron al ping desde la LAN ([03-contenedor-y-vm.txt](salidas/03-c
 `vzdump` del contenedor 100 en pve2 (modo *snapshot*, zstd): **160 MB en 32 s**. **Qué se copia:** las VM y los contenedores (`vzdump`) y `/etc/pve` (configuración del clúster, replicada en los tres nodos). **Qué no:** el propio Proxmox, que se reinstala desde la ISO en 10 minutos y se vuelve a unir al clúster. **Pendiente:** enviar estas copias al NAS (almacenamiento NFS o PBS) cuando TrueNAS pueda estar encendido a la vez que el clúster, en el equipo de clase.
 
 > Tras la prueba de quórum, el contenedor 100 quedó parado ([pve-07](capturas/pve-07-web-contenedor-100-en-pve2.png)) porque pve2 se apagó en frío y el contenedor no tiene `onboot=1`.
+
+<!-- GALERIA:inicio -->
+
+## Galería de evidencias
+
+Todas las pruebas de esta máquina, en el orden en que se hicieron. Las capturas son de la propia VM; las salidas son el texto literal de los comandos ejecutados, con fecha y hora en la primera línea.
+
+### Salidas de comandos
+
+| # | Fichero | Qué demuestra |
+|---|---|---|
+| 1 | [`01-nodos-version-zona-repos.txt`](salidas/01-nodos-version-zona-repos.txt) | Clúster Proxmox · preparación de los 3 nodos por la API REST (/api2/json) — 2026-11-22T21:14:10+01:00 |
+| 2 | [`02-cluster.txt`](salidas/02-cluster.txt) | Clúster Proxmox cluster-iso29 — 2026-11-22T21:15:48+01:00 |
+| 3 | [`03-contenedor-y-vm.txt`](salidas/03-contenedor-y-vm.txt) | Clúster · contenedor 100 y VM 101 en pve1 — 2026-11-22T21:18:59+01:00 |
+| 4 | [`04-migraciones-medidas.txt`](salidas/04-migraciones-medidas.txt) | Clúster · migraciones medidas — 2026-11-22T21:22:48+01:00 |
+| 5 | [`05-copia-vzdump-y-quorum.txt`](salidas/05-copia-vzdump-y-quorum.txt) | Clúster · copia vzdump del contenedor y prueba de quórum — 2026-11-22T21:27:43+01:00 |
+| 6 | [`06-copias-al-nas-nfs.txt`](salidas/06-copias-al-nas-nfs.txt) | Clúster Proxmox · copias al NAS por NFS — 2026-11-22T21:46:39+01:00 |
+
+### Capturas
+
+<details open><summary><b>01. Arranque iso 9.2</b> · <code>pve-01-arranque-iso-9.2.png</code></summary>
+
+![01. Arranque iso 9.2](capturas/pve-01-arranque-iso-9.2.png)
+
+</details>
+
+<details open><summary><b>02. Disco destino</b> · <code>pve-02-disco-destino.png</code></summary>
+
+![02. Disco destino](capturas/pve-02-disco-destino.png)
+
+</details>
+
+<details open><summary><b>03. Red ip fija</b> · <code>pve-03-red-ip-fija.png</code></summary>
+
+![03. Red ip fija](capturas/pve-03-red-ip-fija.png)
+
+</details>
+
+<details open><summary><b>04. Resumen instalacion</b> · <code>pve-04-resumen-instalacion.png</code></summary>
+
+![04. Resumen instalacion](capturas/pve-04-resumen-instalacion.png)
+
+</details>
+
+<details open><summary><b>05. Web datacenter cluster</b> · <code>pve-05-web-datacenter-cluster.png</code></summary>
+
+![05. Web datacenter cluster](capturas/pve-05-web-datacenter-cluster.png)
+
+</details>
+
+<details open><summary><b>06. Web nodo pve1</b> · <code>pve-06-web-nodo-pve1.png</code></summary>
+
+![06. Web nodo pve1](capturas/pve-06-web-nodo-pve1.png)
+
+</details>
+
+<details open><summary><b>07. Web contenedor 100 en pve2</b> · <code>pve-07-web-contenedor-100-en-pve2.png</code></summary>
+
+![07. Web contenedor 100 en pve2](capturas/pve-07-web-contenedor-100-en-pve2.png)
+
+</details>
+
+<details open><summary><b>08. Web vm 101 en pve3</b> · <code>pve-08-web-vm-101-en-pve3.png</code></summary>
+
+![08. Web vm 101 en pve3](capturas/pve-08-web-vm-101-en-pve3.png)
+
+</details>
+
+<!-- GALERIA:fin -->

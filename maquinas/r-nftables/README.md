@@ -82,3 +82,66 @@ sudo systemctl restart nftables dnsmasq
 ```
 
 **Tiempo de recuperación: 1,3 s** (bajar del NAS + verificar SHA256 + restaurar + reiniciar los servicios). La comprobación SHA256 garantiza que no se restaura una copia dañada.
+
+<!-- GALERIA:inicio -->
+
+## Galería de evidencias
+
+Todas las pruebas de esta máquina, en el orden en que se hicieron. Las capturas son de la propia VM; las salidas son el texto literal de los comandos ejecutados, con fecha y hora en la primera línea.
+
+### Salidas de comandos
+
+| # | Fichero | Qué demuestra |
+|---|---|---|
+| 1 | [`01-actualizacion.txt`](salidas/01-actualizacion.txt) | r-nftables · actualización antes de producción — 2026-11-22T17:29:45+01:00 |
+| 2 | [`02-router-configurado.txt`](salidas/02-router-configurado.txt) | r-nftables · estado del router — 2026-11-22T17:32:12+01:00 |
+| 3 | [`03-registro-cortafuegos.txt`](salidas/03-registro-cortafuegos.txt) | r-nftables · registro del cortafuegos y contadores — 2026-11-22T17:50:04+01:00 |
+| 4 | [`04-fallo-y-recuperacion.txt`](salidas/04-fallo-y-recuperacion.txt) | r-nftables · fallo provocado y recuperación desde el NAS — 2026-11-22T18:24:50+01:00 |
+| 5 | [`copia-automatica-al-nas.txt`](salidas/copia-automatica-al-nas.txt) | r-nftables · copia automática de la configuración al NAS — 2026-11-22T18:22:24+01:00 |
+| 6 | [`inc004-vboxpostinstall.log`](salidas/inc004-vboxpostinstall.log) | ****************************************************************************** |
+
+### Capturas
+
+<details open><summary><b>01. Instalador sistema base</b> · <code>nft-01-instalador-sistema-base.png</code></summary>
+
+![01. Instalador sistema base](capturas/nft-01-instalador-sistema-base.png)
+
+</details>
+
+<details open><summary><b>02. Inc004 fallo postinstall</b> · <code>nft-02-inc004-fallo-postinstall.png</code></summary>
+
+![02. Inc004 fallo postinstall](capturas/nft-02-inc004-fallo-postinstall.png)
+
+</details>
+
+<details open><summary><b>03. Inc004 instalar sudo como root</b> · <code>nft-03-inc004-instalar-sudo-como-root.png</code></summary>
+
+![03. Inc004 instalar sudo como root](capturas/nft-03-inc004-instalar-sudo-como-root.png)
+
+</details>
+
+<details open><summary><b>04. Interfaces rutas forward</b> · <code>nft-04-interfaces-rutas-forward.png</code></summary>
+
+![04. Interfaces rutas forward](capturas/nft-04-interfaces-rutas-forward.png)
+
+</details>
+
+<details open><summary><b>05. Reglas nftables</b> · <code>nft-05-reglas-nftables.png</code></summary>
+
+![05. Reglas nftables](capturas/nft-05-reglas-nftables.png)
+
+</details>
+
+<details open><summary><b>06. Log permitido bloqueado</b> · <code>nft-06-log-permitido-bloqueado.png</code></summary>
+
+![06. Log permitido bloqueado](capturas/nft-06-log-permitido-bloqueado.png)
+
+</details>
+
+<details open><summary><b>07. Recuperacion desde nas</b> · <code>nft-07-recuperacion-desde-nas.png</code></summary>
+
+![07. Recuperacion desde nas](capturas/nft-07-recuperacion-desde-nas.png)
+
+</details>
+
+<!-- GALERIA:fin -->

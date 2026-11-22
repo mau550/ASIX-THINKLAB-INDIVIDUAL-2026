@@ -74,3 +74,70 @@ Para la empresa del proyecto (5 departamentos) supone menos trabajo, más seguri
 | Todo en un `.zip` (4,7 MB) + `.sha256` | `scp -i copia_nas c-srvdc@192.168.29.10:/mnt/copias/srv-dc/` | |
 
 Se guardan 7 copias locales. Resultado: `LastTaskResult 0` · `OK: srv-dc-ad-20261122-2033.zip (4.7 MB) subida a c-srvdc@nas-truenas`.
+
+<!-- GALERIA:inicio -->
+
+## Galería de evidencias
+
+Todas las pruebas de esta máquina, en el orden en que se hicieron. Las capturas son de la propia VM; las salidas son el texto literal de los comandos ejecutados, con fecha y hora en la primera línea.
+
+### Salidas de comandos
+
+| # | Fichero | Qué demuestra |
+|---|---|---|
+| 1 | [`01-version-red-ip-fija.txt`](salidas/01-version-red-ip-fija.txt) | srv-dc · versión, zona horaria e IP fija — 2026-11-22T19:56:31+01:00 |
+| 2 | [`02-dominio-ad-ds.txt`](salidas/02-dominio-ad-ds.txt) | srv-dc · instalación de AD DS y creación del bosque iso29.lan — 2026-11-22T19:56:59+01:00 |
+| 3 | [`03-ou-usuarios-grupos-gpo.txt`](salidas/03-ou-usuarios-grupos-gpo.txt) | srv-dc · unidades organizativas, grupos, usuarios y GPO — 2026-11-22T20:17:23+01:00 |
+| 4 | [`05-copia-automatica-ad-al-nas.txt`](salidas/05-copia-automatica-ad-al-nas.txt) | srv-dc · copia automática de Active Directory al NAS — 2026-11-22T20:31:15+01:00 |
+
+### Capturas
+
+<details open><summary><b>01. Uefi sin pulsar tecla</b> · <code>dc-01-uefi-sin-pulsar-tecla.png</code></summary>
+
+![01. Uefi sin pulsar tecla](capturas/dc-01-uefi-sin-pulsar-tecla.png)
+
+</details>
+
+<details open><summary><b>02. Instalacion desatendida</b> · <code>dc-02-instalacion-desatendida.png</code></summary>
+
+![02. Instalacion desatendida](capturas/dc-02-instalacion-desatendida.png)
+
+</details>
+
+<details open><summary><b>03. Instalado server manager</b> · <code>dc-03-instalado-server-manager.png</code></summary>
+
+![03. Instalado server manager](capturas/dc-03-instalado-server-manager.png)
+
+</details>
+
+<details open><summary><b>04. Server manager ad ds dns</b> · <code>dc-04-server-manager-ad-ds-dns.png</code></summary>
+
+![04. Server manager ad ds dns](capturas/dc-04-server-manager-ad-ds-dns.png)
+
+</details>
+
+<details open><summary><b>05. Aduc ou grupos</b> · <code>dc-05-aduc-ou-grupos.png</code></summary>
+
+![05. Aduc ou grupos](capturas/dc-05-aduc-ou-grupos.png)
+
+</details>
+
+<details open><summary><b>06. Aduc administradores mauro</b> · <code>dc-06-aduc-administradores-mauro.png</code></summary>
+
+![06. Aduc administradores mauro](capturas/dc-06-aduc-administradores-mauro.png)
+
+</details>
+
+<details open><summary><b>07. Aduc departamento administracion</b> · <code>dc-07-aduc-departamento-administracion.png</code></summary>
+
+![07. Aduc departamento administracion](capturas/dc-07-aduc-departamento-administracion.png)
+
+</details>
+
+<details open><summary><b>08. Informe gpo bloqueo</b> · <code>dc-08-informe-gpo-bloqueo.png</code></summary>
+
+![08. Informe gpo bloqueo](capturas/dc-08-informe-gpo-bloqueo.png)
+
+</details>
+
+<!-- GALERIA:fin -->

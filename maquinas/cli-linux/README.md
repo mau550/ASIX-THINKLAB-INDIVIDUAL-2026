@@ -43,3 +43,135 @@ La cuenta personal (`mauro`) no estaba en `sudo` y no conozco su contraseña. En
 | Se copia | No se copia | Motivo |
 |---|---|---|
 | `/etc` + lista de paquetes (`dpkg --get-selections`) + `/home/mauro` (1,1 MB) | El sistema (7,8 GB) | Debian se reinstala en 15 min; la configuración y los datos del usuario son lo único que no se recupera de otra forma |
+
+<!-- GALERIA:inicio -->
+
+## Galería de evidencias
+
+Todas las pruebas de esta máquina, en el orden en que se hicieron. Las capturas son de la propia VM; las salidas son el texto literal de los comandos ejecutados, con fecha y hora en la primera línea.
+
+### Salidas de comandos
+
+| # | Fichero | Qué demuestra |
+|---|---|---|
+| 1 | [`01-version-usuarios-red.txt`](salidas/01-version-usuarios-red.txt) | cli-linux · versión, usuarios de administración y red — 2026-11-22T20:41:03+01:00 |
+| 2 | [`02-repos-https-actualizacion.txt`](salidas/02-repos-https-actualizacion.txt) | cli-linux · repositorios HTTPS y actualización — 2026-11-22T20:42:33+01:00 |
+| 3 | [`03-copia-automatica-al-nas.txt`](salidas/03-copia-automatica-al-nas.txt) | cli-linux · copia automática al NAS — 2026-11-22T20:48:12+01:00 |
+
+### Capturas
+
+<details open><summary><b>01. Rescate crear adminlab</b> · <code>cl-01-rescate-crear-adminlab.png</code></summary>
+
+![01. Rescate crear adminlab](capturas/cl-01-rescate-crear-adminlab.png)
+
+</details>
+
+<details open><summary><b>00. Pantalla negra</b> · <code>inc001-00-pantalla-negra.png</code></summary>
+
+![00. Pantalla negra](capturas/inc001-00-pantalla-negra.png)
+
+</details>
+
+<details open><summary><b>01. 01</b> · <code>inc001-01.png</code></summary>
+
+![01. 01](capturas/inc001-01.png)
+
+</details>
+
+<details open><summary><b>02. 02</b> · <code>inc001-02.png</code></summary>
+
+![02. 02](capturas/inc001-02.png)
+
+</details>
+
+<details open><summary><b>03. 03</b> · <code>inc001-03.png</code></summary>
+
+![03. 03](capturas/inc001-03.png)
+
+</details>
+
+<details open><summary><b>04. 04</b> · <code>inc001-04.png</code></summary>
+
+![04. 04](capturas/inc001-04.png)
+
+</details>
+
+<details open><summary><b>05. 05</b> · <code>inc001-05.png</code></summary>
+
+![05. 05](capturas/inc001-05.png)
+
+</details>
+
+<details open><summary><b>06. 06</b> · <code>inc001-06.png</code></summary>
+
+![06. 06](capturas/inc001-06.png)
+
+</details>
+
+<details open><summary><b>07. 07</b> · <code>inc001-07.png</code></summary>
+
+![07. 07](capturas/inc001-07.png)
+
+</details>
+
+<details open><summary><b>08. 08</b> · <code>inc001-08.png</code></summary>
+
+![08. 08](capturas/inc001-08.png)
+
+</details>
+
+<details open><summary><b>09. 09</b> · <code>inc001-09.png</code></summary>
+
+![09. 09](capturas/inc001-09.png)
+
+</details>
+
+<details open><summary><b>10. 10</b> · <code>inc001-10.png</code></summary>
+
+![10. 10](capturas/inc001-10.png)
+
+</details>
+
+<details open><summary><b>11. 11</b> · <code>inc001-11.png</code></summary>
+
+![11. 11](capturas/inc001-11.png)
+
+</details>
+
+<details open><summary><b>12. 12</b> · <code>inc001-12.png</code></summary>
+
+![12. 12](capturas/inc001-12.png)
+
+</details>
+
+<details open><summary><b>13. 13</b> · <code>inc001-13.png</code></summary>
+
+![13. 13](capturas/inc001-13.png)
+
+</details>
+
+<details open><summary><b>14. 14</b> · <code>inc001-14.png</code></summary>
+
+![14. 14](capturas/inc001-14.png)
+
+</details>
+
+<details open><summary><b>15. 15</b> · <code>inc001-15.png</code></summary>
+
+![15. 15](capturas/inc001-15.png)
+
+</details>
+
+<details open><summary><b>16. 16</b> · <code>inc001-16.png</code></summary>
+
+![16. 16](capturas/inc001-16.png)
+
+</details>
+
+<details open><summary><b>17. 17</b> · <code>inc001-17.png</code></summary>
+
+![17. 17](capturas/inc001-17.png)
+
+</details>
+
+<!-- GALERIA:fin -->

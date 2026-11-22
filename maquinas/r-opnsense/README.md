@@ -85,3 +85,125 @@ Desde la sesión web de `root` se generó una clave de API (`/api/auth/user/add_
 | Efecto | `srv-dc` → **SIN INTERNET** | |
 | Recuperación | `sftp get` del NAS → `sha256sum -c` (coincide) → `openssl enc -d` → *System › Configuration › Backups › Restore* con reinicio ([opn-15](capturas/opn-15-restaurar-config-desde-nas.png), [opn-16](capturas/opn-16-restaurada-reiniciando.png)) | |
 | Después | Reglas 50/51/100/101 de vuelta y activas ([opn-17](capturas/opn-17-recuperado-reglas.png)) · `srv-dc` → **HTTPS 200** | **69 s** |
+
+<!-- GALERIA:inicio -->
+
+## Galería de evidencias
+
+Todas las pruebas de esta máquina, en el orden en que se hicieron. Las capturas son de la propia VM; las salidas son el texto literal de los comandos ejecutados, con fecha y hora en la primera línea.
+
+### Salidas de comandos
+
+| # | Fichero | Qué demuestra |
+|---|---|---|
+| 1 | [`01-usuario-y-version.txt`](salidas/01-usuario-y-version.txt) | r-opnsense · versión, actualización y usuario de administración (API REST) — 2026-11-22T20:14:14+01:00 |
+| 2 | [`02-reglas-y-orden.txt`](salidas/02-reglas-y-orden.txt) | r-opnsense · reglas de la LAN y orden de evaluación — 2026-11-22T20:14:28+01:00 |
+| 3 | [`03-copia-al-nas.txt`](salidas/03-copia-al-nas.txt) | r-opnsense · copia cifrada de la configuración al NAS — 2026-11-22T20:24:38+01:00 |
+| 4 | [`04-fallo-y-recuperacion.txt`](salidas/04-fallo-y-recuperacion.txt) | r-opnsense · fallo provocado y recuperación desde el NAS — 2026-11-22T20:25:24+01:00 |
+| 5 | [`05-http-para-nodos-proxmox.txt`](salidas/05-http-para-nodos-proxmox.txt) | r-opnsense · excepción: HTTP permitido solo a los nodos Proxmox — 2026-11-22T21:06:42+01:00 |
+
+### Capturas
+
+<details open><summary><b>01. Arranque live 26.7</b> · <code>opn-01-arranque-live-26.7.png</code></summary>
+
+![01. Arranque live 26.7](capturas/opn-01-arranque-live-26.7.png)
+
+</details>
+
+<details open><summary><b>02. Instalador ufs</b> · <code>opn-02-instalador-ufs.png</code></summary>
+
+![02. Instalador ufs](capturas/opn-02-instalador-ufs.png)
+
+</details>
+
+<details open><summary><b>03. Disco ada0</b> · <code>opn-03-disco-ada0.png</code></summary>
+
+![03. Disco ada0](capturas/opn-03-disco-ada0.png)
+
+</details>
+
+<details open><summary><b>04. Configuracion final</b> · <code>opn-04-configuracion-final.png</code></summary>
+
+![04. Configuracion final](capturas/opn-04-configuracion-final.png)
+
+</details>
+
+<details open><summary><b>05. Consola interfaces por defecto</b> · <code>opn-05-consola-interfaces-por-defecto.png</code></summary>
+
+![05. Consola interfaces por defecto](capturas/opn-05-consola-interfaces-por-defecto.png)
+
+</details>
+
+<details open><summary><b>06. Asignar wan em0 lan em1</b> · <code>opn-06-asignar-wan-em0-lan-em1.png</code></summary>
+
+![06. Asignar wan em0 lan em1](capturas/opn-06-asignar-wan-em0-lan-em1.png)
+
+</details>
+
+<details open><summary><b>07. Lan 192.168.29.1 dhcp</b> · <code>opn-07-lan-192.168.29.1-dhcp.png</code></summary>
+
+![07. Lan 192.168.29.1 dhcp](capturas/opn-07-lan-192.168.29.1-dhcp.png)
+
+</details>
+
+<details open><summary><b>08. Actualizaciones pendientes</b> · <code>opn-08-actualizaciones-pendientes.png</code></summary>
+
+![08. Actualizaciones pendientes](capturas/opn-08-actualizaciones-pendientes.png)
+
+</details>
+
+<details open><summary><b>09. Reglas lan orden correcto</b> · <code>opn-09-reglas-lan-orden-correcto.png</code></summary>
+
+![09. Reglas lan orden correcto](capturas/opn-09-reglas-lan-orden-correcto.png)
+
+</details>
+
+<details open><summary><b>10. Registro permitido y bloqueado</b> · <code>opn-10-registro-permitido-y-bloqueado.png</code></summary>
+
+![10. Registro permitido y bloqueado](capturas/opn-10-registro-permitido-y-bloqueado.png)
+
+</details>
+
+<details open><summary><b>11. Usuarios root y mauro</b> · <code>opn-11-usuarios-root-y-mauro.png</code></summary>
+
+![11. Usuarios root y mauro](capturas/opn-11-usuarios-root-y-mauro.png)
+
+</details>
+
+<details open><summary><b>12. Version actualizada</b> · <code>opn-12-version-actualizada.png</code></summary>
+
+![12. Version actualizada](capturas/opn-12-version-actualizada.png)
+
+</details>
+
+<details open><summary><b>13. Panel</b> · <code>opn-13-panel.png</code></summary>
+
+![13. Panel](capturas/opn-13-panel.png)
+
+</details>
+
+<details open><summary><b>14. Fallo reglas borradas</b> · <code>opn-14-fallo-reglas-borradas.png</code></summary>
+
+![14. Fallo reglas borradas](capturas/opn-14-fallo-reglas-borradas.png)
+
+</details>
+
+<details open><summary><b>15. Restaurar config desde nas</b> · <code>opn-15-restaurar-config-desde-nas.png</code></summary>
+
+![15. Restaurar config desde nas](capturas/opn-15-restaurar-config-desde-nas.png)
+
+</details>
+
+<details open><summary><b>16. Restaurada reiniciando</b> · <code>opn-16-restaurada-reiniciando.png</code></summary>
+
+![16. Restaurada reiniciando](capturas/opn-16-restaurada-reiniciando.png)
+
+</details>
+
+<details open><summary><b>17. Recuperado reglas</b> · <code>opn-17-recuperado-reglas.png</code></summary>
+
+![17. Recuperado reglas](capturas/opn-17-recuperado-reglas.png)
+
+</details>
+
+<!-- GALERIA:fin -->

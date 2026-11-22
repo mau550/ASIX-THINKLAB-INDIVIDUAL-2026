@@ -5,6 +5,8 @@ Alumno: **Mauro Bas Montes** · Grupo 3 · Puesto **29** → LAN `192.168.29.0/2
 
 Entorno de pruebas propio en VirtualBox que reproduce, a escala, la infraestructura del grupo: tres routers alternativos, NAS de copias, clúster de virtualización, dominio, servidor Linux con RAID y clientes. Todo lo que figura como hecho está **comprobado** y enlazado a su evidencia (captura o salida de orden). Lo que falta se indica como pendiente, con su guía.
 
+> 📸 **[Índice de todas las evidencias](EVIDENCIAS.md)** — 106 capturas y 46 salidas de comandos, por máquina. Cada máquina muestra al final de su README su **galería completa**, en el orden en que se hizo el trabajo.
+
 ## Estado de un vistazo
 
 | | |

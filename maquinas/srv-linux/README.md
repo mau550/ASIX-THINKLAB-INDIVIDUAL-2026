@@ -66,3 +66,87 @@ El original queda en `/etc/apt/sources.list.orig` para poder volver atrás.
 `srv-linux` es el **primario** del recurso `espejo` (`/dev/drbd0` montado en `/srv/espejo`). Detalle y prueba de caída: [`srv-linux2`](../srv-linux2/README.md).
 
 ![DRBD primario con datos](capturas/srv-09-espejo-drbd-primario-con-datos.png)
+
+<!-- GALERIA:inicio -->
+
+## Galería de evidencias
+
+Todas las pruebas de esta máquina, en el orden en que se hicieron. Las capturas son de la propia VM; las salidas son el texto literal de los comandos ejecutados, con fecha y hora en la primera línea.
+
+### Salidas de comandos
+
+| # | Fichero | Qué demuestra |
+|---|---|---|
+| 1 | [`01-repos-https-actualizacion.txt`](salidas/01-repos-https-actualizacion.txt) | srv-linux · repositorios por HTTPS y actualización — 2026-11-22T17:33:23+01:00 |
+| 2 | [`02-raid-creacion.txt`](salidas/02-raid-creacion.txt) | srv-linux · creación de RAID 0, 1 y 5 con mdadm — 2026-11-22T17:36:25+01:00 |
+| 3 | [`03-raid-datos-y-velocidad.txt`](salidas/03-raid-datos-y-velocidad.txt) | srv-linux · datos de prueba y velocidad de escritura — 2026-11-22T17:37:13+01:00 |
+| 4 | [`04-raid-fallo-de-disco.txt`](salidas/04-raid-fallo-de-disco.txt) | srv-linux · fallo de un disco: se desconecta raid2.vdi (sdc) con la VM apagada — 2026-11-22T17:38:48+01:00 |
+| 5 | [`05-raid-reconstruccion.txt`](salidas/05-raid-reconstruccion.txt) | srv-linux · sustitución del disco y reconstrucción — 2026-11-22T17:39:49+01:00 |
+| 6 | [`06-red-y-cortafuegos-mikrotik.txt`](salidas/06-red-y-cortafuegos-mikrotik.txt) | Red individual con r-mikrotik como router — pruebas desde srv-linux (192.168.29.14) — 2026-11-22T17:44:15+01:00 |
+| 7 | [`07-red-y-cortafuegos-nftables.txt`](salidas/07-red-y-cortafuegos-nftables.txt) | Red individual con r-nftables como router — pruebas desde srv-linux (192.168.29.14) — 2026-11-22T17:49:43+01:00 |
+| 8 | [`08-espejo-drbd-creacion.txt`](salidas/08-espejo-drbd-creacion.txt) | Espejo DRBD entre srv-linux (.14) y srv-linux2 (.16) — creación — 2026-11-22T18:54:57+01:00 |
+| 9 | [`copia-automatica-al-nas.txt`](salidas/copia-automatica-al-nas.txt) | srv-linux · copia automática de la configuración al NAS — 2026-11-22T18:22:26+01:00 |
+
+### Capturas
+
+<details open><summary><b>01. Instalador sistema base</b> · <code>srv-01-instalador-sistema-base.png</code></summary>
+
+![01. Instalador sistema base](capturas/srv-01-instalador-sistema-base.png)
+
+</details>
+
+<details open><summary><b>02. Instalador grub en sda</b> · <code>srv-02-instalador-grub-en-sda.png</code></summary>
+
+![02. Instalador grub en sda](capturas/srv-02-instalador-grub-en-sda.png)
+
+</details>
+
+<details open><summary><b>03. Raid mdstat lsblk</b> · <code>srv-03-raid-mdstat-lsblk.png</code></summary>
+
+![03. Raid mdstat lsblk](capturas/srv-03-raid-mdstat-lsblk.png)
+
+</details>
+
+<details open><summary><b>04. Raid montados fstab</b> · <code>srv-04-raid-montados-fstab.png</code></summary>
+
+![04. Raid montados fstab](capturas/srv-04-raid-montados-fstab.png)
+
+</details>
+
+<details open><summary><b>05. Fallo disco raid0 perdido raid1 raid5 degradados</b> · <code>srv-05-fallo-disco-raid0-perdido-raid1-raid5-degradados.png</code></summary>
+
+![05. Fallo disco raid0 perdido raid1 raid5 degradados](capturas/srv-05-fallo-disco-raid0-perdido-raid1-raid5-degradados.png)
+
+</details>
+
+<details open><summary><b>06. Raid reconstruido uu uuu</b> · <code>srv-06-raid-reconstruido-uu-uuu.png</code></summary>
+
+![06. Raid reconstruido uu uuu](capturas/srv-06-raid-reconstruido-uu-uuu.png)
+
+</details>
+
+<details open><summary><b>07. Red ping traceroute rutas</b> · <code>srv-07-red-ping-traceroute-rutas.png</code></summary>
+
+![07. Red ping traceroute rutas](capturas/srv-07-red-ping-traceroute-rutas.png)
+
+</details>
+
+<details open><summary><b>08. Https permitido http bloqueado</b> · <code>srv-08-https-permitido-http-bloqueado.png</code></summary>
+
+![08. Https permitido http bloqueado](capturas/srv-08-https-permitido-http-bloqueado.png)
+
+</details>
+
+<details open><summary><b>09. Espejo drbd primario con datos</b> · <code>srv-09-espejo-drbd-primario-con-datos.png</code></summary>
+
+![09. Espejo drbd primario con datos](capturas/srv-09-espejo-drbd-primario-con-datos.png)
+
+</details>
+
+<details open><summary><b>10. Espejo vuelve y recibe cambios</b> · <code>srv-10-espejo-vuelve-y-recibe-cambios.png</code></summary>
+
+![10. Espejo vuelve y recibe cambios](capturas/srv-10-espejo-vuelve-y-recibe-cambios.png)
+
+</details>
+
+<!-- GALERIA:fin -->

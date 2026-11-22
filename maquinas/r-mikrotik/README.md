@@ -98,3 +98,145 @@ Script [`copia-al-nas.rsc`](config/copia-al-nas.rsc), ejecutado a diario a las 0
 | Después | Regla NAT de vuelta, uptime 23 s | `srv-linux`: `HTTPS 200` ([mk-19](capturas/mk-19-recuperado-nat-vuelve.png)) |
 
 **Tiempo de recuperación: 39 s** desde que se empieza a bajar la copia hasta la primera conexión correcta del cliente.
+
+<!-- GALERIA:inicio -->
+
+## Galería de evidencias
+
+Todas las pruebas de esta máquina, en el orden en que se hicieron. Las capturas son de la propia VM; las salidas son el texto literal de los comandos ejecutados, con fecha y hora en la primera línea.
+
+### Salidas de comandos
+
+| # | Fichero | Qué demuestra |
+|---|---|---|
+| 1 | [`01-version-estado-inicial.txt`](salidas/01-version-estado-inicial.txt) | r-mikrotik · versión y recursos — 2026-11-22T17:14:18+01:00 |
+| 2 | [`02-configuracion.txt`](salidas/02-configuracion.txt) | r-mikrotik · configuración de red, DHCP, DNS, NAT y cortafuegos — 2026-11-22T17:14:30+01:00 |
+| 3 | [`03-usuarios.txt`](salidas/03-usuarios.txt) | r-mikrotik · usuarios de administración — 2026-11-22T18:29:23+01:00 |
+| 4 | [`04-registro-cortafuegos.txt`](salidas/04-registro-cortafuegos.txt) | r-mikrotik · registro y contadores tras las pruebas desde srv-linux — 2026-11-22T17:44:35+01:00 |
+| 5 | [`05-copias-locales.txt`](salidas/05-copias-locales.txt) | r-mikrotik · copias locales — 2026-11-22T17:59:17+01:00 |
+| 6 | [`06-copia-al-nas.txt`](salidas/06-copia-al-nas.txt) | r-mikrotik · copia al NAS (script + planificador) — 2026-11-22T18:27:10+01:00 |
+| 7 | [`07-fallo-y-recuperacion.txt`](salidas/07-fallo-y-recuperacion.txt) | r-mikrotik · fallo provocado y recuperación desde el NAS — 2026-11-22T18:27:25+01:00 |
+
+### Capturas
+
+<details open><summary><b>01. Arranque chr 7.24.5</b> · <code>mk-01-arranque-chr-7.24.5.png</code></summary>
+
+![01. Arranque chr 7.24.5](capturas/mk-01-arranque-chr-7.24.5.png)
+
+</details>
+
+<details open><summary><b>02. Primer login cambio password</b> · <code>mk-02-primer-login-cambio-password.png</code></summary>
+
+![02. Primer login cambio password](capturas/mk-02-primer-login-cambio-password.png)
+
+</details>
+
+<details open><summary><b>03. Importar clave ssh</b> · <code>mk-03-importar-clave-ssh.png</code></summary>
+
+![03. Importar clave ssh](capturas/mk-03-importar-clave-ssh.png)
+
+</details>
+
+<details open><summary><b>04. Version recursos</b> · <code>mk-04-version-recursos.png</code></summary>
+
+![04. Version recursos](capturas/mk-04-version-recursos.png)
+
+</details>
+
+<details open><summary><b>05. Interfaces ip</b> · <code>mk-05-interfaces-ip.png</code></summary>
+
+![05. Interfaces ip](capturas/mk-05-interfaces-ip.png)
+
+</details>
+
+<details open><summary><b>06. A dhcp</b> · <code>mk-06a-dhcp.png</code></summary>
+
+![06. A dhcp](capturas/mk-06a-dhcp.png)
+
+</details>
+
+<details open><summary><b>06. B dns</b> · <code>mk-06b-dns.png</code></summary>
+
+![06. B dns](capturas/mk-06b-dns.png)
+
+</details>
+
+<details open><summary><b>07. Nat</b> · <code>mk-07-nat.png</code></summary>
+
+![07. Nat](capturas/mk-07-nat.png)
+
+</details>
+
+<details open><summary><b>08. Reglas filtro</b> · <code>mk-08-reglas-filtro.png</code></summary>
+
+![08. Reglas filtro](capturas/mk-08-reglas-filtro.png)
+
+</details>
+
+<details open><summary><b>09. Usuarios</b> · <code>mk-09-usuarios.png</code></summary>
+
+![09. Usuarios](capturas/mk-09-usuarios.png)
+
+</details>
+
+<details open><summary><b>10. Log permitido y bloqueado</b> · <code>mk-10-log-permitido-y-bloqueado.png</code></summary>
+
+![10. Log permitido y bloqueado](capturas/mk-10-log-permitido-y-bloqueado.png)
+
+</details>
+
+<details open><summary><b>11. Webfig interfaces</b> · <code>mk-11-webfig-interfaces.png</code></summary>
+
+![11. Webfig interfaces](capturas/mk-11-webfig-interfaces.png)
+
+</details>
+
+<details open><summary><b>12. Webfig direcciones</b> · <code>mk-12-webfig-direcciones.png</code></summary>
+
+![12. Webfig direcciones](capturas/mk-12-webfig-direcciones.png)
+
+</details>
+
+<details open><summary><b>13. Webfig reglas filtro</b> · <code>mk-13-webfig-reglas-filtro.png</code></summary>
+
+![13. Webfig reglas filtro](capturas/mk-13-webfig-reglas-filtro.png)
+
+</details>
+
+<details open><summary><b>14. Webfig nat</b> · <code>mk-14-webfig-nat.png</code></summary>
+
+![14. Webfig nat](capturas/mk-14-webfig-nat.png)
+
+</details>
+
+<details open><summary><b>15. Webfig log</b> · <code>mk-15-webfig-log.png</code></summary>
+
+![15. Webfig log](capturas/mk-15-webfig-log.png)
+
+</details>
+
+<details open><summary><b>16. Fallo nat borrado</b> · <code>mk-16-fallo-nat-borrado.png</code></summary>
+
+![16. Fallo nat borrado](capturas/mk-16-fallo-nat-borrado.png)
+
+</details>
+
+<details open><summary><b>17. Backup bajado del nas</b> · <code>mk-17-backup-bajado-del-nas.png</code></summary>
+
+![17. Backup bajado del nas](capturas/mk-17-backup-bajado-del-nas.png)
+
+</details>
+
+<details open><summary><b>18. Restaurar y reiniciar</b> · <code>mk-18-restaurar-y-reiniciar.png</code></summary>
+
+![18. Restaurar y reiniciar](capturas/mk-18-restaurar-y-reiniciar.png)
+
+</details>
+
+<details open><summary><b>19. Recuperado nat vuelve</b> · <code>mk-19-recuperado-nat-vuelve.png</code></summary>
+
+![19. Recuperado nat vuelve](capturas/mk-19-recuperado-nat-vuelve.png)
+
+</details>
+
+<!-- GALERIA:fin -->

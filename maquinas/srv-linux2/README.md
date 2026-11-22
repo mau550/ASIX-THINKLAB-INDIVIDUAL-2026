@@ -40,3 +40,25 @@ Salidas completas: [creación](../srv-linux/salidas/08-espejo-drbd-creacion.txt)
 **Caso de uso:** el servidor de ficheros de *Administración*. Si se estropea la fuente o la placa del servidor principal, el secundario tiene **exactamente los mismos datos** (protocolo C, síncrono: una escritura no termina hasta que está en los dos) y en segundos sirve los ficheros. Un RAID 1 en un único equipo no protegería de eso.
 
 **Límite:** la conmutación es manual. En producción se automatizaría con Pacemaker y Corosync, con una IP flotante.
+
+<!-- GALERIA:inicio -->
+
+## Galería de evidencias
+
+Todas las pruebas de esta máquina, en el orden en que se hicieron. Las capturas son de la propia VM; las salidas son el texto literal de los comandos ejecutados, con fecha y hora en la primera línea.
+
+### Salidas de comandos
+
+| # | Fichero | Qué demuestra |
+|---|---|---|
+| 1 | [`01-espejo-caida-y-relevo.txt`](salidas/01-espejo-caida-y-relevo.txt) | Espejo DRBD · caída del primario (srv-linux) y relevo en srv-linux2 — 2026-11-22T18:56:41+01:00 |
+
+### Capturas
+
+<details open><summary><b>01. Relevo datos intactos</b> · <code>srv2-01-relevo-datos-intactos.png</code></summary>
+
+![01. Relevo datos intactos](capturas/srv2-01-relevo-datos-intactos.png)
+
+</details>
+
+<!-- GALERIA:fin -->

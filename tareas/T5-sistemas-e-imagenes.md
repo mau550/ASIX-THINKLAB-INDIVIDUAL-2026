@@ -25,7 +25,7 @@ Documentos relacionados: [comparación de los tres routers](T5-comparacion-route
 | Virtualización | [`pve1-3`](../maquinas/pve1/README.md) | Proxmox VE **9.2.2** | AGPLv3; repositorio *enterprise* de pago | ✅ Clúster de 3 nodos con quórum y migraciones |
 | Dominio | [`srv-dc`](../maquinas/srv-dc/README.md) | Windows Server 2025 Standard Evaluation (26100) | Propietaria; evaluación 180 días | ✅ DC de `iso29.lan` |
 | Servidor Linux | [`srv-linux`](../maquinas/srv-linux/README.md) | Debian **13.8** sin escritorio | Libre (DFSG) | ✅ Instalado, configurado, RAID |
-| Cliente Windows | [`cli-win11`](../maquinas/cli-win11/README.md) | Windows 11 (`w11.iso`) | Propietaria; sin activar | ✅ Instalado · ⏳ configurar |
+| Cliente Windows | [`cli-win11`](../maquinas/cli-win11/README.md) | Windows 11 (`w11.iso`) | Propietaria; sin activar | ✅ Windows 11 Pro 23H2, instalación desatendida, unido a `iso29.lan` |
 | Cliente Linux | [`cli-linux`](../maquinas/cli-linux/README.md) | Debian **13.8** con GNOME | Libre (DFSG) | ✅ Reparado ([INC-001](../incidencias/INC-001-cli-linux-pantalla-negra-sin-grub.md)) y configurado |
 
 ### Requisitos mínimos oficiales frente a lo asignado

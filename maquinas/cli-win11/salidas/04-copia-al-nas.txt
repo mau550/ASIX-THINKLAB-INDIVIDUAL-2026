@@ -1,0 +1,30 @@
+# cli-win11 · copia automática al NAS (nas-truenas) — 2026-11-22T22:49:20
+
+PS C:\> icacls C:\ProgramData\copias\copia-cli-win11 /inheritance:r /grant SYSTEM:F /grant Administradores:F   # la clave privada solo la leen SYSTEM y administradores
+archivo procesado: C:\ProgramData\copias\copia-cli-win11
+Se procesaron correctamente 1 archivos; error al procesar 0 archivos
+
+PS C:\> Register-ScheduledTask 'Copia al NAS' (diaria 02:30, como SYSTEM, ejecuta C:\ProgramData\copias\copia-cli-win11.ps1)
+PS C:\> Start-ScheduledTask -TaskPath \ISO29\ -TaskName 'Copia al NAS'   # primera copia, ahora
+
+PS C:\> Get-ScheduledTaskInfo -TaskPath \ISO29\ -TaskName 'Copia al NAS' | Select-Object LastRunTime,LastTaskResult,NextRunTime | Format-List
+
+
+LastRunTime    : 22/11/2026 22:49:49
+LastTaskResult : 0
+NextRunTime    : 23/11/2026 2:30:30
+
+
+
+
+
+PS C:\> Get-Content C:\ProgramData\copias\copia.log -Tail 3
+2026-11-22T22:49:31 OK: cli-win11-20261122-2249.zip (4 KB) sha256=b586fe6c136b33a02fd4929cdfba3467b7732da9f5a9470b28f9319eab0052db subida a c-cliwin11@192.168.29.10
+
+
+PS C:\> ssh c-cliwin11@192.168.29.10 'cd /mnt/copias/cli-win11 && ls -l && sha256sum -c <ultima>.sha256'
+total 9
+-rw-r--r-- 1 c-cliwin11 c-cliwin11 3878 Nov 22 22:49 cli-win11-20261122-2249.zip
+-rw-r--r-- 1 c-cliwin11 c-cliwin11   95 Nov 22 22:49 cli-win11-20261122-2249.zip.sha256
+cli-win11-20261122-2249.zip: OK
+

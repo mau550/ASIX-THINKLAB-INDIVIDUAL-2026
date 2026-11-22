@@ -21,7 +21,7 @@ Toda la configuración posterior a la instalación se hizo por la **API REST de 
 | **a232** Clúster con los nodos disponibles | ✅ | `cluster-iso29`: 3 nodos, `quorate=1` · [pve-05](capturas/pve-05-web-datacenter-cluster.png) |
 | **a235** Migrar un contenedor y una VM (Debian sin escritorio) | ✅ | CT 100 pve1 → pve2 (restart) · VM 101 pve1 → pve3 **en caliente** · [04-migraciones-medidas.txt](salidas/04-migraciones-medidas.txt) |
 | **a236** Tiempo y espacio de la migración; interpretar y proponer mejoras | ✅ | §4 |
-| **a231** Copiar configuraciones o imágenes al servidor correspondiente | 🟡 | `vzdump` del contenedor (160 MB, 32 s) en el almacenamiento `local` de pve2 · falta enviarlo al NAS (TrueNAS apagado por falta de RAM) · [05-copia-vzdump-y-quorum.txt](salidas/05-copia-vzdump-y-quorum.txt) |
+| **a231** Copiar configuraciones o imágenes al servidor correspondiente | ✅ | `vzdump` del CT 100 (161 MB) y de la VM 101 (550 MB) **en el NAS** por NFS (`nas-copias`) + `/etc/pve` en tar.gz + tarea diaria `copia-diaria-nas` 03:00 (7 copias) · [06-copias-al-nas-nfs.txt](salidas/06-copias-al-nas-nfs.txt) · [05-copia-vzdump-y-quorum.txt](salidas/05-copia-vzdump-y-quorum.txt) |
 | a79 Actualizar | 🟡 | Repositorio `pve-no-subscription` añadido; `apt update` → **229 paquetes pendientes**, sin instalar por tiempo |
 
 ## 1. Instalación (Terminal UI)
@@ -89,7 +89,7 @@ Las dos respondieron al ping desde la LAN ([03-contenedor-y-vm.txt](salidas/03-c
 
 ## 5. Copia (a231)
 
-`vzdump` del contenedor 100 en pve2 (modo *snapshot*, zstd): **160 MB en 32 s**. **Qué se copia:** las VM y los contenedores (`vzdump`) y `/etc/pve` (configuración del clúster, replicada en los tres nodos). **Qué no:** el propio Proxmox, que se reinstala desde la ISO en 10 minutos y se vuelve a unir al clúster. **Pendiente:** enviar estas copias al NAS (almacenamiento NFS o PBS) cuando TrueNAS pueda estar encendido a la vez que el clúster, en el equipo de clase.
+`vzdump` del contenedor 100 en pve2 (modo *snapshot*, zstd): **160 MB en 32 s**. **Qué se copia:** las VM y los contenedores (`vzdump`) y `/etc/pve` (configuración del clúster, replicada en los tres nodos). **Qué no:** el propio Proxmox, que se reinstala desde la ISO en 10 minutos y se vuelve a unir al clúster. **Copia al NAS (22/11):** TrueNAS comparte `/mnt/copias/proxmox` por **NFS solo a las IP de los tres nodos** ([05-nfs-para-proxmox.txt](../nas-truenas/salidas/05-nfs-para-proxmox.txt)); en el clúster se añadió como almacenamiento `nas-copias` (`pvesm add nfs`, contenido `backup`, `prune-backups keep-last=7`). Se copiaron allí el CT 100 (161 MB) y la VM 101 (550 MB, 2 min 26 s), más un `tar.gz` de `/etc/pve`, y se programó la tarea de clúster `copia-diaria-nas` (todas las VM y CT, 03:00, *snapshot*, zstd) → [06-copias-al-nas-nfs.txt](salidas/06-copias-al-nas-nfs.txt).
 
 > Tras la prueba de quórum, el contenedor 100 quedó parado ([pve-07](capturas/pve-07-web-contenedor-100-en-pve2.png)) porque pve2 se apagó en frío y el contenedor no tiene `onboot=1`.
 

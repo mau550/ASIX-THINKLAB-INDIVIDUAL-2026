@@ -1,0 +1,61 @@
+# cli-win11 · unión al dominio iso29.lan — 2026-11-22T22:46:54
+
+PS C:\> Add-Computer -DomainName iso29.lan -OUPath 'OU=Equipos,OU=Empresa,DC=iso29,DC=lan' -Credential ISO29\mauro -PassThru
+
+HasSucceeded ComputerName             
+------------ ------------             
+True         cli-win11                
+
+
+
+(se reinicia el equipo para completar la unión)
+
+## Tras el reinicio — 2026-11-22T22:49:19
+
+PS C:\> Get-CimInstance Win32_ComputerSystem | Select-Object Name,Domain,PartOfDomain | Format-List
+
+
+Name         : CLI-WIN11
+Domain       : iso29.lan
+PartOfDomain : True
+
+
+
+
+
+PS C:\> Test-ComputerSecureChannel -Verbose
+True
+
+
+PS C:\> nltest /dsgetdc:iso29.lan
+           DC: \\srv-dc.iso29.lan
+      Dirección: \\192.168.29.13
+     GUID del DOM: 29d5a8d2-ab1e-41d3-83b7-d06a022c5df3
+     Nombre del DOM: iso29.lan
+  Nombre del bosque: iso29.lan
+ Nombre de sitio DC: Default-First-Site-Name
+Nuestro nombre de sitio: Default-First-Site-Name
+        Marcas: PDC GC DS LDAP KDC TIMESERV GTIMESERV WRITABLE DNS_DC DNS_DOMAIN DNS_FOREST CLOSE_SITE FULL_SECRET WS DS_8 DS_9 DS_10 LISTA DE CLAVES 0x40000
+El comando se completó correctamente
+
+
+PS C:\> nltest /sc_query:iso29.lan
+Marcas: 30 HAS_IP  HAS_TIMESERV  Servicio de autenticación: Netlogon
+Nombre DC de confianza \\srv-dc.iso29.lan 
+Estado de conexión DC de confianza Status = 0 0x0 NERR_Success
+El comando se completó correctamente
+
+
+PS C:\> net localgroup Administradores
+Nombre de alias      Administradores
+Comentario           Los administradores tienen acceso completo y sin restricciones al equipo o dominio
+
+Miembros
+
+-------------------------------------------------------------------------------
+Administrador
+ISO29\Domain Admins
+mauro
+Se ha completado el comando correctamente.
+
+

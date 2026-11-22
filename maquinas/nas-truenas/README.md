@@ -44,7 +44,8 @@ Instalador de texto ([capturas tn-01…05](capturas/)): *Install/Upgrade* → di
 | `r-opnsense` | `config.xml` **cifrado AES-256** (44 KB) | `copia-opnsense.sh` → SFTP (clave) | Bajo demanda / antes de cada cambio |
 | `srv-dc` | AD (`ntdsutil ifm`) + SYSVOL + GPO + CSV (4,7 MB) | `copia-ad.ps1` → SCP (clave) | Diario 02:30 (tarea programada, SYSTEM) |
 | `cli-linux` | `/etc` + paquetes + `/home/mauro` (1,1 MB) | `copia-config.sh` → SFTP (clave) | Diario 02:00 (systemd) |
-| `cli-win11`, `proxmox`, `srv-linux2` | — | Carpeta creada; usuario pendiente | ⏳ |
+| `cli-win11` | Datos de usuario + informe de configuración (zip + SHA256) | `copia-cli-win11.ps1` → SCP (clave, usuario `c-cliwin11`) | Diario 02:30 (tarea programada, SYSTEM) |
+| `proxmox` | `vzdump` de CT y VM (161 + 550 MB) + `/etc/pve` | **NFS** solo para los 3 nodos → almacenamiento `nas-copias` | Diario 03:00 (`copia-diaria-nas`) |
 
 ## 3. Limitaciones (honestas)
 
@@ -67,6 +68,7 @@ Todas las pruebas de esta máquina, en el orden en que se hicieron. Las capturas
 | 3 | [`03-red-ip-fija.txt`](salidas/03-red-ip-fija.txt) | nas-truenas · red con IP fija (commit + checkin) — 2026-11-22T18:06:28+01:00 |
 | 4 | [`04-copias-recibidas.txt`](salidas/04-copias-recibidas.txt) | nas-truenas · copias recibidas en cada carpeta — 2026-11-22T18:22:35+01:00 |
 | 5 | [`05-nfs-para-proxmox.txt`](salidas/05-nfs-para-proxmox.txt) | nas-truenas · recurso NFS para las copias del clúster Proxmox — 2026-11-22T21:46:28+01:00 |
+| 6 | [`06-usuario-copias-cli-win11.txt`](salidas/06-usuario-copias-cli-win11.txt) | nas-truenas · dataset y usuario de copias para cli-win11 — 2026-11-22T22:44:35+01:00 |
 
 ### Capturas
 

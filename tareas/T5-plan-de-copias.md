@@ -29,8 +29,8 @@ flowchart LR
 | `srv-linux` | `/etc`, lista de paquetes y definición de los RAID | Los datos de `/srv/raid*` (son de prueba) | `copia-config.sh` + SFTP | Diario 02:00 | — |
 | `srv-dc` | AD (`ntds.dit`) + SYSVOL + registro + GPO + CSV de usuarios y grupos | La imagen del servidor (50 GB) | `ntdsutil ifm` + `scp` | Diario 02:30 | — |
 | `cli-linux` | `/etc`, lista de paquetes y `/home/mauro` | El sistema (7,8 GB) | `copia-config.sh` + SFTP | Diario 02:00 | — |
-| `cli-win11` | Documentos y Escritorio del usuario | Windows y programas (se reinstalan) | `scp` (OpenSSH de Windows) | ⏳ Necesita iniciar sesión en la VM | — |
-| `pve1-3` | `/etc/pve` + `vzdump` de las VM y CT | — | — | ⏳ | — |
+| `cli-win11` | Documentos, Escritorio e Imágenes + informe de configuración | Windows y programas (se reinstalan de forma desatendida) | `copia-cli-win11.ps1` + `scp` con clave | Diario 02:30 | ✅ ([04-copia-al-nas.txt](../maquinas/cli-win11/salidas/04-copia-al-nas.txt)) |
+| `pve1-3` | `/etc/pve` + `vzdump` de las VM y CT | Proxmox (se reinstala desde la ISO y se une al clúster) | `vzdump` a NFS del NAS | Diario 03:00 | ✅ ([06-copias-al-nas-nfs.txt](../maquinas/pve1/salidas/06-copias-al-nas-nfs.txt)) |
 
 **Regla general:** se copia lo que **no se puede reconstruir** (configuración y datos). No se copia lo que se reinstala desde una ISO verificada en minutos (el sistema operativo).
 

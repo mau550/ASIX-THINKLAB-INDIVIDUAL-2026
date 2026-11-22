@@ -5,14 +5,14 @@ Alumno: **Mauro Bas Montes** · Grupo 3 · Puesto **29** → LAN `192.168.29.0/2
 
 Entorno de pruebas propio en VirtualBox que reproduce, a escala, la infraestructura del grupo: tres routers alternativos, NAS de copias, clúster de virtualización, dominio, servidor Linux con RAID y clientes. Todo lo que figura como hecho está **comprobado** y enlazado a su evidencia (captura o salida de orden). Lo que falta se indica como pendiente, con su guía.
 
-> 📸 **[Índice de todas las evidencias](EVIDENCIAS.md)** — 106 capturas y 46 salidas de comandos, por máquina. Cada máquina muestra al final de su README su **galería completa**, en el orden en que se hizo el trabajo.
+> 📸 **[Índice de todas las evidencias](EVIDENCIAS.md)** — 110 capturas y 51 salidas de comandos, por máquina. Cada máquina muestra al final de su README su **galería completa**, en el orden en que se hizo el trabajo.
 
 ## Estado de un vistazo
 
 | | |
 |---|---|
-| Máquinas virtuales | **12 creadas** (11 del diseño + `srv-linux2`) · **11 instaladas, configuradas y probadas** (solo falta configurar `cli-win11`) |
-| Criterios de la rúbrica | **75 / 96 hechos** · 4 parciales · 14 se evalúan en la prueba presencial · 3 pendientes (`cli-win11`) · [autoevaluación completa](rubrica/autoevaluacion.md) |
+| Máquinas virtuales | **12 creadas** (11 del diseño + `srv-linux2`) · **las 12 instaladas, configuradas y probadas** |
+| Criterios de la rúbrica | **80 / 96 hechos** · 2 parciales (tests en el equipo de clase) · 14 se evalúan en la prueba presencial · 0 pendientes · [autoevaluación completa](rubrica/autoevaluacion.md) |
 | Incidencias reales documentadas | **11** ([registro](incidencias/README.md)) |
 | Copias de seguridad | 6 máquinas copian al NAS, 5 de forma automática; **restauradas de verdad** en pruebas de fallo (MikroTik 39 s · OPNsense 69 s · nftables 1,3 s) · [plan de copias](tareas/T5-plan-de-copias.md) |
 | Imágenes | 6 de 7 verificadas por SHA256 contra el valor oficial ([anexo](anexos/sha256-imagenes-20261122.txt)) |
@@ -32,13 +32,15 @@ flowchart TB
     SRV <-. "espejo DRBD" .-> SRV2
     LAN --- PVE["pve1-3 ✅ .11/.12/.15<br/>cluster-iso29"]
     LAN --- DC["srv-dc ✅ .13<br/>iso29.lan"]
-    LAN --- CW["cli-win11 🟡"]
+    LAN --- CW["cli-win11 ✅ .17<br/>miembro de iso29.lan"]
     LAN --- CL["cli-linux ✅ DHCP"]
     SRV -- "copia diaria SFTP" --> NAS
     NFT -- "copia diaria SFTP" --> NAS
     MK -- "copia diaria SFTP" --> NAS
     DC -- "copia diaria SCP" --> NAS
     CL -- "copia diaria SFTP" --> NAS
+    CW -- "copia diaria SCP" --> NAS
+    CW -. "miembro del dominio" .-> DC
     OPN -- "copia cifrada" --> NAS
 ```
 
@@ -54,7 +56,7 @@ flowchart TB
 | `srv-dc` | Dominio `iso29.lan` | Windows Server 2025 | ✅ DC, OU y grupos por departamento, GPO y copia diaria de AD | [→](maquinas/srv-dc/README.md) |
 | `srv-linux` | Servidor Linux | Debian 13.8 sin escritorio | ✅ IP fija, RAID 0/1/5 con avería y reconstrucción, copias | [→](maquinas/srv-linux/README.md) |
 | `srv-linux2` | Espejo entre equipos | Debian 13.8 (clon) | ✅ DRBD: caída del primario y relevo en 3,5 s | [→](maquinas/srv-linux2/README.md) |
-| `cli-win11` | Cliente Windows | Windows 11 | 🟡 Instalado y arranca; falta la contraseña de la cuenta | [→](maquinas/cli-win11/README.md) |
+| `cli-win11` | Cliente Windows | Windows 11 | ✅ Windows 11 Pro 23H2, IP fija .17, unido a `iso29.lan`, copia diaria al NAS | [→](maquinas/cli-win11/README.md) |
 | `cli-linux` | Cliente Linux | Debian 13.8 + GNOME | ✅ Reparado (INC-001), admin `adminlab`, DHCP y copia | [→](maquinas/cli-linux/README.md) |
 
 ## Tareas
@@ -65,7 +67,7 @@ flowchart TB
 | T1 · Necesidades y requisitos | [T1-necesidades-y-requisitos](tareas/T1-necesidades-y-requisitos.md) | ✅ |
 | T2 · Equipos de clase y de casa | [T2-equipos-clase-y-casa](tareas/T2-equipos-clase-y-casa.md) | ✅ · Apte+ 🟡 (faltan los tests en clase) |
 | T4 · Red individual | [T4-red-individual](tareas/T4-red-individual.md) | ✅ (+ Apte+) |
-| T5 · Instalación y comunicaciones | [T5-sistemas-e-imagenes](tareas/T5-sistemas-e-imagenes.md) · [comparación de routers](tareas/T5-comparacion-routers.md) · [plan de copias](tareas/T5-plan-de-copias.md) + fichas | ✅ Routers, NAS, clúster Proxmox, dominio, servidores y cliente Linux · 🟡 `cli-win11` |
+| T5 · Instalación y comunicaciones | [T5-sistemas-e-imagenes](tareas/T5-sistemas-e-imagenes.md) · [comparación de routers](tareas/T5-comparacion-routers.md) · [plan de copias](tareas/T5-plan-de-copias.md) + fichas | ✅ Routers, NAS, clúster Proxmox, dominio, servidores y clientes Linux y Windows 11 |
 | T6 · Almacenamiento y recuperación | [T6-almacenamiento-y-recuperacion](tareas/T6-almacenamiento-y-recuperacion.md) | ✅ (+ Apte+: espejo DRBD entre dos equipos) |
 | T7 · Rendimiento | [T7-rendimiento](tareas/T7-rendimiento.md) | ✅ (+ Apte+: dos optimizaciones medidas) |
 | T8 · Prueba final | [T8-prueba-final](tareas/T8-prueba-final.md) · [chuleta de la defensa](defensa/resumen-por-vm.md) · [preguntas por RA](defensa/preguntas.md) | 📅 Preparada |

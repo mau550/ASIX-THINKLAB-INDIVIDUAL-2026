@@ -61,7 +61,7 @@ flowchart TB
 | `srv-dc` | Adaptador 1 → Ethernet | `lan-iso` | **192.168.29.13/24** | 192.168.29.1 | 127.0.0.1 (él mismo) + reenviador .1 | Fija | ✅ comprobado |
 | `srv-linux` | Adaptador 1 → `enp0s3` | `lan-iso` | **192.168.29.14/24** | 192.168.29.1 | 192.168.29.1 | Fija | ✅ comprobado |
 | `srv-linux2` | Adaptador 1 → `enp0s3` | `lan-iso` | **192.168.29.16/24** | 192.168.29.1 | 192.168.29.1 | Fija | ✅ comprobado |
-| `cli-win11` | Adaptador 1 → Ethernet | `lan-iso` (hoy NAT) | .100–.200 | por DHCP | por DHCP | DHCP | ⏳ falta pasarla a `lan-iso` |
+| `cli-win11` | Adaptador 1 → `LAN-iso29` | `lan-iso` | **192.168.29.17/24** | 192.168.29.1 | 192.168.29.13 (`srv-dc`) | Fija | ✅ [comprobado](../maquinas/cli-win11/salidas/02-red.txt) |
 | `cli-linux` | Adaptador 1 → `enp0s3` | `lan-iso` | 192.168.29.105 (DHCP) | 192.168.29.1 | 192.168.29.1 | DHCP | ✅ comprobado |
 
 Configuraciones reales: [VirtualBox de cada VM](../maquinas/) (`config/virtualbox-showvminfo.txt`) · [interfaces de r-nftables](../maquinas/r-nftables/config/interfaces) · [interfaces de srv-linux](../maquinas/srv-linux/config/interfaces).

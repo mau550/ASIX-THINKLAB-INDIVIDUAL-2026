@@ -1,0 +1,94 @@
+# cli-win11 · versión de Windows y usuario de administración — 2026-11-22T22:46:17
+
+PS C:\> (Get-ItemProperty "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion") | Select-Object ProductName,EditionID,DisplayVersion,CurrentBuild,UBR | Format-List
+
+
+ProductName    : Windows 10 Pro
+EditionID      : Professional
+DisplayVersion : 23H2
+CurrentBuild   : 22631
+UBR            : 2861
+
+
+
+
+
+PS C:\> Get-CimInstance Win32_OperatingSystem | Select-Object Caption,Version,OSArchitecture,InstallDate | Format-List
+
+
+Caption        : Microsoft Windows 11 Pro
+Version        : 10.0.22631
+OSArchitecture : 64 bits
+InstallDate    : 22/11/2026 22:33:31
+
+
+
+
+
+PS C:\> Get-CimInstance Win32_ComputerSystem | Select-Object Name,Domain,Workgroup,TotalPhysicalMemory,NumberOfLogicalProcessors | Format-List
+
+
+Name                      : CLI-WIN11
+Domain                    : WORKGROUP
+Workgroup                 : WORKGROUP
+TotalPhysicalMemory       : 4277866496
+NumberOfLogicalProcessors : 2
+
+
+
+
+
+PS C:\> Confirm-SecureBootUEFI
+False
+
+
+PS C:\> Get-Tpm | Select-Object TpmPresent,TpmReady
+
+TpmPresent TpmReady
+---------- --------
+      True     True
+
+
+
+
+PS C:\> whoami
+cli-win11\mauro
+
+
+PS C:\> whoami /groups | Select-String -Pattern "Administradores|Nivel obligatorio|Mandatory"
+
+NT AUTHORITY\Cuenta local y miembro del grupo de administradores Grupo conocido S-1-5-114    Grupo obligatorio, Habilitado de manera predeterminada, Grupo 
+habilitado                      
+BUILTIN\Administradores                                          Alias          S-1-5-32-544 Grupo obligatorio, Habilitado de manera predeterminada, Grupo 
+habilitado, Propietario de grupo
+Etiqueta obligatoria\Nivel obligatorio alto                      Etiqueta       S-1-16-12288                                                                    
+                           
+
+
+
+
+PS C:\> Get-LocalUser | Select-Object Name,Enabled,PasswordRequired,Description | Format-Table -AutoSize
+
+Name               Enabled PasswordRequired Description                                                                                                         
+----               ------- ---------------- -----------                                                                                                         
+Administrador        False             True Cuenta integrada para la administración del equipo o dominio                                                        
+DefaultAccount       False            False Cuenta de usuario administrada por el sistema.                                                                      
+Invitado             False            False Cuenta integrada para el acceso como invitado al equipo o dominio                                                   
+mauro                 True             True                                                                                                                     
+WDAGUtilityAccount   False             True Una cuenta de usuario que el sistema administra y usa para escenarios de Protección de aplicaciones de Windows De...
+
+
+
+
+PS C:\> net localgroup Administradores
+Nombre de alias      Administradores
+Comentario           Los administradores tienen acceso completo y sin restricciones al equipo o dominio
+
+Miembros
+
+-------------------------------------------------------------------------------
+Administrador
+mauro
+Se ha completado el comando correctamente.
+
+

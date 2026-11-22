@@ -45,7 +45,7 @@ Todas en el grupo de VirtualBox `/ISO-individual`, con discos VDI **dinámicos**
 | [`srv-dc`](../maquinas/srv-dc/README.md) | Dominio `iso29.lan` | Windows Server 2025 Eval. | 2 | 4 GB | 50 GB | UEFI + TPM 2.0 | `lan-iso` | ✅ DC, OU, GPO y copias |
 | [`srv-linux`](../maquinas/srv-linux/README.md) | Servidor Linux + RAID | Debian 13.8 sin escritorio | 1 | 1 GB | 10 GB + 5 × 1 GB | BIOS | `lan-iso` | ✅ RAID 0/1/5 y DRBD |
 | [`srv-linux2`](../maquinas/srv-linux2/README.md) | Espejo DRBD (T6) | Debian 13.8 (clon) | 1 | 1 GB | 10 GB + 1 GB | BIOS | `lan-iso` | ✅ Relevo probado |
-| [`cli-win11`](../maquinas/cli-win11/README.md) | Cliente Windows | Windows 11 | 2 | 4 GB | 80 GB | UEFI + SB + TPM 2.0 | NAT → `lan-iso` | ✅ Instalado · ⏳ configurar |
+| [`cli-win11`](../maquinas/cli-win11/README.md) | Cliente Windows | Windows 11 Pro 23H2 | 2 | 4 GB | 64 GB | UEFI + TPM 2.0 | `lan-iso` .17 | ✅ Instalado, configurado y unido a `iso29.lan` |
 | [`cli-linux`](../maquinas/cli-linux/README.md) | Cliente Linux | Debian 13.8 + GNOME | 1 | 2 GB | 20 GB | BIOS | `lan-iso` (DHCP) | ✅ Reparado y configurado |
 | | | | **19** | **29,25 GB** (con los nodos Proxmox a 2 GB) | | | | |
 

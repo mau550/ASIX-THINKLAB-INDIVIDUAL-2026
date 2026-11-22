@@ -58,7 +58,7 @@ La siguiente tabla diferencia los requisitos publicados por los fabricantes de l
 | TrueNAS SCALE | Procesador x86-64 de dos núcleos, 8 GB RAM, dispositivo de arranque de al menos 16 GB y discos adicionales para almacenamiento. | 8 GB RAM como referencia inicial y discos virtuales adicionales. | Atención: consume una parte importante de la memoria disponible. |
 | Proxmox VE | Para evaluación: CPU de 64 bits compatible con VT-x/AMD-V, 1 GB RAM, disco y tarjeta de red, además de la memoria necesaria para las máquinas invitadas. | Pendiente de dimensionar según las pruebas y la virtualización anidada. | La documentación oficial permite su instalación como invitado si el hipervisor admite virtualización anidada. |
 | Windows Server 2025 | Consultar requisitos oficiales según modalidad de instalación y funciones del servidor. | Pendiente de asignar; propuesta inicial de 4 GB RAM y 50 GB de disco. | Se estudiará para la gestión centralizada de identidades. |
-| Windows 11 | 4 GB RAM, 64 GB de almacenamiento, firmware UEFI, Secure Boot y TPM 2.0. | VM existente: 4 GB RAM, 2 CPU virtuales y 80 GB de disco. | Tiene configurados UEFI, Secure Boot y TPM 2.0 en VirtualBox. Instalación pendiente de verificar. |
+| Windows 11 | 4 GB RAM, 64 GB de almacenamiento, firmware UEFI, Secure Boot y TPM 2.0. | VM existente: 4 GB RAM, 2 CPU virtuales y 80 GB de disco. | Reinstalada el 22/11: 4 GB RAM, 2 CPU, 64 GB, UEFI + TPM 2.0 (Secure Boot compatible, no activado). Windows 11 Pro 23H2 verificado ([cli-win11](../maquinas/cli-win11/README.md)). |
 | Ubuntu Desktop | Consultar los requisitos oficiales de la versión seleccionada. | Pendiente de dimensionar. | Se estudiará como alternativa de cliente GNU/Linux. |
 
 **Fuentes oficiales de requisitos:**

@@ -1,6 +1,6 @@
 # Autoevaluación con la rúbrica individual (ASIX ThinkLab · «Naix un sistema» 2.0)
 
-Generada a partir de la rúbrica oficial (`Rubrica-autoavaluacio-Individual`). Para cada criterio: nivel, RA, estado **real** y enlace a la evidencia. Actualizada el 22/11/2026.
+Generada a partir de la rúbrica oficial (`Rubrica-autoavaluacio-Individual`). Para cada criterio: nivel, RA, estado **real** y enlace a la evidencia. Actualizada el 22/11/2026 a las 23:00.
 
 Leyenda: ✅ hecho y con evidencia · 🟡 parcial · ⏳ pendiente (con guía) · 📅 se evalúa en la prueba presencial (preparado)
 
@@ -8,11 +8,11 @@ Leyenda: ✅ hecho y con evidencia · 🟡 parcial · ⏳ pendiente (con guía) 
 
 | Nivel | ✅ | 🟡 | ⏳ | 📅 | Total |
 |---|---:|---:|---:|---:|---:|
-| Apte | 64 | 2 | 3 | 9 | 78 |
+| Apte | 69 | 0 | 0 | 9 | 78 |
 | Apte+ | 11 | 2 | 0 | 5 | 18 |
-| **Total** | **75** | **4** | **3** | **14** | **96** |
+| **Total** | **80** | **2** | **0** | **14** | **96** |
 
-**Lo que queda pendiente:** `cli-win11` (3 criterios; hace falta la contraseña de la cuenta), enviar la copia de Proxmox al NAS, los tests de hardware en el equipo de clase y la optimización del puerto USB 3 (cambios físicos).
+**Lo que queda pendiente:** solo lo que no se puede hacer desde este equipo: los tests de hardware en el ordenador de clase (a27/a28) y la optimización del puerto USB 3 (cambio físico). Los 14 criterios 📅 se evalúan en la prueba presencial y están preparados en [`defensa/`](../defensa/).
 
 ## T0 · Entorno de pruebas
 
@@ -76,7 +76,7 @@ Leyenda: ✅ hecho y con evidencia · 🟡 parcial · ⏳ pendiente (con guía) 
 | a228 | Apte | ISO-RA1 | Proxmox: instal·lar el sistema previst i comprovar-ne la versió i el funcionament. | ✅ Hecho | [pve1-3](../maquinas/pve1/README.md) · 3 nodos Proxmox VE 9.2.2 |
 | a229 | Apte | ISO-RA1 | Proxmox: configurar l’usuari o usuaris d’administració. | ✅ Hecho | [pve1-3](../maquinas/pve1/README.md) · `mauro@pve` Administrator |
 | a230 | Apte | ISO-RA1 | Proxmox: configurar els paràmetres de xarxa de les interfícies. | ✅ Hecho | [pve1-3](../maquinas/pve1/README.md) · `vmbr0` con IP fija |
-| a231 | Apte | ISO-RA3 | Proxmox: copiar les configuracions o imatges necessàries al servidor corresponent i justificar què es copia i què no. | 🟡 Parcial | [pve1-3](../maquinas/pve1/README.md) · `vzdump` del CT (160 MB); falta enviarlo al NAS |
+| a231 | Apte | ISO-RA3 | Proxmox: copiar les configuracions o imatges necessàries al servidor corresponent i justificar què es copia i què no. | ✅ Hecho | [pve1](../maquinas/pve1/README.md) · `vzdump` del CT 100 y la VM 101 **al NAS** por NFS (almacenamiento `nas-copias`) + tarea diaria `copia-diaria-nas` 03:00 · [salida](../maquinas/pve1/salidas/06-copias-al-nas-nfs.txt) · [NFS en el NAS](../maquinas/nas-truenas/salidas/05-nfs-para-proxmox.txt) |
 | a232 | Apte | ISO-RA1 | Proxmox: configurar el clúster amb els nodes disponibles; si no hi ha nodes suficients, registrar el disseny o la simulació autoritzada. | ✅ Hecho | [pve1-3](../maquinas/pve1/README.md) · `cluster-iso29`, 3 nodos, prueba de quórum 2/3 y 1/3 |
 | a235 | Apte | ISO-RA1, ISO-RA6 | Proxmox: executar la migració d’un contenidor i una VM entre nodes disponibles. La migració de una VM haurà de ser d'un sistema ubuntu server o debian sense entorn gràfic per a que siga més ràpid. | ✅ Hecho | [pve1-3](../maquinas/pve1/README.md) · CT 100 → pve2 (restart) y VM 101 → pve3 en caliente |
 | a236 | Apte | ISO-RA6 | Proxmox individual: mesurar temps i espai de la migració de VM i contenidor, interpretar-los i valorar millores. | ✅ Hecho | [pve1-3](../maquinas/pve1/README.md) §4 · 90,6 s / 167,5 s, corte de 172 ms, mejoras |
@@ -90,10 +90,10 @@ Leyenda: ✅ hecho y con evidencia · 🟡 parcial · ⏳ pendiente (con guía) 
 | a244 | Apte | ISO-RA1 | Servidors GNU/Linux d’infraestructura: configurar els paràmetres de xarxa de les interfícies. | ✅ Hecho | [srv-linux](../maquinas/srv-linux/README.md) |
 | a245 | Apte | ISO-RA3 | Servidors GNU/Linux d’infraestructura: copiar les configuracions o imatges necessàries al servidor corresponent i justificar què es copia i què no. | ✅ Hecho | [srv-linux](../maquinas/srv-linux/README.md) §4 |
 | a246 | Apte | ISO-RA1 | En cada servidor GNU/Linux d’infraestructura: instal·lar i configurar el programari necessari per a la seua funcionalitat. De moment cap programari addicional, es veurà en tasques posteriors. | ✅ Hecho | [srv-linux](../maquinas/srv-linux/README.md) |
-| a247 | Apte | ISO-RA1 | Windows 11: instal·lar el sistema previst i comprovar-ne la versió i el funcionament. | 🟡 Parcial | [cli-win11](../maquinas/cli-win11/README.md) : instalado y arranca; sin la contraseña no se puede entrar |
-| a248 | Apte | ISO-RA1 | Windows 11: configurar l’usuari o usuaris d’administració. | ⏳ Pendiente | [cli-win11](../maquinas/cli-win11/README.md) : necesita iniciar sesión |
-| a249 | Apte | ISO-RA1 | Windows 11: configurar els paràmetres de xarxa de les interfícies. | ⏳ Pendiente | [cli-win11](../maquinas/cli-win11/README.md) |
-| a250 | Apte | ISO-RA3 | Windows 11: copiar les configuracions o imatges necessàries al servidor corresponent i justificar què es copia i què no. | ⏳ Pendiente | [cli-win11](../maquinas/cli-win11/README.md) |
+| a247 | Apte | ISO-RA1 | Windows 11: instal·lar el sistema previst i comprovar-ne la versió i el funcionament. | ✅ Hecho | [cli-win11](../maquinas/cli-win11/README.md): Windows 11 Pro 23H2 (compilación 22631.2861), instalación desatendida · [w11-06](../maquinas/cli-win11/capturas/w11-06-version-23H2-y-mauro-administrador.png) · [salida](../maquinas/cli-win11/salidas/01-version-y-usuario-admin.txt) |
+| a248 | Apte | ISO-RA1 | Windows 11: configurar l’usuari o usuaris d’administració. | ✅ Hecho | [cli-win11](../maquinas/cli-win11/README.md): `mauro` administrador local, `Administrador` integrado deshabilitado, `ISO29\Domain Admins` en Administradores tras unirse al dominio · [salida](../maquinas/cli-win11/salidas/01-version-y-usuario-admin.txt) |
+| a249 | Apte | ISO-RA1 | Windows 11: configurar els paràmetres de xarxa de les interfícies. | ✅ Hecho | [cli-win11](../maquinas/cli-win11/README.md): `LAN-iso29` 192.168.29.17/24, puerta .1, DNS .13 (`srv-dc`), sufijo `iso29.lan`; ping, tracert, DNS y LDAP comprobados; **unido al dominio** · [w11-07](../maquinas/cli-win11/capturas/w11-07-red-fija-dominio-y-copia.png) · [red](../maquinas/cli-win11/salidas/02-red.txt) · [dominio](../maquinas/cli-win11/salidas/03-union-dominio.txt) |
+| a250 | Apte | ISO-RA3 | Windows 11: copiar les configuracions o imatges necessàries al servidor corresponent i justificar què es copia i què no. | ✅ Hecho | [cli-win11](../maquinas/cli-win11/README.md): tarea diaria como SYSTEM → zip con datos de usuario + informe de configuración, `scp` con clave a `c-cliwin11@nas-truenas`, SHA256 verificado en el NAS · [salida](../maquinas/cli-win11/salidas/04-copia-al-nas.txt) · [script](../maquinas/cli-win11/config/copia-cli-win11.ps1) |
 | a252 | Apte | ISO-RA1 | GNU/Linux client: instal·lar el sistema previst i comprovar-ne la versió i el funcionament. | ✅ Hecho | [cli-linux](../maquinas/cli-linux/README.md) |
 | a253 | Apte | ISO-RA1 | GNU/Linux client: configurar l’usuari o usuaris d’administració. | ✅ Hecho | [cli-linux](../maquinas/cli-linux/README.md) : `adminlab` |
 | a254 | Apte | ISO-RA1 | GNU/Linux client: configurar els paràmetres de xarxa de les interfícies. | ✅ Hecho | [cli-linux](../maquinas/cli-linux/README.md) |

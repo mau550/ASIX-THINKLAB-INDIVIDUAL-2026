@@ -5,8 +5,8 @@ Todas las capturas y salidas de comandos del laboratorio, por máquina. Cada má
 | Máquina | Capturas | Salidas | Galería |
 |---|---:|---:|---|
 | [`cli-linux`](maquinas/cli-linux/README.md) | 19 | 3 | [ver galería](maquinas/cli-linux/README.md#galería-de-evidencias) |
-| [`cli-win11`](maquinas/cli-win11/README.md) | 3 | 0 | [ver galería](maquinas/cli-win11/README.md#galería-de-evidencias) |
-| [`nas-truenas`](maquinas/nas-truenas/README.md) | 11 | 5 | [ver galería](maquinas/nas-truenas/README.md#galería-de-evidencias) |
+| [`cli-win11`](maquinas/cli-win11/README.md) | 7 | 4 | [ver galería](maquinas/cli-win11/README.md#galería-de-evidencias) |
+| [`nas-truenas`](maquinas/nas-truenas/README.md) | 11 | 6 | [ver galería](maquinas/nas-truenas/README.md#galería-de-evidencias) |
 | [`pve1`](maquinas/pve1/README.md) | 8 | 6 | [ver galería](maquinas/pve1/README.md#galería-de-evidencias) |
 | [`pve2`](maquinas/pve2/README.md) | 1 | 0 | [ver galería](maquinas/pve2/README.md#galería-de-evidencias) |
 | [`pve3`](maquinas/pve3/README.md) | 1 | 0 | [ver galería](maquinas/pve3/README.md#galería-de-evidencias) |
@@ -16,7 +16,7 @@ Todas las capturas y salidas de comandos del laboratorio, por máquina. Cada má
 | [`srv-dc`](maquinas/srv-dc/README.md) | 8 | 4 | [ver galería](maquinas/srv-dc/README.md#galería-de-evidencias) |
 | [`srv-linux`](maquinas/srv-linux/README.md) | 10 | 9 | [ver galería](maquinas/srv-linux/README.md#galería-de-evidencias) |
 | [`srv-linux2`](maquinas/srv-linux2/README.md) | 1 | 1 | [ver galería](maquinas/srv-linux2/README.md#galería-de-evidencias) |
-| **Total** | **106** | **46** | |
+| **Total** | **110** | **51** | |
 
 ## `cli-linux`
 
@@ -45,9 +45,17 @@ Todas las capturas y salidas de comandos del laboratorio, por máquina. Cada má
 
 ## `cli-win11`
 
+- 📄 [`01-version-y-usuario-admin.txt`](maquinas/cli-win11/salidas/01-version-y-usuario-admin.txt) — cli-win11 · versión de Windows y usuario de administración — 2026-11-22T22:46:17
+- 📄 [`02-red.txt`](maquinas/cli-win11/salidas/02-red.txt) — cli-win11 · configuración de red (IP fija en lan-iso, DNS del dominio) — 2026-11-22T22:46:20
+- 📄 [`03-union-dominio.txt`](maquinas/cli-win11/salidas/03-union-dominio.txt) — cli-win11 · unión al dominio iso29.lan — 2026-11-22T22:46:54
+- 📄 [`04-copia-al-nas.txt`](maquinas/cli-win11/salidas/04-copia-al-nas.txt) — cli-win11 · copia automática al NAS (nas-truenas) — 2026-11-22T22:49:20
 - 🖼️ [01. Arranca pantalla bloqueo](maquinas/cli-win11/capturas/w11-01-arranca-pantalla-bloqueo.png)
 - 🖼️ [02. Arranque tras apagado forzado](maquinas/cli-win11/capturas/w11-02-arranque-tras-apagado-forzado.png)
 - 🖼️ [03. Apagado colgado pantalla negra](maquinas/cli-win11/capturas/w11-03-apagado-colgado-pantalla-negra.png)
+- 🖼️ [04. Instalacion desatendida nueva](maquinas/cli-win11/capturas/w11-04-instalacion-desatendida-nueva.png)
+- 🖼️ [05. Escritorio tras instalar](maquinas/cli-win11/capturas/w11-05-escritorio-tras-instalar.png)
+- 🖼️ [06. Version 23H2 y mauro administrador](maquinas/cli-win11/capturas/w11-06-version-23H2-y-mauro-administrador.png)
+- 🖼️ [07. Red fija dominio y copia](maquinas/cli-win11/capturas/w11-07-red-fija-dominio-y-copia.png)
 
 ## `nas-truenas`
 
@@ -56,6 +64,7 @@ Todas las capturas y salidas de comandos del laboratorio, por máquina. Cada má
 - 📄 [`03-red-ip-fija.txt`](maquinas/nas-truenas/salidas/03-red-ip-fija.txt) — nas-truenas · red con IP fija (commit + checkin) — 2026-11-22T18:06:28+01:00
 - 📄 [`04-copias-recibidas.txt`](maquinas/nas-truenas/salidas/04-copias-recibidas.txt) — nas-truenas · copias recibidas en cada carpeta — 2026-11-22T18:22:35+01:00
 - 📄 [`05-nfs-para-proxmox.txt`](maquinas/nas-truenas/salidas/05-nfs-para-proxmox.txt) — nas-truenas · recurso NFS para las copias del clúster Proxmox — 2026-11-22T21:46:28+01:00
+- 📄 [`06-usuario-copias-cli-win11.txt`](maquinas/nas-truenas/salidas/06-usuario-copias-cli-win11.txt) — nas-truenas · dataset y usuario de copias para cli-win11 — 2026-11-22T22:44:35+01:00
 - 🖼️ [01. Instalador menu](maquinas/nas-truenas/capturas/tn-01-instalador-menu.png)
 - 🖼️ [02. Disco sistema sda](maquinas/nas-truenas/capturas/tn-02-disco-sistema-sda.png)
 - 🖼️ [03. Usuario truenas admin](maquinas/nas-truenas/capturas/tn-03-usuario-truenas-admin.png)

@@ -1,0 +1,9 @@
+# nas-truenas · dataset y usuario de copias para cli-win11 — 2026-11-22T22:44:35+01:00
+truenas_admin@nas-truenas:~$ midclt call pool.dataset.create {"name":"copias/cli-win11","compression":"LZ4"}
+  -> ya existía (creado al preparar el pool): [EINVAL] Path /mnt/copias/cli-win11 already exists — se reutiliza
+truenas_admin@nas-truenas:~$ midclt call user.create {username: c-cliwin11, home: /mnt/copias/cli-win11, sshpubkey: ssh-ed25519… copia-cli-win11, password_disabled}
+  -> creado
+truenas_admin@nas-truenas:~$ midclt call user.query [["username","=","c-cliwin11"]] (campos seleccionados)
+c-cliwin11  uid=3006 home=/mnt/copias/cli-win11 shell=/usr/bin/bash clave_ssh=sí (copia-cli-win11) password_ssh=no (deshabilitada)
+truenas_admin@nas-truenas:~$ midclt call filesystem.stat /mnt/copias/cli-win11 (propietario y permisos)
+  uid 3006 gid 3006 modo 700

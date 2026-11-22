@@ -23,3 +23,4 @@ credenciales*
 id_ed25519*
 copia_nas*
 .env
+__pycache__/

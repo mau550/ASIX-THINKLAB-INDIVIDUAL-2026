@@ -15,7 +15,7 @@ Para tenerla abierta durante la defensa y la prueba final. El detalle está en l
 | `srv-linux` | .14 | `ssh mauro@192.168.29.14` (por el router) | `cat /proc/mdstat` · `cat /proc/drbd` · `systemctl list-timers` | «RAID 0 lo perdí al quitar un disco; RAID 1 y 5 siguieron con los datos intactos. **Un RAID no es una copia**» |
 | `srv-linux2` | .16 | `ssh mauro@192.168.29.16` | `cat /proc/drbd` | «DRBD = RAID 1 por red entre dos equipos: si se apaga srv-linux, srv-linux2 tiene los datos en 3,5 s» |
 | `cli-linux` | DHCP (.105) | `ssh adminlab@…` | `id adminlab` · `ip r` | «Separé la cuenta de uso diario de la de administración» |
-| `cli-win11` | — | Consola | — | «Instalado y arranca; falta iniciar sesión para configurarlo» |
+| `cli-win11` | 192.168.29.17 | Consola / Terminal | `mauro` (admin local), `ISO29\mauro` | «Instalación desatendida, IP fija con DNS del DC, unido a `iso29.lan`, copia diaria por SCP al NAS» |
 | `pve1-3` | .11/.12/.15 | Web `https://192.168.29.11:8006` (root@pam o mauro@pve) | `pvecm status` · *Datacenter › Cluster* · tareas de migración | «Con 2 de 3 nodos el clúster siguió; con 1 de 3 dio *no quorum*. La VM migró en caliente con 172 ms de corte; el contenedor tiene que reiniciarse» |
 
 ## Cifras que conviene recordar

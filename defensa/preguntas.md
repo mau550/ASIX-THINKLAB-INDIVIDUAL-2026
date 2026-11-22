@@ -40,5 +40,5 @@ Respuestas cortas, cada una apoyada en algo que **he hecho y medido** en este la
 ## ISO RA6 · Rendimiento
 
 23. **¿Cómo sabes si falta RAM?** `vmstat`: `si/so` distintos de 0 de forma sostenida y poca RAM disponible.
-24. **¿Qué optimizaciones aplicaste?** 1) Servidores sin escritorio: 211 MB frente a 1,3 GB. 2) Caché de E/S del anfitrión en `srv-dc` para que Windows no se cuelgue con el disco lento (aplicada; falta medir su efecto). La mejora de fondo es el puerto USB 3.
+24. **¿Qué optimizaciones aplicaste?** 1) Servidores sin escritorio: 211 MB frente a 1,3 GB. 2) Caché de E/S del anfitrión en `srv-dc` para que Windows no se cuelgue con el disco lento (medida: de 3 y 1 reinicios AHCI por sesión a 0). La mejora de fondo es el puerto USB 3.
 25. **¿Cuántas VM caben?** En casa, 2 de escritorio o router + NAS + 1–2 servidores. En clase (30 GiB), el escenario del clúster.

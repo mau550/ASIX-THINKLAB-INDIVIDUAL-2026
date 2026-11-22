@@ -3,6 +3,9 @@
 #               y la lista de usuarios, grupos y GPO en texto. NO se copia la imagen del sistema (50 GB): se reinstala.
 $ErrorActionPreference = "Stop"
 Start-Transcript -Path "C:\ProgramData\copias\ultima-copia.log" -Force | Out-Null
+# Tras un reinicio, AD Web Services tarda en estar disponible: esperar hasta 5 min antes de copiar
+$limite = (Get-Date).AddMinutes(5)
+while ($true) { try { Get-ADDomain -ErrorAction Stop | Out-Null; break } catch { if ((Get-Date) -gt $limite) { throw "AD no responde tras 5 min" }; Start-Sleep 10 } }
 $fecha = Get-Date -Format "yyyyMMdd-HHmm"
 $base  = "C:\ProgramData\copias"; $tmp = "$base\ifm-$fecha"; $zip = "$base\srv-dc-ad-$fecha.zip"
 New-Item -ItemType Directory -Force $tmp | Out-Null

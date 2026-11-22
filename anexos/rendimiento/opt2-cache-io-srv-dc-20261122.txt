@@ -1,0 +1,20 @@
+# Optimización 2 · caché de E/S del anfitrión en srv-dc — 2026-11-22T21:34:54+01:00
+$ grep useHostIOCache ~/VirtualBox-ThinkLab/ISO-individual/srv-dc/srv-dc.vbox
+  StorageController name="SATA" type="AHCI" … useHostIOCache="true"
+
+## Arranque hasta NTDS en marcha: 72 s
+
+## Carga de E/S: tarea «Copia AD al NAS» (ntdsutil ifm + zip + scp)
+1.er intento (nada más arrancar): LastTaskResult = 1 → «Get-ADUser: Server instance not found on the given port» (AD Web Services aún no estaba listo).
+Mejora aplicada a copia-ad.ps1: esperar hasta 5 min a que Get-ADDomain responda.
+
+## Reinicios del puerto AHCI (el disco virtual no responde a tiempo) por sesión, según VBox.log (horas UTC)
+  VBox.log.2  18:14  SIN caché  · instalación de Windows Server + actualización de OPNsense a la vez   → 3 resets (Windows colgado 2 veces)
+  VBox.log.1  19:09  SIN caché  · promoción a DC, OU, GPO, copias                                       → 1 reset
+  VBox.log    20:33  CON caché  · arranque + 2 ejecuciones de la copia de AD (ntdsutil + zip + scp)     → 0 resets
+
+## 2.º intento con el script mejorado
+duración de la copia: 16 s
+LastTaskResult = 0
+OK: srv-dc-ad-20261122-2135.zip (4.7 MB) subida a c-srvdc@nas-truenas
+Reinicios AHCI en esta sesión (con caché, arranque + copia): 0

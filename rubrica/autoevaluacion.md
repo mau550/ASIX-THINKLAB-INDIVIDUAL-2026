@@ -9,8 +9,8 @@ Leyenda: ✅ hecho y con evidencia · 🟡 parcial · ⏳ pendiente (con guía) 
 | Nivel | ✅ | 🟡 | ⏳ | 📅 | Total |
 |---|---:|---:|---:|---:|---:|
 | Apte | 64 | 2 | 3 | 9 | 78 |
-| Apte+ | 9 | 4 | 0 | 5 | 18 |
-| **Total** | **73** | **6** | **3** | **14** | **96** |
+| Apte+ | 11 | 2 | 0 | 5 | 18 |
+| **Total** | **75** | **4** | **3** | **14** | **96** |
 
 **Lo que queda pendiente:** `cli-win11` (3 criterios; hace falta la contraseña de la cuenta), enviar la copia de Proxmox al NAS, los tests de hardware en el equipo de clase y la optimización del puerto USB 3 (cambios físicos).
 
@@ -123,8 +123,8 @@ Leyenda: ✅ hecho y con evidencia · 🟡 parcial · ⏳ pendiente (con guía) 
 | a120 | Apte | ISO-RA6 | Determinar quantes VM permeten treballar sense bloquejar l’equip. | ✅ Hecho | [T7 §4](../tareas/T7-rendimiento.md) |
 | a121 | Apte | ISO-RA6 | Lliurar l’informe de mesures i conclusions. | ✅ Hecho | [T7](../tareas/T7-rendimiento.md) |
 | a123 | Apte+ | ISO-RA6 | Proposar i aplicar una primera optimització de les VM. | ✅ Hecho | Servidores sin escritorio (medida) · [T7 §5](../tareas/T7-rendimiento.md) |
-| a124 | Apte+ | ISO-RA6 | Proposar i aplicar una segona optimització de les VM. | 🟡 Parcial | Caché de E/S del anfitrión aplicada en srv-dc, sin medir · USB 3 pendiente · [T7 §5](../tareas/T7-rendimiento.md) |
-| a125 | Apte+ | ISO-RA6 | Comparar les mesures de rendiment abans i després. | 🟡 Parcial | Antes/después medido para la optimización 1; falta la 2 |
+| a124 | Apte+ | ISO-RA6 | Proposar i aplicar una segona optimització de les VM. | ✅ Hecho | Caché de E/S del anfitrión en srv-dc: 3/1 → **0** reinicios AHCI · [T7 §5](../tareas/T7-rendimiento.md) |
+| a125 | Apte+ | ISO-RA6 | Comparar les mesures de rendiment abans i després. | ✅ Hecho | Antes/después medido para las dos optimizaciones · [T7 §5](../tareas/T7-rendimiento.md) |
 
 ## T8 · Prueba final
 

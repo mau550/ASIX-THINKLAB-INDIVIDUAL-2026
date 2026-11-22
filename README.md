@@ -10,7 +10,7 @@ Entorno de pruebas propio en VirtualBox que reproduce, a escala, la infraestruct
 | | |
 |---|---|
 | Máquinas virtuales | **12 creadas** (11 del diseño + `srv-linux2`) · **11 instaladas, configuradas y probadas** (solo falta configurar `cli-win11`) |
-| Criterios de la rúbrica | **73 / 96 hechos** · 6 parciales · 14 se evalúan en la prueba presencial · 3 pendientes (`cli-win11`) · [autoevaluación completa](rubrica/autoevaluacion.md) |
+| Criterios de la rúbrica | **75 / 96 hechos** · 4 parciales · 14 se evalúan en la prueba presencial · 3 pendientes (`cli-win11`) · [autoevaluación completa](rubrica/autoevaluacion.md) |
 | Incidencias reales documentadas | **11** ([registro](incidencias/README.md)) |
 | Copias de seguridad | 6 máquinas copian al NAS, 5 de forma automática; **restauradas de verdad** en pruebas de fallo (MikroTik 39 s · OPNsense 69 s · nftables 1,3 s) · [plan de copias](tareas/T5-plan-de-copias.md) |
 | Imágenes | 6 de 7 verificadas por SHA256 contra el valor oficial ([anexo](anexos/sha256-imagenes-20261122.txt)) |
@@ -65,7 +65,7 @@ flowchart TB
 | T4 · Red individual | [T4-red-individual](tareas/T4-red-individual.md) | ✅ (+ Apte+) |
 | T5 · Instalación y comunicaciones | [T5-sistemas-e-imagenes](tareas/T5-sistemas-e-imagenes.md) · [comparación de routers](tareas/T5-comparacion-routers.md) · [plan de copias](tareas/T5-plan-de-copias.md) + fichas | ✅ Routers, NAS, clúster Proxmox, dominio, servidores y cliente Linux · 🟡 `cli-win11` |
 | T6 · Almacenamiento y recuperación | [T6-almacenamiento-y-recuperacion](tareas/T6-almacenamiento-y-recuperacion.md) | ✅ (+ Apte+: espejo DRBD entre dos equipos) |
-| T7 · Rendimiento | [T7-rendimiento](tareas/T7-rendimiento.md) | ✅ · Apte+ 🟡 (optimización 2 aplicada, falta medirla) |
+| T7 · Rendimiento | [T7-rendimiento](tareas/T7-rendimiento.md) | ✅ (+ Apte+: dos optimizaciones medidas) |
 | T8 · Prueba final | [T8-prueba-final](tareas/T8-prueba-final.md) · [chuleta de la defensa](defensa/resumen-por-vm.md) · [preguntas por RA](defensa/preguntas.md) | 📅 Preparada |
 
 ## Cómo está organizado el repositorio

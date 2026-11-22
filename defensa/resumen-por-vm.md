@@ -23,7 +23,7 @@ Para tenerla abierta durante la defensa y la prueba final. El detalle está en l
 | Qué | Dato |
 |---|---|
 | Disco del laboratorio en casa | USB 2.0 → **41 MB/s**, al 80–93 % con una sola VM de Windows ([INC-002](../incidencias/INC-002-ssd-portatil-en-usb2.md)) |
-| VM a la vez en casa (16 GB) | 2 de escritorio, o router + NAS + 1–2 servidores; el clúster Proxmox solo en clase |
+| VM a la vez en casa (16 GB) | 2 de escritorio, o router + NAS + 1–2 servidores, o router + 3 nodos Proxmox a 2 GB (probado) |
 | Servidor sin escritorio | 211 MB de RAM usados, arranque en 7,5 s |
 | Recuperación de routers | MikroTik 39 s · OPNsense 69 s · nftables 1,3 s |
 | RAID | Reconstrucción en 13 s · RAID 0 se pierde · RAID 1 y 5 sobreviven |

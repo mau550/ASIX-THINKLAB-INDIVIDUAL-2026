@@ -31,7 +31,7 @@ Install-ADDSForest -DomainName iso29.lan -DomainNetbiosName ISO29 -InstallDns -S
 
 Tras el reinicio, `dcdiag` → *passed* Connectivity, Advertising, NetLogons y Services ([02-dominio-ad-ds.txt](salidas/02-dominio-ad-ds.txt)). El DNS publica `_ldap._tcp.iso29.lan → srv-dc.iso29.lan:389`.
 
-> Durante los primeros minutos tras la promoción, `Get-ADDomain` daba *«Unable to find a default server with Active Directory Web Services running»* y `dcdiag` fallaba en *Advertising*: el DC aún no se anunciaba. A los pocos minutos todo pasaba. Durante el reinicio también se repitió el cuelgue por E/S de [INC-003](../../incidencias/INC-003-cli-win11-apagado-colgado.md) (`AHCI#0: Port 0 reset`). Como mitigación se activó, al apagar la VM, la caché de E/S del anfitrión (`VBoxManage storagectl srv-dc --name SATA --hostiocache on`); su efecto está pendiente de medir.
+> Durante los primeros minutos tras la promoción, `Get-ADDomain` daba *«Unable to find a default server with Active Directory Web Services running»* y `dcdiag` fallaba en *Advertising*: el DC aún no se anunciaba. A los pocos minutos todo pasaba. Durante el reinicio también se repitió el cuelgue por E/S de [INC-003](../../incidencias/INC-003-cli-win11-apagado-colgado.md) (`AHCI#0: Port 0 reset`). Como mitigación se activó, al apagar la VM, la caché de E/S del anfitrión (`VBoxManage storagectl srv-dc --name SATA --hostiocache on`); con ella, 0 reinicios AHCI en el arranque y en dos copias de AD ([medida](../../anexos/rendimiento/opt2-cache-io-srv-dc-20261122.txt)).
 
 ![Server Manager](capturas/dc-04-server-manager-ad-ds-dns.png)
 

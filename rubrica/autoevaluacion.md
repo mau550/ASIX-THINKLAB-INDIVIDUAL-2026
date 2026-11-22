@@ -8,11 +8,11 @@ Leyenda: ✅ hecho y con evidencia · 🟡 parcial · ⏳ pendiente (con guía) 
 
 | Nivel | ✅ | 🟡 | ⏳ | 📅 | Total |
 |---|---:|---:|---:|---:|---:|
-| Apte | 58 | 1 | 10 | 9 | 78 |
+| Apte | 64 | 2 | 3 | 9 | 78 |
 | Apte+ | 9 | 4 | 0 | 5 | 18 |
-| **Total** | **67** | **5** | **10** | **14** | **96** |
+| **Total** | **73** | **6** | **3** | **14** | **96** |
 
-**Lo que queda pendiente:** clúster Proxmox (7 criterios; no cabe en la RAM del equipo de casa), `cli-win11` (3; hace falta la contraseña de la cuenta), tests de hardware en el equipo de clase y la optimización del puerto USB 3 (cambios físicos).
+**Lo que queda pendiente:** `cli-win11` (3 criterios; hace falta la contraseña de la cuenta), enviar la copia de Proxmox al NAS, los tests de hardware en el equipo de clase y la optimización del puerto USB 3 (cambios físicos).
 
 ## T0 · Entorno de pruebas
 
@@ -73,13 +73,13 @@ Leyenda: ✅ hecho y con evidencia · 🟡 parcial · ⏳ pendiente (con guía) 
 | a225 | Apte | ISO-RA1 | TrueNAS: configurar l’usuari o usuaris d’administració. | ✅ Hecho | [nas-truenas](../maquinas/nas-truenas/README.md) |
 | a226 | Apte | ISO-RA1 | TrueNAS: configurar els paràmetres de xarxa de les interfícies. | ✅ Hecho | [nas-truenas](../maquinas/nas-truenas/README.md) |
 | a227 | Apte | ISO-RA3 | TrueNAS: preparar un disc addicional o, si no és possible, una partició addicional per a les còpies dels equips crítics. | ✅ Hecho | [nas-truenas](../maquinas/nas-truenas/README.md) |
-| a228 | Apte | ISO-RA1 | Proxmox: instal·lar el sistema previst i comprovar-ne la versió i el funcionament. | ⏳ Pendiente | [pve1-3](../maquinas/pve1/README.md): VM con VT-x anidada e ISO verificada; instalación y clúster pendientes |
-| a229 | Apte | ISO-RA1 | Proxmox: configurar l’usuari o usuaris d’administració. | ⏳ Pendiente | [pve1-3](../maquinas/pve1/README.md): VM con VT-x anidada e ISO verificada; instalación y clúster pendientes |
-| a230 | Apte | ISO-RA1 | Proxmox: configurar els paràmetres de xarxa de les interfícies. | ⏳ Pendiente | [pve1-3](../maquinas/pve1/README.md): VM con VT-x anidada e ISO verificada; instalación y clúster pendientes |
-| a231 | Apte | ISO-RA3 | Proxmox: copiar les configuracions o imatges necessàries al servidor corresponent i justificar què es copia i què no. | ⏳ Pendiente | [pve1-3](../maquinas/pve1/README.md): VM con VT-x anidada e ISO verificada; instalación y clúster pendientes |
-| a232 | Apte | ISO-RA1 | Proxmox: configurar el clúster amb els nodes disponibles; si no hi ha nodes suficients, registrar el disseny o la simulació autoritzada. | ⏳ Pendiente | [pve1-3](../maquinas/pve1/README.md): VM con VT-x anidada e ISO verificada; instalación y clúster pendientes |
-| a235 | Apte | ISO-RA1, ISO-RA6 | Proxmox: executar la migració d’un contenidor i una VM entre nodes disponibles. La migració de una VM haurà de ser d'un sistema ubuntu server o debian sense entorn gràfic per a que siga més ràpid. | ⏳ Pendiente | [pve1-3](../maquinas/pve1/README.md): VM con VT-x anidada e ISO verificada; instalación y clúster pendientes |
-| a236 | Apte | ISO-RA6 | Proxmox individual: mesurar temps i espai de la migració de VM i contenidor, interpretar-los i valorar millores. | ⏳ Pendiente | [pve1-3](../maquinas/pve1/README.md): VM con VT-x anidada e ISO verificada; instalación y clúster pendientes |
+| a228 | Apte | ISO-RA1 | Proxmox: instal·lar el sistema previst i comprovar-ne la versió i el funcionament. | ✅ Hecho | [pve1-3](../maquinas/pve1/README.md) · 3 nodos Proxmox VE 9.2.2 |
+| a229 | Apte | ISO-RA1 | Proxmox: configurar l’usuari o usuaris d’administració. | ✅ Hecho | [pve1-3](../maquinas/pve1/README.md) · `mauro@pve` Administrator |
+| a230 | Apte | ISO-RA1 | Proxmox: configurar els paràmetres de xarxa de les interfícies. | ✅ Hecho | [pve1-3](../maquinas/pve1/README.md) · `vmbr0` con IP fija |
+| a231 | Apte | ISO-RA3 | Proxmox: copiar les configuracions o imatges necessàries al servidor corresponent i justificar què es copia i què no. | 🟡 Parcial | [pve1-3](../maquinas/pve1/README.md) · `vzdump` del CT (160 MB); falta enviarlo al NAS |
+| a232 | Apte | ISO-RA1 | Proxmox: configurar el clúster amb els nodes disponibles; si no hi ha nodes suficients, registrar el disseny o la simulació autoritzada. | ✅ Hecho | [pve1-3](../maquinas/pve1/README.md) · `cluster-iso29`, 3 nodos, prueba de quórum 2/3 y 1/3 |
+| a235 | Apte | ISO-RA1, ISO-RA6 | Proxmox: executar la migració d’un contenidor i una VM entre nodes disponibles. La migració de una VM haurà de ser d'un sistema ubuntu server o debian sense entorn gràfic per a que siga més ràpid. | ✅ Hecho | [pve1-3](../maquinas/pve1/README.md) · CT 100 → pve2 (restart) y VM 101 → pve3 en caliente |
+| a236 | Apte | ISO-RA6 | Proxmox individual: mesurar temps i espai de la migració de VM i contenidor, interpretar-los i valorar millores. | ✅ Hecho | [pve1-3](../maquinas/pve1/README.md) §4 · 90,6 s / 167,5 s, corte de 172 ms, mejoras |
 | a237 | Apte | ISO-RA1 | Windows Server 2025: instal·lar el sistema previst i comprovar-ne la versió i el funcionament. | ✅ Hecho | [srv-dc](../maquinas/srv-dc/README.md) |
 | a238 | Apte | ISO-RA1 | Windows Server 2025: configurar l’usuari o usuaris d’administració. | ✅ Hecho | [srv-dc](../maquinas/srv-dc/README.md) |
 | a239 | Apte | ISO-RA1 | Windows Server 2025: configurar els paràmetres de xarxa de les interfícies. | ✅ Hecho | [srv-dc](../maquinas/srv-dc/README.md) |

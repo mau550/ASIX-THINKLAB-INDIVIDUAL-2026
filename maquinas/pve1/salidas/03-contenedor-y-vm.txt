@@ -1,0 +1,19 @@
+# Clúster · contenedor 100 y VM 101 en pve1 — 2026-11-22T21:18:59+01:00
+
+$ POST /nodes/pve1/lxc  vmid=100 hostname=ct-debian ostemplate=local:vztmpl/debian-13-standard_13.6-1_amd64.tar.zst rootfs=local-lvm:4 memory=256 net0=…ip=192.168.29.20/24,gw=192.168.29.1 unprivileged=1
+  tarea vzcreate → WARNINGS: 1
+$ POST /nodes/pve1/lxc/100/status/start
+  tarea vzstart → WARNINGS: 1
+
+$ POST /nodes/pve1/qemu  vmid=101 name=vm-debian memory=512 cores=1 scsi0=local-lvm:0,import-from=local:import/debian-13-genericcloud-amd64.qcow2 ide2=local-lvm:cloudinit ipconfig0=ip=192.168.29.21/24,gw=192.168.29.1 serial0=socket vga=serial0
+  tarea qmcreate → OK
+$ PUT /nodes/pve1/qemu/101/resize  disk=scsi0 size=4G
+$ POST /nodes/pve1/qemu/101/status/start
+  tarea qmstart → OK
+
+$ GET /cluster/resources?type=vm
+  lxc/100    ct-debian  nodo=pve1 estado=running mem=256MB disco=3GB
+  qemu/101   vm-debian  nodo=pve1 estado=running mem=512MB disco=4GB
+# Conectividad desde la LAN (bastión r-nftables, 192.168.29.3):
+  192.168.29.20 responde
+  192.168.29.21 responde

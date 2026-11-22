@@ -1,0 +1,40 @@
+# Clúster · migraciones medidas — 2026-11-22T21:22:48+01:00
+# Almacenamiento local (local-lvm) en cada nodo: la migración COPIA el disco por la red.
+
+## 1. Contenedor 100 (ct-debian, 192.168.29.20): pve1 → pve2, modo restart
+$ POST /nodes/pve1/lxc/100/migrate target=pve2 restart=1
+  duración total de la tarea: 90.6 s
+  registro de la tarea (líneas clave):
+    2026-11-22 21:22:56 starting migration of CT 100 to node 'pve2' (192.168.29.12)
+    2026-11-22 21:24:12 successfully imported 'local-lvm:vm-100-disk-0'
+      Logical volume "vm-100-disk-0" successfully removed.
+    2026-11-22 21:24:19 Task finished with 1 warning(s)!
+    2026-11-22 21:24:20 migration finished successfully (duration 00:01:30)
+    TASK OK
+
+## 2. VM 101 (vm-debian, 192.168.29.21): pve1 → pve3, EN CALIENTE con disco local
+$ POST /nodes/pve1/qemu/101/migrate target=pve3 online=1 with-local-disks=1
+  duración total de la tarea: 167.5 s
+  registro de la tarea (líneas clave):
+    2026-11-22 21:26:58 migration active, transferred 373.6 MiB of 512.8 MiB VM-state, 15.3 MiB/s
+    2026-11-22 21:26:59 migration active, transferred 393.8 MiB of 512.8 MiB VM-state, 33.4 MiB/s
+    2026-11-22 21:27:00 migration active, transferred 407.7 MiB of 512.8 MiB VM-state, 103.6 MiB/s
+    2026-11-22 21:27:02 migration active, transferred 432.7 MiB of 512.8 MiB VM-state, 37.7 MiB/s
+    2026-11-22 21:27:04 average migration speed: 42.7 MiB/s - downtime 172 ms
+    2026-11-22 21:27:04 migration completed, transferred 459.7 MiB VM-state
+    2026-11-22 21:27:04 migration status: completed
+    mirror-scsi0: Completed successfully.
+    mirror-scsi0: mirror-job finished
+    2026-11-22 21:27:06 stopping NBD storage migration server on target.
+      Logical volume "vm-101-cloudinit" successfully removed.
+      Logical volume "vm-101-disk-0" successfully removed.
+    2026-11-22 21:27:14 migration finished successfully (duration 00:02:47)
+    TASK OK
+
+$ GET /cluster/resources?type=vm  (después)
+  lxc/100    ct-debian  nodo=pve2 estado=running disco=3GB usado=571MB
+  qemu/101   vm-debian  nodo=pve3 estado=running disco=4GB usado=0MB
+
+## Corte de servicio medido con ping cada 0,2 s desde la LAN (r-nftables como bastión)
+  192.168.29.20: 176 respuestas en 97 s; mayor tiempo sin respuesta = 9.4 s
+  192.168.29.21: 821 respuestas en 174 s; mayor tiempo sin respuesta = 7.4 s

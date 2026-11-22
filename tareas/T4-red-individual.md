@@ -57,7 +57,7 @@ flowchart TB
 | `r-nftables` | Adaptador 2 → `enp0s8` | `lan-iso` | **192.168.29.1/24** | — | — | Fija | ✅ comprobado |
 | `r-opnsense` | Adaptador 1 → `em0` / 2 → `em1` | NAT / `lan-iso` | 10.0.2.15 (DHCP) / **192.168.29.1/24** | 10.0.2.2 | — | DHCP / Fija | ✅ comprobado |
 | `nas-truenas` | Adaptador 1 → `enp0s3` | `lan-iso` | **192.168.29.10/24** | 192.168.29.1 | 192.168.29.1 | Fija | ✅ comprobado |
-| `pve1` / `pve2` / `pve3` | Adaptador 1 → `vmbr0` | `lan-iso` | .11 / .12 / .15 | 192.168.29.1 | 192.168.29.1 | Fija | ⏳ previsto |
+| `pve1` / `pve2` / `pve3` | Adaptador 1 → `nic0` → puente `vmbr0` | `lan-iso` | **.11 / .12 / .15** | 192.168.29.1 | 192.168.29.1 | Fija | ✅ comprobado (clúster) |
 | `srv-dc` | Adaptador 1 → Ethernet | `lan-iso` | **192.168.29.13/24** | 192.168.29.1 | 127.0.0.1 (él mismo) + reenviador .1 | Fija | ✅ comprobado |
 | `srv-linux` | Adaptador 1 → `enp0s3` | `lan-iso` | **192.168.29.14/24** | 192.168.29.1 | 192.168.29.1 | Fija | ✅ comprobado |
 | `srv-linux2` | Adaptador 1 → `enp0s3` | `lan-iso` | **192.168.29.16/24** | 192.168.29.1 | 192.168.29.1 | Fija | ✅ comprobado |

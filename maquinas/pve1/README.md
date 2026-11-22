@@ -1,36 +1,94 @@
-# `pve1` · `pve2` · `pve3` · Clúster Proxmox VE
-
-> **Estado: ⏳ VM creadas (con virtualización anidada) y con la ISO verificada montada. Falta instalarlas.** El clúster completo (3 × 4 GB + NAS 8 GB ≈ 20 GB) **no cabe en el equipo de casa** (16 GB, ver [T7](../../tareas/T7-rendimiento.md)): se hará en el **equipo de clase** (30 GiB), donde está el mismo disco USB.
+# `pve1` · `pve2` · `pve3` · Clúster Proxmox VE `cluster-iso29`
 
 | Dato | `pve1` | `pve2` | `pve3` |
 |---|---|---|---|
-| IP fija | 192.168.29.11 | 192.168.29.12 | 192.168.29.15 |
-| Recursos | 2 vCPU · 4 GB · 32 GB · **UEFI** · `nested-hw-virt on` | igual | igual |
-| Red | `lan-iso` (modo promiscuo «Permitir todo», necesario para el puente `vmbr0`) | igual | igual |
-| Imagen | `proxmox-ve_9.2-1.iso`, SHA256 `4e88fe41…3ef2c6c` = **coincide** con `SHA256SUMS` de enterprise.proxmox.com | igual | igual |
+| Sistema | **Proxmox VE 9.2.2** (núcleo 7.0.2-6-pve) | igual | igual |
+| IP fija (`vmbr0` sobre `nic0`) | 192.168.29.11 | 192.168.29.12 | 192.168.29.15 |
+| Recursos | 2 vCPU · **2 GB** · 32 GB · UEFI · VT-x anidada | igual | igual |
+| Imagen | `proxmox-ve_9.2-1.iso`, SHA256 `4e88fe41…3ef2c6c` = **coincide** con `SHA256SUMS` oficial | | |
 
-Configuración de VirtualBox: [pve1](config/virtualbox-showvminfo.txt) · [pve2](../pve2/config/virtualbox-showvminfo.txt) · [pve3](../pve3/config/virtualbox-showvminfo.txt).
+> **Adaptación al equipo de casa:** el diseño preveía 4 GB por nodo (12 GB en total), que no caben junto al router en 16 GB. Se instalaron con **2 GB** (el mínimo práctico de Proxmox con VM pequeñas) y se apagaron TrueNAS y los clientes durante estas pruebas ([T7](../../tareas/T7-rendimiento.md)).
 
-## ¿Por qué 3 nodos y no 2?
+Toda la configuración posterior a la instalación se hizo por la **API REST de Proxmox** (`/api2/json`), desde el anfitrión y a través de un túnel SSH por la LAN. Cada orden y su respuesta están en `salidas/`.
 
-Proxmox decide por **quórum**: hace falta más de la mitad de los votos. Con 2 nodos, si cae uno queda 1 de 2, que no es mayoría, y el clúster se bloquea por seguridad para evitar el *split-brain*. Con 3, si cae uno quedan 2 de 3 y el clúster sigue funcionando.
+## Estado por criterio
 
-## Criterios pendientes: a228–a232, a235, a236
+| Criterio | Estado | Evidencia |
+|---|---|---|
+| **a228** Instalar, versión y funcionamiento | ✅ | Instalador de texto ([pve-01…04](capturas/), [pve2](../pve2/capturas/), [pve3](../pve3/capturas/)) · `GET /version` → 9.2.2 · [01-nodos-version-zona-repos.txt](salidas/01-nodos-version-zona-repos.txt) |
+| **a229** Usuario de administración | ✅ | `mauro@pve` con rol **Administrator** en `/`, replicado a los 3 nodos · [02-cluster.txt](salidas/02-cluster.txt) |
+| **a230** Parámetros de red | ✅ | `vmbr0` con IP fija, pasarela y DNS .1 en los tres |
+| **a232** Clúster con los nodos disponibles | ✅ | `cluster-iso29`: 3 nodos, `quorate=1` · [pve-05](capturas/pve-05-web-datacenter-cluster.png) |
+| **a235** Migrar un contenedor y una VM (Debian sin escritorio) | ✅ | CT 100 pve1 → pve2 (restart) · VM 101 pve1 → pve3 **en caliente** · [04-migraciones-medidas.txt](salidas/04-migraciones-medidas.txt) |
+| **a236** Tiempo y espacio de la migración; interpretar y proponer mejoras | ✅ | §4 |
+| **a231** Copiar configuraciones o imágenes al servidor correspondiente | 🟡 | `vzdump` del contenedor (160 MB, 32 s) en el almacenamiento `local` de pve2 · falta enviarlo al NAS (TrueNAS apagado por falta de RAM) · [05-copia-vzdump-y-quorum.txt](salidas/05-copia-vzdump-y-quorum.txt) |
+| a79 Actualizar | 🟡 | Repositorio `pve-no-subscription` añadido; `apt update` → **229 paquetes pendientes**, sin instalar por tiempo |
 
-## Guía (en el equipo de clase)
+## 1. Instalación (Terminal UI)
 
-1. Instalar los tres nodos: *Install Proxmox VE (Graphical)* → disco ext4 → país España → contraseña de root → hostname `pve1.iso29.lan`, IP `192.168.29.11/24`, gateway y DNS `192.168.29.1`. 📸 resumen antes de instalar.
-2. Quitar las ISO, arrancar y en cada nodo:
+ISO verificada → *Install Proxmox VE (Terminal UI)* → EULA → disco `/dev/sda` (ext4) → país y zona → contraseña de root y correo → red (FQDN `pveN.iso29.lan`, IP fija, pasarela y DNS .1) → resumen → instalar ([pve-04](capturas/pve-04-resumen-instalacion.png)).
 
-   ```bash
-   pveversion                                         # a228 📸
-   # Repositorio gratuito y actualización (a79)
-   sed -i 's/^/#/' /etc/apt/sources.list.d/pve-enterprise.sources
-   echo "deb https://download.proxmox.com/debian/pve trixie pve-no-subscription" > /etc/apt/sources.list.d/pve-no-sub.list
-   apt update && apt full-upgrade -y
-   ```
+Problemas encontrados (todos resueltos):
 
-3. **Usuario (a229):** `pveum user add mauro@pve --password` · `pveum acl modify / --users mauro@pve --roles Administrator`.
-4. **Clúster (a232):** en `pve1`, `pvecm create cluster-iso29`; en `pve2` y `pve3`, `pvecm add 192.168.29.11`. Comprobar con `pvecm status`: 3 votos y `Quorate: Yes`. 📸
-5. **Migración (a235, a236):** crear un contenedor Debian (`pct create`) y una VM Debian **sin escritorio**. Migrarlos (`pct migrate 100 pve2 --restart` y `qm migrate 101 pve2 --online`) y anotar **tiempo**, **parada** y **espacio copiado** (`du -sh`) de cada uno. 📸
-6. **Copias (a231):** `vzdump` del contenedor al NAS (almacenamiento NFS o SFTP hacia `copias/proxmox`) y copia de `/etc/pve`.
+| Problema | Causa | Solución |
+|---|---|---|
+| País «Romania» y zona Bucharest (pve1); zona Vienna y **teclado alemán** (pve2 y pve3) | El instalador los propone por geolocalización IP | Zona corregida después con `PUT /nodes/{n}/time timezone=Europe/Madrid` |
+| El correo salía `admin"iso29.lan` o `adminÄiso29.lan` | Con teclado alemán, `@` es AltGr+Q | Se escribió con AltGr+Q. La contraseña no tenía Y ni Z, así que no le afectó el intercambio Y/Z |
+| pve3 con pasarela y DNS `192.168.100.1` | No recibió DHCP a tiempo y el instalador rellenó sus valores por defecto | Se corrigió en el resumen ([pve3-01](../pve3/capturas/pve3-01-resumen-instalacion.png)) |
+| Plantillas y paquetes no se descargan | Proxmox usa **HTTP** y la LAN lo tiene bloqueado | En OPNsense, alias `nodos_proxmox` y regla 49 `PERMITIDO-HTTP-PROXMOX` **solo para los nodos** ([evidencia](../r-opnsense/salidas/05-http-para-nodos-proxmox.txt)) |
+
+## 2. Clúster y quórum (a232)
+
+```text
+POST /cluster/config  clustername=cluster-iso29                      (pve1)
+GET  /cluster/config/join                → huella del certificado de pve1
+POST /cluster/config/join hostname=192.168.29.11 fingerprint=… password=…  (pve2 y pve3)
+```
+
+**Prueba de quórum** ([05-copia-vzdump-y-quorum.txt](salidas/05-copia-vzdump-y-quorum.txt)):
+
+| Nodos encendidos | `quorate` | ¿Se puede cambiar la configuración? |
+|---|---|---|
+| 3 de 3 | 1 | Sí |
+| **2 de 3** (pve3 apagado de golpe) | **1** | **Sí** (`PUT /cluster/options` → OK) |
+| **1 de 3** (pve2 también apagado) | **0** | **No**: `cfs-lock … error: no quorum!` |
+| 3 de 3 otra vez | 1 | Se recupera solo en ~40 s |
+
+**Por qué 3 nodos:** el clúster solo funciona con **mayoría** de votos. Con 2 nodos, al caer uno el otro queda en minoría y se bloquea para no arriesgar un *split-brain* (que los dos lados arranquen la misma VM).
+
+## 3. Contenedor y VM (Debian sin escritorio)
+
+| ID | Tipo | Nombre | Origen | Recursos | IP |
+|---|---|---|---|---|---|
+| 100 | Contenedor LXC (sin privilegios) | `ct-debian` | Plantilla `debian-13-standard_13.6-1_amd64.tar.zst` (123 MB) | 1 CPU · 256 MB · 4 GB | 192.168.29.20 |
+| 101 | VM KVM | `vm-debian` | Imagen oficial `debian-13-genericcloud-amd64.qcow2` (328 MB) + cloud-init | 1 vCPU · 512 MB · 4 GB | 192.168.29.21 |
+
+Las dos respondieron al ping desde la LAN ([03-contenedor-y-vm.txt](salidas/03-contenedor-y-vm.txt)).
+
+## 4. Migraciones medidas (a235, a236)
+
+| | Contenedor 100 → pve2 | VM 101 → pve3 |
+|---|---|---|
+| Modo | `restart` (se para, se copia y se arranca) | **En caliente** (`online=1`, `with-local-disks=1`) |
+| Duración total | **90,6 s** | **167,5 s** |
+| Corte según Proxmox | — (se reinicia) | **172 ms** (*downtime*) |
+| Tiempo sin responder al ping desde la LAN (cada 0,2 s) | **9,4 s** | **7,4 s** |
+| Datos copiados | Disco de 4 GB (571 MB usados) | 459,7 MiB de memoria + disco de 4 GB (*mirror* por NBD) |
+| Velocidad | — | 42,7 MiB/s de media |
+
+**Interpretación:**
+
+- El contenedor no puede migrar en caliente porque comparte el núcleo del nodo; se para y se arranca en el destino. Son unos 9 s sin servicio.
+- La VM se migra mientras funciona: primero se copia el disco y la memoria, después solo lo que cambia, y al final se pausa **172 ms** para el último trozo. Los 7,4 s sin ping desde la LAN no son la VM parada: es lo que tarda la red virtual en enterarse de que la MAC está ahora en otro nodo (convergencia ARP del *switch* `lan-iso`).
+- Casi todo el tiempo se va en **copiar el disco por la red**, porque el almacenamiento es local (`local-lvm`) en cada nodo.
+
+**Mejoras propuestas:**
+1. **Almacenamiento compartido** (NFS desde `nas-truenas` o Ceph): la migración solo copiaría la memoria (unos segundos en vez de casi 3 minutos).
+2. Una red dedicada a la migración, separada de la de los usuarios.
+3. Disco del laboratorio en USB 3 ([INC-002](../../incidencias/INC-002-ssd-portatil-en-usb2.md)): todos los «discos» de los nodos están en el mismo SSD.
+
+## 5. Copia (a231)
+
+`vzdump` del contenedor 100 en pve2 (modo *snapshot*, zstd): **160 MB en 32 s**. **Qué se copia:** las VM y los contenedores (`vzdump`) y `/etc/pve` (configuración del clúster, replicada en los tres nodos). **Qué no:** el propio Proxmox, que se reinstala desde la ISO en 10 minutos y se vuelve a unir al clúster. **Pendiente:** enviar estas copias al NAS (almacenamiento NFS o PBS) cuando TrueNAS pueda estar encendido a la vez que el clúster, en el equipo de clase.
+
+> Tras la prueba de quórum, el contenedor 100 quedó parado ([pve-07](capturas/pve-07-web-contenedor-100-en-pve2.png)) porque pve2 se apagó en frío y el contenedor no tiene `onboot=1`.

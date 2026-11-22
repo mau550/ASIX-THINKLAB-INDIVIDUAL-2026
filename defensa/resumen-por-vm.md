@@ -16,7 +16,7 @@ Para tenerla abierta durante la defensa y la prueba final. El detalle está en l
 | `srv-linux2` | .16 | `ssh mauro@192.168.29.16` | `cat /proc/drbd` | «DRBD = RAID 1 por red entre dos equipos: si se apaga srv-linux, srv-linux2 tiene los datos en 3,5 s» |
 | `cli-linux` | DHCP (.105) | `ssh adminlab@…` | `id adminlab` · `ip r` | «Separé la cuenta de uso diario de la de administración» |
 | `cli-win11` | — | Consola | — | «Instalado y arranca; falta iniciar sesión para configurarlo» |
-| `pve1-3` | .11/.12/.15 | — | — | «3 nodos por el quórum: con 2, si cae uno, el otro se bloquea» |
+| `pve1-3` | .11/.12/.15 | Web `https://192.168.29.11:8006` (root@pam o mauro@pve) | `pvecm status` · *Datacenter › Cluster* · tareas de migración | «Con 2 de 3 nodos el clúster siguió; con 1 de 3 dio *no quorum*. La VM migró en caliente con 172 ms de corte; el contenedor tiene que reiniciarse» |
 
 ## Cifras que conviene recordar
 
@@ -28,6 +28,7 @@ Para tenerla abierta durante la defensa y la prueba final. El detalle está en l
 | Recuperación de routers | MikroTik 39 s · OPNsense 69 s · nftables 1,3 s |
 | RAID | Reconstrucción en 13 s · RAID 0 se pierde · RAID 1 y 5 sobreviven |
 | DRBD | Sincronización de 1 GB en 55 s · relevo en 3,5 s |
+| Proxmox | Migración CT 90,6 s (9 s sin servicio) · VM en caliente 167,5 s (172 ms de corte) · `vzdump` 160 MB en 32 s |
 | Incidencias reales documentadas | 11 ([registro](../incidencias/README.md)) |
 
 ## Si en la prueba me piden…

@@ -9,8 +9,8 @@ Entorno de pruebas propio en VirtualBox que reproduce, a escala, la infraestruct
 
 | | |
 |---|---|
-| Máquinas virtuales | **12 creadas** (11 del diseño + `srv-linux2`) · **9 instaladas, configuradas y probadas** |
-| Criterios de la rúbrica | **67 / 96 hechos** · 5 parciales · 14 se evalúan en la prueba presencial · 10 pendientes · [autoevaluación completa](rubrica/autoevaluacion.md) |
+| Máquinas virtuales | **12 creadas** (11 del diseño + `srv-linux2`) · **11 instaladas, configuradas y probadas** (solo falta configurar `cli-win11`) |
+| Criterios de la rúbrica | **73 / 96 hechos** · 6 parciales · 14 se evalúan en la prueba presencial · 3 pendientes (`cli-win11`) · [autoevaluación completa](rubrica/autoevaluacion.md) |
 | Incidencias reales documentadas | **11** ([registro](incidencias/README.md)) |
 | Copias de seguridad | 6 máquinas copian al NAS, 5 de forma automática; **restauradas de verdad** en pruebas de fallo (MikroTik 39 s · OPNsense 69 s · nftables 1,3 s) · [plan de copias](tareas/T5-plan-de-copias.md) |
 | Imágenes | 6 de 7 verificadas por SHA256 contra el valor oficial ([anexo](anexos/sha256-imagenes-20261122.txt)) |
@@ -28,7 +28,7 @@ flowchart TB
     LAN --- SRV["srv-linux ✅ .14<br/>RAID 0/1/5"]
     LAN --- SRV2["srv-linux2 ✅ .16"]
     SRV <-. "espejo DRBD" .-> SRV2
-    LAN --- PVE["pve1-3 ⏳ .11/.12/.15"]
+    LAN --- PVE["pve1-3 ✅ .11/.12/.15<br/>cluster-iso29"]
     LAN --- DC["srv-dc ✅ .13<br/>iso29.lan"]
     LAN --- CW["cli-win11 🟡"]
     LAN --- CL["cli-linux ✅ DHCP"]
@@ -48,7 +48,7 @@ flowchart TB
 | `r-opnsense` | Router 2 | OPNsense 26.7.9_3 | ✅ Actualizado, usuario, reglas con registro (y orden), copia cifrada y recuperación en 69 s | [→](maquinas/r-opnsense/README.md) |
 | `r-nftables` | Router 3 | Debian 13.8 + nftables + dnsmasq | ✅ Igual que el MikroTik | [→](maquinas/r-nftables/README.md) |
 | `nas-truenas` | NAS y copias | TrueNAS 25.10.7 | ✅ IP fija, pool `copias`, usuario y carpeta por máquina | [→](maquinas/nas-truenas/README.md) |
-| `pve1`–`pve3` | Clúster de virtualización | Proxmox VE 9.2 | ⏳ ISO verificada; clúster en el equipo de clase | [→](maquinas/pve1/README.md) |
+| `pve1`–`pve3` | Clúster de virtualización | Proxmox VE 9.2.2 | ✅ Clúster `cluster-iso29` con quórum probado, migración de CT y VM medida, `vzdump` | [→](maquinas/pve1/README.md) |
 | `srv-dc` | Dominio `iso29.lan` | Windows Server 2025 | ✅ DC, OU y grupos por departamento, GPO y copia diaria de AD | [→](maquinas/srv-dc/README.md) |
 | `srv-linux` | Servidor Linux | Debian 13.8 sin escritorio | ✅ IP fija, RAID 0/1/5 con avería y reconstrucción, copias | [→](maquinas/srv-linux/README.md) |
 | `srv-linux2` | Espejo entre equipos | Debian 13.8 (clon) | ✅ DRBD: caída del primario y relevo en 3,5 s | [→](maquinas/srv-linux2/README.md) |
@@ -63,7 +63,7 @@ flowchart TB
 | T1 · Necesidades y requisitos | [T1-necesidades-y-requisitos](tareas/T1-necesidades-y-requisitos.md) | ✅ |
 | T2 · Equipos de clase y de casa | [T2-equipos-clase-y-casa](tareas/T2-equipos-clase-y-casa.md) | ✅ · Apte+ 🟡 (faltan los tests en clase) |
 | T4 · Red individual | [T4-red-individual](tareas/T4-red-individual.md) | ✅ (+ Apte+) |
-| T5 · Instalación y comunicaciones | [T5-sistemas-e-imagenes](tareas/T5-sistemas-e-imagenes.md) · [comparación de routers](tareas/T5-comparacion-routers.md) · [plan de copias](tareas/T5-plan-de-copias.md) + fichas | ✅ Routers, NAS, dominio, servidores y cliente Linux · ⏳ Proxmox |
+| T5 · Instalación y comunicaciones | [T5-sistemas-e-imagenes](tareas/T5-sistemas-e-imagenes.md) · [comparación de routers](tareas/T5-comparacion-routers.md) · [plan de copias](tareas/T5-plan-de-copias.md) + fichas | ✅ Routers, NAS, clúster Proxmox, dominio, servidores y cliente Linux · 🟡 `cli-win11` |
 | T6 · Almacenamiento y recuperación | [T6-almacenamiento-y-recuperacion](tareas/T6-almacenamiento-y-recuperacion.md) | ✅ (+ Apte+: espejo DRBD entre dos equipos) |
 | T7 · Rendimiento | [T7-rendimiento](tareas/T7-rendimiento.md) | ✅ · Apte+ 🟡 (optimización 2 aplicada, falta medirla) |
 | T8 · Prueba final | [T8-prueba-final](tareas/T8-prueba-final.md) · [chuleta de la defensa](defensa/resumen-por-vm.md) · [preguntas por RA](defensa/preguntas.md) | 📅 Preparada |

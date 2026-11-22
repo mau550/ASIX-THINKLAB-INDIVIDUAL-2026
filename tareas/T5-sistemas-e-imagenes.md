@@ -22,7 +22,7 @@ Documentos relacionados: [comparación de los tres routers](T5-comparacion-route
 | Router 2 | [`r-opnsense`](../maquinas/r-opnsense/README.md) | OPNsense **26.7.9_3** | BSD-2 | ✅ Instalado y configurado |
 | Router 3 | [`r-nftables`](../maquinas/r-nftables/README.md) | Debian **13.8** sin escritorio + nftables + dnsmasq | Libre (DFSG) | ✅ Instalado y configurado |
 | NAS / copias | [`nas-truenas`](../maquinas/nas-truenas/README.md) | TrueNAS **25.10.7** Community «Goldeye» | GPL; soporte de pago opcional | ✅ Instalado y configurado |
-| Virtualización | [`pve1-3`](../maquinas/pve1/README.md) | Proxmox VE **9.2-1** | AGPLv3; repositorio *enterprise* de pago | ⏳ ISO verificada y montada (clúster en el equipo de clase) |
+| Virtualización | [`pve1-3`](../maquinas/pve1/README.md) | Proxmox VE **9.2.2** | AGPLv3; repositorio *enterprise* de pago | ✅ Clúster de 3 nodos con quórum y migraciones |
 | Dominio | [`srv-dc`](../maquinas/srv-dc/README.md) | Windows Server 2025 Standard Evaluation (26100) | Propietaria; evaluación 180 días | ✅ DC de `iso29.lan` |
 | Servidor Linux | [`srv-linux`](../maquinas/srv-linux/README.md) | Debian **13.8** sin escritorio | Libre (DFSG) | ✅ Instalado, configurado, RAID |
 | Cliente Windows | [`cli-win11`](../maquinas/cli-win11/README.md) | Windows 11 (`w11.iso`) | Propietaria; sin activar | ✅ Instalado · ⏳ configurar |

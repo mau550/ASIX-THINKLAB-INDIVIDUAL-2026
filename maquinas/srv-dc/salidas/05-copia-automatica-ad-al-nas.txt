@@ -1,0 +1,85 @@
+# srv-dc · copia automática de Active Directory al NAS — 2026-11-22T20:31:15+01:00
+PS> Register-ScheduledTask Copia AD al NAS (diaria 02:30, SYSTEM, privilegios máximos)
+PS> Start-ScheduledTask Copia AD al NAS  (ejecución de prueba)
+
+
+TaskName       : Copia AD al NAS
+LastRunTime    : 22/11/2026 20:31:17
+LastTaskResult : 1
+NextRunTime    : 23/11/2026 2:30:00
+
+
+
+
+PS> Get-ChildItem C:\ProgramData\copias
+
+Name                                Length LastWriteTime      
+----                                ------ -------------      
+copia-ad.ps1                          1819 22/11/2026 20:31:15
+copia_nas                              399 22/11/2026 20:22:47
+copia_nas.pub                           95 22/11/2026 20:22:47
+known_hosts                             96 22/11/2026 20:31:45
+srv-dc-ad-20261122-2031.zip        4910642 22/11/2026 20:31:45
+srv-dc-ad-20261122-2031.zip.sha256      95 22/11/2026 20:31:45
+
+
+
+# En el NAS:
+truenas_admin@nas-truenas:~$ midclt call filesystem.listdir /mnt/copias/srv-dc
+
+# ===== 1.er intento: LastTaskResult = 1. scp a mano (como Administrator) sí funcionaba. =====
+# Causa: la clave privada tenía también el permiso «ISO29\Administrator:(M)»; OpenSSH para Windows rechaza una clave privada
+# que pueden leer otras cuentas además del propietario, SYSTEM y Administradores. Se corrige la ACL.
+PS> icacls C:\ProgramData\copias\copia_nas /inheritance:r /grant:r SYSTEM:F BUILTIN\Administrators:F
+C:\ProgramData\copias\copia_nas BUILTIN\Administrators:(F)
+                                NT AUTHORITY\SYSTEM:(F)
+
+Successfully processed 1 files; Failed processing 0 files
+PS> Start-ScheduledTask Copia AD al NAS
+
+
+LastRunTime    : 22/11/2026 20:32:15
+LastTaskResult : 1
+NextRunTime    : 23/11/2026 2:30:00
+
+
+
+
+PS> Get-Content C:\ProgramData\copias\ultima-copia.log | Select-String OK|Error|falló
+
+C:\WINDOWS\System32\OpenSSH\scp.exe: Connection closed
+PS>TerminatingError(): "scp fallÃ³ (255)"
+scp fallÃ³ (255)
+scp fallÃ³ (255)
++ if ($LASTEXITCODE -ne 0) { throw "scp fallÃ³ ($LASTEXITCODE)" }
+    + CategoryInfo          : OperationStopped: (scp fallÃ³ (255):String) [], RuntimeException
+    + FullyQualifiedErrorId : scp fallÃ³ (255)
+
+
+# En el NAS:
+truenas_admin@nas-truenas:~$ midclt call filesystem.listdir /mnt/copias/srv-dc
+  srv-dc-ad-20261122-2031.zip                  4910642 B  uid=3004
+
+# ===== 2.º intento: sigue fallando como SYSTEM. scp -v ejecutado como SYSTEM muestra: =====
+#   WARNING: UNPROTECTED PRIVATE KEY FILE! … Load key "C:/ProgramData/copias/copia_nas": bad permissions
+# Causa real: el PROPIETARIO del fichero era ISO29\Administrator (quien lo creó). Si la usa SYSTEM, OpenSSH exige que el propietario
+# sea la cuenta que la usa. Solución: icacls /setowner SYSTEM.
+PS> icacls C:\ProgramData\copias\copia_nas /setowner SYSTEM
+NT AUTHORITY\SYSTEM
+PS> Start-ScheduledTask Copia AD al NAS
+
+
+LastRunTime    : 22/11/2026 20:33:17
+LastTaskResult : 0
+NextRunTime    : 23/11/2026 2:30:00
+
+
+
+
+PS> Select-String OK: C:\ProgramData\copias\ultima-copia.log
+OK: srv-dc-ad-20261122-2033.zip (4.7 MB) subida a c-srvdc@nas-truenas
+# En el NAS:
+truenas_admin@nas-truenas:~$ midclt call filesystem.listdir /mnt/copias/srv-dc
+  srv-dc-ad-20261122-2033.zip                  4906284 B  uid=3004
+  srv-dc-ad-20261122-2031.zip                  4910642 B  uid=3004
+  srv-dc-ad-20261122-2033.zip.sha256                95 B  uid=3004

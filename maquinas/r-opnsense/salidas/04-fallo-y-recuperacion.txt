@@ -20,3 +20,34 @@ $ POST /api/firewall/filter/apply
 ## 3. Efecto
 PS srv-dc> curl.exe https://www.debian.org
 SIN INTERNET (codigo 000)
+
+## 4. Recuperación desde el NAS — 2026-11-22T20:29:46+01:00
+$ echo "ls -1t *.enc" | sftp -i claves-lab/copia-opnsense c-opnsense@192.168.29.10     → r-opnsense-config-20261122-2024.xml.enc
+$ sftp … get r-opnsense-config-20261122-2024.xml.enc{,.sha256}; sha256sum -c
+r-opnsense-config-20261122-2024.xml.enc: La suma coincide
+$ openssl enc -d -aes-256-cbc -pbkdf2 -iter 200000 -in …xml.enc -out config.xml    → <?xml version="1.0"?><opnsense>…
+Web: System → Configuration → Backups → Restore configuration (config.xml, «Reboot after a successful restore» marcado)
+→ «The configuration has been restored. The system is rebooting now.»
+
+# Tiempo desde iniciar la restauración hasta que el cliente vuelve a navegar: 69 s
+
+## 5. Comprobación
+  seq   50 enabled=1 pass  TCP  :443  PERMITIDO-HTTPS
+  seq   51 enabled=1 block TCP  :80  BLOQUEO-HTTP
+  seq  100 enabled=1 pass  any  :*  Default allow LAN to any rule
+  seq  101 enabled=1 pass  any  :*  Default allow LAN IPv6 to any rule
+PS srv-dc> curl.exe --ssl-no-revoke https://www.debian.org
+HTTPS 200
+
+## Nota sobre el paso 1 (INC-008)
+El «antes» dio 000 aunque la red funcionaba. curl.exe de Windows (Schannel) comprueba si el certificado
+está revocado descargando la CRL/OCSP por HTTP (puerto 80), y la regla BLOQUEO-HTTP lo impide:
+curl.exe : curl: (35) schannel: next InitializeSecurityContext failed: CRYPT_E_REVOCATION_OFFLINE (0x80092013) - The 
+revocation function was unable to check revocation because the revocation server was offline.
+At C:\lab\cmd.ps1:2 char:1
++ curl.exe -sS -o NUL --max-time 6 https://www.debian.org 2>&1 | Select ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (curl: (35) scha...er was offline.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+Con --ssl-no-revoke la conexión HTTPS funciona (200). Ver incidencias/INC-008.

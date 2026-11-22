@@ -1,0 +1,30 @@
+# cli-linux · repositorios HTTPS y actualización — 2026-11-22T20:42:33+01:00
+
+adminlab@cli-linux:~$ sudo grep -rh '^deb ' /etc/apt/sources.list /etc/apt/sources.list.d/ 2>/dev/null
+deb http://deb.debian.org/debian/ trixie main non-free-firmware
+deb http://security.debian.org/debian-security trixie-security main non-free-firmware
+deb http://deb.debian.org/debian/ trixie-updates main non-free-firmware
+
+adminlab@cli-linux:~$ sudo cp /etc/apt/sources.list /etc/apt/sources.list.orig; sed -i 's#http://deb.debian.org#https://deb.debian.org#g; s#http://security.debian.org#https://security.debian.org#g' /etc/apt/sources.list; grep '^deb ' /etc/apt/sources.list
+deb https://deb.debian.org/debian/ trixie main non-free-firmware
+deb https://security.debian.org/debian-security trixie-security main non-free-firmware
+deb https://deb.debian.org/debian/ trixie-updates main non-free-firmware
+
+adminlab@cli-linux:~$ sudo apt-get update 2>&1 | tail -2; apt list --upgradable 2>/dev/null | tail -n +2 | wc -l
+Descargados 43,4 kB en 0s (102 kB/s)
+Leyendo lista de paquetes...
+121
+
+adminlab@cli-linux:~$ sudo DEBIAN_FRONTEND=noninteractive apt-get -y -q -o Dpkg::Options::=--force-confold full-upgrade 2>&1 | grep -E 'actualizados|^Configurando linux-image' ; DEBIAN_FRONTEND=noninteractive apt-get -y -q install curl >/dev/null 2>&1; echo curl: $(curl --version | head -1 | cut -d' ' -f1-2)
+121 actualizados, 1 nuevos se instalarán, 0 para eliminar y 0 no actualizados.
+Configurando linux-image-6.12.117+deb13-amd64 (6.12.117-1) ...
+Configurando linux-image-amd64 (6.12.117-1) ...
+curl: curl 8.14.1
+
+adminlab@cli-linux:~$ sudo reboot  →  después: versión, núcleo, pendientes
+13.8
+6.12.117+deb13-amd64
+0
+HTTPS 200
+HTTP 000
+HTTP bloqueado por r-opnsense (esperado)

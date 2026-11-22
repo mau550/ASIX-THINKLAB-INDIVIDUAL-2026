@@ -1,0 +1,24 @@
+# cli-linux · copia automática al NAS — 2026-11-22T20:48:12+01:00
+
+adminlab@cli-linux:~$ sudo cat /etc/copia-config.conf
+USUARIO_NAS=c-clilinux
+NAS=192.168.29.10
+RUTAS="etc home/mauro"
+EXTRA="dpkg --get-selections"
+
+adminlab@cli-linux:~$ sudo systemctl start copia-config.service; systemctl status copia-config.service --no-pager | sed -n '1,3p;6p'
+○ copia-config.service - Copia de la configuración al NAS (nas-truenas)
+     Loaded: loaded (/etc/systemd/system/copia-config.service; static)
+     Active: inactive (dead) since Sun 2026-11-22 20:48:13 CET; 12ms ago
+    Process: 1732 ExecStart=/usr/local/sbin/copia-config.sh (code=exited, status=0/SUCCESS)
+
+adminlab@cli-linux:~$ sudo journalctl -t copia-config --no-pager | tail -1
+nov 22 20:48:13 debian-mauro copia-config[1757]: OK: debian-mauro-20261122-2048.tar.gz (1,1M) subida a c-clilinux@192.168.29.10
+
+adminlab@cli-linux:~$ sudo systemctl list-timers copia-config.timer --no-pager | head -2
+NEXT                            LEFT LAST PASSED UNIT               ACTIVATES
+Mon 2026-11-23 02:09:24 CET 5h 21min -         - copia-config.timer copia-config.service
+
+# En el NAS:
+  debian-mauro-20261122-2048.tar.gz            1053225 B  uid=3005
+  debian-mauro-20261122-2048.tar.gz.sha256         100 B  uid=3005

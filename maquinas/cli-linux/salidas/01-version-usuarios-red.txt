@@ -1,0 +1,38 @@
+# cli-linux · versión, usuarios de administración y red — 2026-11-22T20:41:03+01:00
+
+adminlab@cli-linux:~$ hostnamectl | grep -E 'Static hostname|Operating|Kernel'; cat /etc/debian_version
+ Static hostname: debian-mauro
+Operating System: Debian GNU/Linux 13 (trixie)
+          Kernel: Linux 6.12.107+deb13-amd64
+13.7
+
+adminlab@cli-linux:~$ id adminlab; id mauro
+uid=1001(adminlab) gid=1001(adminlab) grupos=1001(adminlab),4(adm),27(sudo)
+uid=1000(mauro) gid=1000(mauro) grupos=1000(mauro),24(cdrom),25(floppy),29(audio),30(dip),44(video),46(plugdev),100(users),101(netdev),102(scanner),106(bluetooth),108(lpadmin)
+
+adminlab@cli-linux:~$ getent group sudo
+sudo:x:27:adminlab
+
+adminlab@cli-linux:~$ ip -br a; ip route; resolvectl status 2>/dev/null | grep -E 'Current DNS|DNS Servers' | head -2 || cat /etc/resolv.conf
+lo               UNKNOWN        127.0.0.1/8 ::1/128 
+enp0s3           UP             192.168.29.105/24 fe80::a00:27ff:fef5:cb4/64 
+default via 192.168.29.1 dev enp0s3 proto dhcp src 192.168.29.105 metric 100 
+192.168.29.0/24 dev enp0s3 proto kernel scope link src 192.168.29.105 metric 100 
+
+adminlab@cli-linux:~$ nmcli -t -f NAME,DEVICE,TYPE con show --active 2>/dev/null
+Wired connection 1:enp0s3:802-3-ethernet
+lo:lo:loopback
+
+adminlab@cli-linux:~$ ping -c 3 192.168.29.1 | tail -2; ping -c 3 1.1.1.1 | tail -2
+3 packets transmitted, 3 received, 0% packet loss, time 2014ms
+rtt min/avg/max/mdev = 0.355/0.850/1.149/0.352 ms
+3 packets transmitted, 3 received, 0% packet loss, time 2004ms
+rtt min/avg/max/mdev = 11.793/12.087/12.327/0.221 ms
+
+adminlab@cli-linux:~$ curl -4 -s -o /dev/null -w 'HTTPS %{http_code}\n' --max-time 8 https://www.debian.org; curl -4 -s -o /dev/null -w 'HTTP %{http_code}\n' --max-time 6 http://www.debian.org || echo 'HTTP BLOQUEADO por r-opnsense'
+bash: línea 1: curl: orden no encontrada
+bash: línea 1: curl: orden no encontrada
+HTTP BLOQUEADO por r-opnsense
+
+adminlab@cli-linux:~$ apt-get update -q >/dev/null 2>&1; apt list --upgradable 2>/dev/null | tail -n +2 | wc -l
+121

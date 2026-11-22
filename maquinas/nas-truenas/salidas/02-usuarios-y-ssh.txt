@@ -32,3 +32,6 @@ c-nftables  uid=3001 home=/mnt/copias/r-nftables   clave_ssh=sí (copia-r-nftabl
 c-srvlinux  uid=3002 home=/mnt/copias/srv-linux    clave_ssh=sí (copia-srv-linux) password_ssh=no
 c-opnsense  uid=3003 home=/mnt/copias/r-opnsense   clave_ssh=sí (copia-r-opnsense) password_ssh=no
 c-srvdc     uid=3004 home=/mnt/copias/srv-dc       clave_ssh=sí (copia-srv-dc) password_ssh=no
+
+truenas_admin@nas-truenas:~$ midclt call user.create {username: c-clilinux, home: /mnt/copias/cli-linux, sshpubkey: ssh-ed25519… copia-cli-linux}
+  -> creado

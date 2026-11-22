@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Genera un PDF por tarea (tareas/T*.md) para entregar, con el enlace al repositorio.
 
-Uso (desde la raíz del repositorio):  python3 scripts/tareas-a-pdf.py [carpeta_salida]
+Uso (desde la raíz del repositorio):  python3 -B scripts/tareas-a-pdf.py [carpeta_salida]
 Salida por defecto: entregas/pdf/. Necesita python3-markdown y Google Chrome.
 
 - Las tareas con varias partes (p. ej. T5-*.md) se unen en un único PDF.

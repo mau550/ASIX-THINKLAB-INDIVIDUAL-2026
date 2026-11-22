@@ -3,9 +3,9 @@
 **Implantación de Sistemas Operativos (ISO) · Fundamentos de Hardware (FDM) · 1.º ASIX · Curso 2026-27**
 Alumno: **Mauro Bas Montes** · Grupo 3 · Puesto **29** → LAN `192.168.29.0/24`
 
-Entorno de pruebas propio en VirtualBox que reproduce, a escala, la infraestructura del grupo: tres routers alternativos, NAS de copias, clúster de virtualización, dominio, servidor Linux con RAID y clientes. Todo lo que figura como hecho está **comprobado** y enlazado a su evidencia (captura o salida de orden). Lo que falta se indica como pendiente, con su guía.
+Entorno de pruebas propio en VirtualBox que reproduce, a escala, la infraestructura del grupo: tres routers alternativos, NAS de copias, clúster de virtualización, dominio, servidor Linux con RAID y clientes. Todo lo que figura como hecho está **comprobado** y enlazado a su evidencia (captura o salida de orden). Lo único que no se ha podido hacer desde este equipo (los tests de hardware en el ordenador de clase) está indicado, con su guía.
 
-> 📄 **PDF de entrega, uno por tarea:** [`entregas/pdf/`](entregas/pdf/) (generados con [`scripts/tareas-a-pdf.py`](scripts/tareas-a-pdf.py); cada PDF enlaza a este repositorio).
+> 📄 **PDF de entrega, uno por tarea:** [`entregas/`](entregas/) + **memoria completa en un solo PDF** (generados con [`scripts/tareas-a-pdf.py`](scripts/tareas-a-pdf.py); cada PDF enlaza a este repositorio).
 >
 > 📸 **[Índice de todas las evidencias](EVIDENCIAS.md)** — 110 capturas y 51 salidas de comandos, por máquina. Cada máquina muestra al final de su README su **galería completa**, en el orden en que se hizo el trabajo.
 
@@ -16,7 +16,7 @@ Entorno de pruebas propio en VirtualBox que reproduce, a escala, la infraestruct
 | Máquinas virtuales | **12 creadas** (11 del diseño + `srv-linux2`) · **las 12 instaladas, configuradas y probadas** |
 | Criterios de la rúbrica | **80 / 96 hechos** · 2 parciales (tests en el equipo de clase) · 14 se evalúan en la prueba presencial · 0 pendientes · [autoevaluación completa](rubrica/autoevaluacion.md) |
 | Incidencias reales documentadas | **11** ([registro](incidencias/README.md)) |
-| Copias de seguridad | 6 máquinas copian al NAS, 5 de forma automática; **restauradas de verdad** en pruebas de fallo (MikroTik 39 s · OPNsense 69 s · nftables 1,3 s) · [plan de copias](tareas/T5-plan-de-copias.md) |
+| Copias de seguridad | **8 sistemas copian al NAS** (routers, servidores, DC, clientes Linux y Windows y el clúster Proxmox), 7 de forma automática; **restauradas de verdad** en pruebas de fallo (MikroTik 39 s · OPNsense 69 s · nftables 1,3 s) · [plan de copias](tareas/T5-plan-de-copias.md) |
 | Imágenes | 6 de 7 verificadas por SHA256 contra el valor oficial ([anexo](anexos/sha256-imagenes-20261122.txt)) |
 
 ## Mapa del laboratorio

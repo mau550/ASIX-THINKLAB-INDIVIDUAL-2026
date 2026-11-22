@@ -1,0 +1,55 @@
+# Pruebas de memoria y CPU (stress-ng 0.17.06) — 2026-11-22T16:40:47+01:00
+# Condiciones: sin VMs encendidas, sesión gráfica abierta
+
+$ free -h
+               total       usado       libre  compartido   búf/caché  disponible
+Mem:            15Gi       4,5Gi       4,7Gi       129Mi       6,8Gi        10Gi
+Inter:          11Gi       1,2Mi        11Gi
+
+$ stress-ng --vm 2 --vm-bytes 3G --vm-method all --verify -t 60s --metrics-brief
+stress-ng: info:  [53690] note: /proc/sys/kernel/sched_autogroup_enabled is 1 and this can impact scheduling throughput for processes not attached to a tty. Setting this to 0 may improve performance metrics
+stress-ng: info:  [53690] note: 12 cpus have scaling governors set to powersave and this can impact on performance; setting /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor to 'performance' may improve performance
+stress-ng: metrc: [53690] stressor       bogo ops real time  usr time  sys time   bogo ops/s     bogo ops/s
+stress-ng: metrc: [53690]                           (secs)    (secs)    (secs)   (real time) (usr+sys time)
+stress-ng: metrc: [53690] vm             12444419     60.13    103.33     16.91    206963.21      103491.85
+stress-ng: info:  [53690] skipped: 0
+stress-ng: info:  [53690] passed: 2: vm (2)
+stress-ng: info:  [53690] failed: 0
+stress-ng: info:  [53690] metrics untrustworthy: 0
+stress-ng: info:  [53690] successful run completed in 1 min, 0.17 secs
+
+$ stress-ng --memrate 1 --memrate-bytes 512M -t 20s --metrics
+stress-ng: info:  [54084] dispatching hogs: 1 memrate
+stress-ng: info:  [54088] memrate: using buffer size of 524288K, cache flushing disabled
+stress-ng: info:  [54088] memrate: cache flushing can be enabled with --memrate-flush option
+stress-ng: metrc: [54084] memrate              17     20.01     19.92      0.09         0.85           0.85       100.00        527296
+stress-ng: metrc: [54084] memrate            16311.97 write64stoq MB per sec (harmonic mean of 1 instance)
+stress-ng: metrc: [54084] memrate            16104.34 write32stow MB per sec (harmonic mean of 1 instance)
+stress-ng: metrc: [54084] memrate            16167.40 write16stod MB per sec (harmonic mean of 1 instance)
+stress-ng: metrc: [54084] memrate            15948.45 write8stob MB per sec (harmonic mean of 1 instance)
+stress-ng: metrc: [54084] memrate            16532.11 write128nt MB per sec (harmonic mean of 1 instance)
+stress-ng: metrc: [54084] memrate            16522.82 write64nt MB per sec (harmonic mean of 1 instance)
+stress-ng: metrc: [54084] memrate            16683.19 write32nt MB per sec (harmonic mean of 1 instance)
+stress-ng: metrc: [54084] memrate             7602.74 write1024 MB per sec (harmonic mean of 1 instance)
+stress-ng: metrc: [54084] memrate             7547.38 write512 MB per sec (harmonic mean of 1 instance)
+stress-ng: metrc: [54084] memrate             7497.55 write256 MB per sec (harmonic mean of 1 instance)
+stress-ng: metrc: [54084] memrate             7535.57 write128 MB per sec (harmonic mean of 1 instance)
+stress-ng: metrc: [54084] memrate             7559.93 write64 MB per sec (harmonic mean of 1 instance)
+stress-ng: metrc: [54084] memrate             7540.32 write32 MB per sec (harmonic mean of 1 instance)
+stress-ng: metrc: [54084] memrate             7560.12 write16 MB per sec (harmonic mean of 1 instance)
+stress-ng: metrc: [54084] memrate             7458.05 write8 MB per sec (harmonic mean of 1 instance)
+stress-ng: metrc: [54084] memrate            15847.96 memset MB per sec (harmonic mean of 1 instance)
+
+$ sensors (antes de la carga de CPU)
+Package id 0:  +48.0°C  (high = +100.0°C, crit = +100.0°C)
+
+$ stress-ng --cpu 12 --cpu-method matrixprod -t 60s --metrics-brief
+$ sensors (a los 50 s de carga) / frecuencia
+Package id 0:  +75.0°C  (high = +100.0°C, crit = +100.0°C)
+Core 0:        +73.0°C  (high = +100.0°C, crit = +100.0°C)
+Frecuencia media: 4200 MHz
+stress-ng: info:  [54253] passed: 12: cpu (12)
+stress-ng: info:  [54253] failed: 0
+stress-ng: info:  [54253] metrics untrustworthy: 0
+stress-ng: info:  [54253] successful run completed in 1 min, 0.01 secs
+[1]+  Hecho                   stress-ng --cpu 12 --cpu-method matrixprod -t 60s --metrics-brief 2>&1 | tail -4

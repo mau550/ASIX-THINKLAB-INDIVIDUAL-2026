@@ -1,0 +1,13 @@
+# nas-truenas · copias recibidas en cada carpeta — 2026-11-22T18:22:35+01:00
+truenas_admin@nas-truenas:~$ ls /mnt/copias/r-nftables
+ls: cannot open directory '/mnt/copias/r-nftables': Permission denied
+
+truenas_admin@nas-truenas:~$ midclt call filesystem.listdir /mnt/copias/r-nftables
+  r-nftables-20261122-1922.tar.gz.sha256           98 B  dueño uid=3001
+  r-nftables-20261122-1922.tar.gz                1562 B  dueño uid=3001
+
+truenas_admin@nas-truenas:~$ midclt call filesystem.listdir /mnt/copias/srv-linux
+  srv-linux-20261122-1822.tar.gz.sha256            97 B  dueño uid=3002
+  srv-linux-20261122-1822.tar.gz               414015 B  dueño uid=3002
+
+truenas_admin@nas-truenas:~$ midclt call filesystem.listdir /mnt/copias/r-mikrotik

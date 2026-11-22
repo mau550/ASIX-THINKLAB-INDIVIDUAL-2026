@@ -1,0 +1,45 @@
+# nas-truenas · zona horaria, pool y datasets con la API (midclt) — 2026-11-22T18:05:17+01:00
+
+truenas_admin@truenas:~$ midclt call system.general.update {"timezone": "Europe/Madrid"}
+timezone = Europe/Madrid
+
+truenas_admin@truenas:~$ midclt call --job pool.create {"name":"copias","topology":{"data":[{"type":"STRIPE","disks":["sda"]}]}}
+
+Status: (none)
+pool copias | estado ONLINE | sano True
+
+truenas_admin@truenas:~$ midclt call pool.dataset.create {"name":"copias/r-mikrotik","compression":"LZ4"}
+  -> copias/r-mikrotik /mnt/copias/r-mikrotik
+
+truenas_admin@truenas:~$ midclt call pool.dataset.create {"name":"copias/r-opnsense","compression":"LZ4"}
+  -> copias/r-opnsense /mnt/copias/r-opnsense
+
+truenas_admin@truenas:~$ midclt call pool.dataset.create {"name":"copias/r-nftables","compression":"LZ4"}
+  -> copias/r-nftables /mnt/copias/r-nftables
+
+truenas_admin@truenas:~$ midclt call pool.dataset.create {"name":"copias/srv-linux","compression":"LZ4"}
+  -> copias/srv-linux /mnt/copias/srv-linux
+
+truenas_admin@truenas:~$ midclt call pool.dataset.create {"name":"copias/srv-dc","compression":"LZ4"}
+  -> copias/srv-dc /mnt/copias/srv-dc
+
+truenas_admin@truenas:~$ midclt call pool.dataset.create {"name":"copias/proxmox","compression":"LZ4"}
+  -> copias/proxmox /mnt/copias/proxmox
+
+truenas_admin@truenas:~$ midclt call pool.dataset.create {"name":"copias/cli-win11","compression":"LZ4"}
+  -> copias/cli-win11 /mnt/copias/cli-win11
+
+truenas_admin@truenas:~$ midclt call pool.dataset.create {"name":"copias/cli-linux","compression":"LZ4"}
+  -> copias/cli-linux /mnt/copias/cli-linux
+
+truenas_admin@truenas:~$ zpool status copias ; zfs list -r copias
+copias ONLINE [('DISK', 'sda')]
+copias               /mnt/copias                comp=LZ4 usado=2.77 MiB
+copias/proxmox       /mnt/copias/proxmox        comp=LZ4 usado=96 KiB
+copias/r-mikrotik    /mnt/copias/r-mikrotik     comp=LZ4 usado=96 KiB
+copias/srv-linux     /mnt/copias/srv-linux      comp=LZ4 usado=96 KiB
+copias/r-nftables    /mnt/copias/r-nftables     comp=LZ4 usado=96 KiB
+copias/srv-dc        /mnt/copias/srv-dc         comp=LZ4 usado=96 KiB
+copias/cli-win11     /mnt/copias/cli-win11      comp=LZ4 usado=96 KiB
+copias/r-opnsense    /mnt/copias/r-opnsense     comp=LZ4 usado=96 KiB
+copias/cli-linux     /mnt/copias/cli-linux      comp=LZ4 usado=96 KiB

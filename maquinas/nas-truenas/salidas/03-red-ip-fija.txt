@@ -1,0 +1,36 @@
+# nas-truenas · red con IP fija (commit + checkin) — 2026-11-22T18:06:28+01:00
+truenas_admin@truenas:~$ midclt call ssh.update {"weak_ciphers": []}
+  -> weak_ciphers []
+truenas_admin@truenas:~$ midclt call network.configuration.update {"hostname":"nas-truenas","domain":"iso29.lan","ipv4gateway":"192.168.29.1","nameserver1":"192.168.29.1"}
+  -> nas-truenas iso29.lan 192.168.29.1 192.168.29.1
+truenas_admin@truenas:~$ midclt call interface.update enp0s3 {"ipv4_dhcp":false,"aliases":[{"type":"INET","address":"192.168.29.10","netmask":24}]}
+  -> enp0s3 dhcp False [{'type': 'INET', 'address': '192.168.29.10', 'netmask': 24}]
+truenas_admin@truenas:~$ midclt call interface.commit {"checkin_timeout": 90}   (si no hay checkin en 90 s, vuelve atrás)
+Connection to 127.0.0.1 closed by remote host.
+
+# ====== INC-005: sin checkin en 90 s (la sesión SSH se cortó al cambiar la IP) → TrueNAS volvió SOLO a la IP anterior ======
+# Comprobado desde r-nftables: 192.168.29.10 NO responde · 192.168.29.137 responde
+
+# --- Segundo intento: update + commit + checkin en un mismo script dentro de TrueNAS (el checkin usa el socket local) ---
+truenas_admin@nas-truenas:~$ cat /tmp/cambio-ip.log
+{…interfaz actualizada…}
+
+pendiente: True
+null
+commit: 0
+null
+checkin: 0
+enp0s3           UP             192.168.29.10/24 fe80::a00:27ff:fe5e:22fc/64
+
+# --- Verificación 2 min después (ya no hay vuelta atrás pendiente) — 2026-11-22T18:18:23+01:00 ---
+truenas_admin@nas-truenas:~$ midclt call interface.checkin_waiting
+null
+truenas_admin@nas-truenas:~$ hostname; ip -br a show enp0s3; ip route; grep nameserver /etc/resolv.conf
+nas-truenas
+enp0s3           UP             192.168.29.10/24 fe80::a00:27ff:fe5e:22fc/64 
+default via 192.168.29.1 dev enp0s3 proto static 
+192.168.29.0/24 dev enp0s3 proto kernel scope link src 192.168.29.10 
+nameserver 192.168.29.1
+truenas_admin@nas-truenas:~$ ping -c2 192.168.29.1; ping -c2 1.1.1.1
+rtt min/avg/max/mdev = 0.133/0.534/0.935/0.401 ms
+rtt min/avg/max/mdev = 11.864/11.927/11.990/0.063 ms

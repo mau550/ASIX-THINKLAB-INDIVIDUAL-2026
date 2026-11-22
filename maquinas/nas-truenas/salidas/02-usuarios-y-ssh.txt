@@ -1,0 +1,23 @@
+# nas-truenas · un usuario por máquina para las copias por SFTP — 2026-11-22T18:06:11+01:00
+# Creados con: midclt call user.create {username, home=/mnt/copias/<vm>, shell=/usr/bin/bash, sshpubkey | password}
+# (la respuesta de user.create incluye hashes de contraseña: NO se guarda; aquí solo la consulta saneada)
+
+truenas_admin@truenas:~$ midclt call user.query [["username","^","c-"]] (campos seleccionados)
+c-mikrotik  uid=3000 home=/mnt/copias/r-mikrotik   shell=/usr/bin/bash clave_ssh=no password_ssh=sí
+c-nftables  uid=3001 home=/mnt/copias/r-nftables   shell=/usr/bin/bash clave_ssh=sí (copia-r-nftables) password_ssh=no (deshabilitada)
+c-srvlinux  uid=3002 home=/mnt/copias/srv-linux    shell=/usr/bin/bash clave_ssh=sí (copia-srv-linux) password_ssh=no (deshabilitada)
+
+truenas_admin@truenas:~$ midclt call ssh.config (campos seleccionados)
+{'tcpport': 22, 'passwordauth': True, 'weak_ciphers': ['AES128-CBC', 'NONE']}
+servicio ssh: RUNNING | arranque automático: True
+
+truenas_admin@truenas:~$ ls -ln /mnt/copias
+total 20
+drwxr-xr-x 2    0    0 2 Nov 22 18:05 cli-linux
+drwxr-xr-x 2    0    0 2 Nov 22 18:05 cli-win11
+drwxr-xr-x 2    0    0 2 Nov 22 18:05 proxmox
+drwx------ 2 3000 3000 5 Nov 22 18:05 r-mikrotik
+drwx------ 3 3001 3001 6 Nov 22 18:05 r-nftables
+drwxr-xr-x 2    0    0 2 Nov 22 18:05 r-opnsense
+drwxr-xr-x 2    0    0 2 Nov 22 18:05 srv-dc
+drwx------ 3 3002 3002 6 Nov 22 18:05 srv-linux

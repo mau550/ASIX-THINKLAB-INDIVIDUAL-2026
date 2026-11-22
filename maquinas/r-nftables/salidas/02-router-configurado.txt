@@ -1,0 +1,66 @@
+# r-nftables · estado del router — 2026-11-22T17:32:12+01:00
+
+mauro@r-nftables:~$ ip -br a
+lo               UNKNOWN        127.0.0.1/8 ::1/128 
+enp0s3           UP             10.0.2.15/24 fe80::bf9d:eee2:d352:f8dd/64 
+enp0s8           DOWN           192.168.29.1/24 
+
+mauro@r-nftables:~$ ip route
+default via 10.0.2.2 dev enp0s3 proto dhcp src 10.0.2.15 metric 1002 
+10.0.2.0/24 dev enp0s3 proto dhcp scope link src 10.0.2.15 metric 1002 
+192.168.29.0/24 dev enp0s8 proto kernel scope link src 192.168.29.1 linkdown 
+
+mauro@r-nftables:~$ cat /proc/sys/net/ipv4/ip_forward
+1
+
+mauro@r-nftables:~$ sudo nft list ruleset
+table inet filtro {
+	chain input {
+		type filter hook input priority filter; policy drop;
+		iif "lo" accept
+		ct state established,related accept
+		ct state invalid drop
+		ip protocol icmp accept
+		iifname "enp0s8" udp dport { 53, 67 } accept comment "DNS y DHCP para la LAN"
+		iifname "enp0s8" tcp dport { 22, 53 } accept comment "SSH y DNS desde la LAN"
+		iifname "enp0s3" tcp dport 22 accept comment "SSH de administración (reenvío de puerto de VirtualBox)"
+		log prefix "ENTRADA-DENEGADA " level info
+	}
+
+	chain forward {
+		type filter hook forward priority filter; policy drop;
+		ct state established,related accept
+		iifname "enp0s8" oifname "enp0s3" ip protocol icmp accept comment "ping y traceroute"
+		iifname "enp0s8" oifname "enp0s3" udp dport 33434-33534 accept comment "traceroute UDP"
+		iifname "enp0s8" oifname "enp0s3" tcp dport 443 log prefix "PERMITIDO-HTTPS " level info accept
+		iifname "enp0s8" oifname "enp0s3" tcp dport 80 log prefix "BLOQUEO-HTTP " level info drop
+		iifname "enp0s8" oifname "enp0s3" udp dport 53 log prefix "BLOQUEO-DNS-EXTERNO " level info drop
+		log prefix "FORWARD-DENEGADO " level info
+	}
+
+	chain output {
+		type filter hook output priority filter; policy accept;
+	}
+}
+table ip nat {
+	chain postrouting {
+		type nat hook postrouting priority srcnat; policy accept;
+		ip saddr 192.168.29.0/24 oifname "enp0s3" masquerade comment "NAT de salida de la LAN"
+	}
+}
+
+mauro@r-nftables:~$ systemctl is-active nftables dnsmasq ssh
+active
+active
+active
+
+mauro@r-nftables:~$ ss -lntup | grep -E ':(22|53|67) '
+udp   UNCONN 0      0                               127.0.0.1:53        0.0.0.0:*          
+udp   UNCONN 0      0                            192.168.29.1:53        0.0.0.0:*          
+udp   UNCONN 0      0                          0.0.0.0%enp0s8:67        0.0.0.0:*          
+udp   UNCONN 0      0                                   [::1]:53           [::]:*          
+tcp   LISTEN 0      128                               0.0.0.0:22        0.0.0.0:*          
+tcp   LISTEN 0      32                              127.0.0.1:53        0.0.0.0:*          
+tcp   LISTEN 0      32                           192.168.29.1:53        0.0.0.0:*          
+tcp   LISTEN 0      32                                  [::1]:53           [::]:*          
+tcp   LISTEN 0      128                                  [::]:22           [::]:*          

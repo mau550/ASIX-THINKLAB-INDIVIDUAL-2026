@@ -1,0 +1,18 @@
+# r-nftables · actualización antes de producción — 2026-11-22T17:29:45+01:00
+$ cat /etc/debian_version; uname -r
+13.1
+6.12.43+deb13-amd64
+
+$ sudo apt-get update && apt list --upgradable | wc -l
+40
+
+$ sudo DEBIAN_FRONTEND=noninteractive apt-get -y full-upgrade
+40 actualizados, 1 nuevos se instalarán, 0 para eliminar y 0 no actualizados.
+Configurando linux-image-6.12.117+deb13-amd64 (6.12.117-1) ...
+Configurando linux-image-amd64 (6.12.117-1) ...
+
+$ sudo reboot  →  tras reiniciar:
+$ cat /etc/debian_version; uname -r; apt list --upgradable
+13.8
+6.12.117+deb13-amd64
+0

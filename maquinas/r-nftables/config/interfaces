@@ -1,0 +1,13 @@
+# /etc/network/interfaces — r-nftables
+source /etc/network/interfaces.d/*
+auto lo
+iface lo inet loopback
+
+# WAN: NAT de VirtualBox (IP por DHCP, 10.0.2.15)
+allow-hotplug enp0s3
+iface enp0s3 inet dhcp
+
+# LAN: red interna lan-iso
+auto enp0s8
+iface enp0s8 inet static
+    address 192.168.29.1/24

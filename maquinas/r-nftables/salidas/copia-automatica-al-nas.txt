@@ -1,0 +1,34 @@
+# r-nftables · copia automática de la configuración al NAS — 2026-11-22T18:22:24+01:00
+
+mauro@r-nftables:~$ sudo cat /etc/copia-config.conf
+USUARIO_NAS=c-nftables
+NAS=192.168.29.10
+RUTAS="etc/nftables.conf etc/network/interfaces etc/dnsmasq.d etc/sysctl.d/99-router.conf etc/hostname etc/hosts"
+
+mauro@r-nftables:~$ sudo systemctl start copia-config.service; systemctl status copia-config.service --no-pager | sed -n '1,3p;6p'
+○ copia-config.service - Copia de la configuración al NAS (nas-truenas)
+     Loaded: loaded (/etc/systemd/system/copia-config.service; static)
+     Active: inactive (dead) since Sun 2026-11-22 19:22:24 CET; 6ms ago
+    Process: 2178 ExecStart=/usr/local/sbin/copia-config.sh (code=exited, status=0/SUCCESS)
+
+mauro@r-nftables:~$ sudo journalctl -t copia-config --no-pager | tail -1
+nov 22 19:22:24 r-nftables copia-config[2201]: OK: r-nftables-20261122-1922.tar.gz (4,0K) subida a c-nftables@192.168.29.10
+
+mauro@r-nftables:~$ systemctl list-timers copia-config.timer --no-pager | head -2
+NEXT                        LEFT LAST PASSED UNIT               ACTIVATES
+Mon 2026-11-23 02:07:51 CET   6h -         - copia-config.timer copia-config.service
+
+mauro@r-nftables:~$ ls -l /var/backups/copia-config/
+total 8
+-rw-r--r-- 1 root root 1562 nov 22 19:22 r-nftables-20261122-1922.tar.gz
+-rw-r--r-- 1 root root   98 nov 22 19:22 r-nftables-20261122-1922.tar.gz.sha256
+
+mauro@r-nftables:~$ sudo tar tzf /var/backups/copia-config/*.tar.gz | head -12
+etc/nftables.conf
+etc/network/interfaces
+etc/dnsmasq.d/
+etc/dnsmasq.d/README
+etc/dnsmasq.d/lan.conf
+etc/sysctl.d/99-router.conf
+etc/hostname
+etc/hosts

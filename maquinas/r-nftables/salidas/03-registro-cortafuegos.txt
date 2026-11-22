@@ -1,0 +1,32 @@
+# r-nftables · registro del cortafuegos y contadores — 2026-11-22T17:50:04+01:00
+$ sudo journalctl -k -g "PERMITIDO|BLOQUEO" --no-pager | head
+nov 22 18:49:49 r-nftables kernel: PERMITIDO-HTTPS IN=enp0s8 OUT=enp0s3 MAC=08:00:27:42:ef:10:08:00:27:51:18:e1:08:00 SRC=192.168.29.14 DST=130.89.148.77 LEN=60 TOS=0x00 PREC=0x00 TTL=63 ID=39201 DF PROTO=TCP SPT=32932 DPT=443 WINDOW=64240 RES=0x00 SYN URGP=0 
+nov 22 18:49:50 r-nftables kernel: PERMITIDO-HTTPS IN=enp0s8 OUT=enp0s3 MAC=08:00:27:42:ef:10:08:00:27:51:18:e1:08:00 SRC=192.168.29.14 DST=130.89.148.77 LEN=60 TOS=0x00 PREC=0x00 TTL=63 ID=39202 DF PROTO=TCP SPT=32932 DPT=443 WINDOW=64240 RES=0x00 SYN URGP=0 
+nov 22 18:49:51 r-nftables kernel: BLOQUEO-HTTP IN=enp0s8 OUT=enp0s3 MAC=08:00:27:42:ef:10:08:00:27:51:18:e1:08:00 SRC=192.168.29.14 DST=130.89.148.77 LEN=60 TOS=0x00 PREC=0x00 TTL=63 ID=6862 DF PROTO=TCP SPT=52194 DPT=80 WINDOW=64240 RES=0x00 SYN URGP=0 
+...
+nov 22 18:49:55 r-nftables kernel: BLOQUEO-HTTP IN=enp0s8 OUT=enp0s3 MAC=08:00:27:42:ef:10:08:00:27:51:18:e1:08:00 SRC=192.168.29.14 DST=130.89.148.77 LEN=60 TOS=0x00 PREC=0x00 TTL=63 ID=6866 DF PROTO=TCP SPT=52194 DPT=80 WINDOW=64240 RES=0x00 SYN URGP=0 
+nov 22 18:49:57 r-nftables kernel: BLOQUEO-HTTP IN=enp0s8 OUT=enp0s3 MAC=08:00:27:42:ef:10:08:00:27:51:18:e1:08:00 SRC=192.168.29.14 DST=130.89.148.77 LEN=60 TOS=0x00 PREC=0x00 TTL=63 ID=6867 DF PROTO=TCP SPT=52194 DPT=80 WINDOW=64240 RES=0x00 SYN URGP=0 
+nov 22 18:49:59 r-nftables kernel: BLOQUEO-HTTP IN=enp0s8 OUT=enp0s3 MAC=08:00:27:42:ef:10:08:00:27:51:18:e1:08:00 SRC=192.168.29.14 DST=130.89.148.77 LEN=60 TOS=0x00 PREC=0x00 TTL=63 ID=6868 DF PROTO=TCP SPT=52194 DPT=80 WINDOW=64240 RES=0x00 SYN URGP=0 
+nov 22 18:50:00 r-nftables kernel: BLOQUEO-DNS-EXTERNO IN=enp0s8 OUT=enp0s3 MAC=08:00:27:42:ef:10:08:00:27:51:18:e1:08:00 SRC=192.168.29.14 DST=8.8.8.8 LEN=83 TOS=0x00 PREC=0x00 TTL=63 ID=36128 PROTO=UDP SPT=36641 DPT=53 LEN=63 
+
+$ sudo nft list chain inet filtro forward
+table inet filtro {
+	chain forward {
+		type filter hook forward priority filter; policy drop;
+		ct state established,related accept
+		iifname "enp0s8" oifname "enp0s3" ip protocol icmp accept comment "ping y traceroute"
+		iifname "enp0s8" oifname "enp0s3" udp dport 33434-33534 accept comment "traceroute UDP"
+		iifname "enp0s8" oifname "enp0s3" tcp dport 443 log prefix "PERMITIDO-HTTPS " level info accept
+		iifname "enp0s8" oifname "enp0s3" tcp dport 80 log prefix "BLOQUEO-HTTP " level info drop
+		iifname "enp0s8" oifname "enp0s3" udp dport 53 log prefix "BLOQUEO-DNS-EXTERNO " level info drop
+		log prefix "FORWARD-DENEGADO " level info
+	}
+}
+
+$ cat /var/lib/misc/dnsmasq.leases ; sudo nft list table ip nat
+table ip nat {
+	chain postrouting {
+		type nat hook postrouting priority srcnat; policy accept;
+		ip saddr 192.168.29.0/24 oifname "enp0s3" masquerade comment "NAT de salida de la LAN"
+	}
+}

@@ -1,0 +1,22 @@
+# r-opnsense · fallo provocado y recuperación desde el NAS — 2026-11-22T20:25:24+01:00
+# Cliente de prueba: srv-dc (192.168.29.13)
+
+## 1. Antes del fallo
+PS srv-dc> curl.exe https://www.debian.org
+SIN INTERNET (codigo 000)
+
+## 2. Fallo provocado: se desactivan las reglas que dejan salir a la LAN y se borran las propias
+$ POST /api/firewall/filter/del_rule/dfb7bea4-7a73-4d22-beb5-5ce188845649   (PERMITIDO-HTTPS)
+{"result":"deleted"}
+$ POST /api/firewall/filter/del_rule/626a07a6-2271-47a1-8027-531f6f775804   (BLOQUEO-HTTP)
+{"result":"deleted"}
+$ POST /api/firewall/filter/set_rule/75f7d640-5dd9-4912-b0e6-b77e9ad1b51a {enabled: 0}   (Default_allow_LAN_to_any_rule)
+{"result":"saved"}
+$ POST /api/firewall/filter/set_rule/a93c39ec-4aea-4387-8432-a8a1e3dbb8a5 {enabled: 0}   (Default_allow_LAN_IPv6_to_any_rule)
+{"result":"saved"}
+$ POST /api/firewall/filter/apply
+{"status":"OK\n\n"}
+
+## 3. Efecto
+PS srv-dc> curl.exe https://www.debian.org
+SIN INTERNET (codigo 000)

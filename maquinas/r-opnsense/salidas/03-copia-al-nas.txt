@@ -1,0 +1,10 @@
+# r-opnsense · copia cifrada de la configuración al NAS — 2026-11-22T20:24:38+01:00
+$ ./scripts/copia-opnsense.sh   (desde el anfitrión: API por túnel a 192.168.29.1:443 y SFTP por túnel a 192.168.29.10:22)
+sftp> put /tmp/tmp.YwsC08hanH/r-opnsense-config-20261122-2024.xml.enc
+sftp> put /tmp/tmp.YwsC08hanH/r-opnsense-config-20261122-2024.xml.enc.sha256
+OK: r-opnsense-config-20261122-2024.xml.enc (44K) subida a c-opnsense@nas-truenas
+
+# En el NAS:
+truenas_admin@nas-truenas:~$ midclt call filesystem.listdir /mnt/copias/r-opnsense
+  r-opnsense-config-20261122-2024.xml.enc          43648 B  uid=3003
+  r-opnsense-config-20261122-2024.xml.enc.sha256     106 B  uid=3003

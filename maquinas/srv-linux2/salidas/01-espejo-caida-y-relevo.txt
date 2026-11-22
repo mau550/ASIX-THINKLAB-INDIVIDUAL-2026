@@ -1,0 +1,60 @@
+# Espejo DRBD · caída del primario (srv-linux) y relevo en srv-linux2 — 2026-11-22T18:56:41+01:00
+
+## 1. Antes: srv-linux primario, srv-linux2 secundario
+root@srv-linux2:~# cat /proc/drbd
+ 0: cs:Connected ro:Secondary/Primary ds:UpToDate/UpToDate C r-----
+    ns:0 nr:1100664 dw:1121272 dr:0 al:8 bm:0 lo:0 pe:0 ua:0 ap:0 ep:1 wo:f oos:0
+
+## 2. Caída: se apaga srv-linux de golpe (anfitrión: VBoxManage controlvm srv-linux poweroff)
+root@srv-linux2:~# cat /proc/drbd
+ 0: cs:Connected ro:Secondary/Primary ds:UpToDate/UpToDate C r-----
+    ns:0 nr:1100664 dw:1121272 dr:0 al:8 bm:0 lo:0 pe:0 ua:0 ap:0 ep:1 wo:f oos:0
+
+## 3. Relevo: srv-linux2 pasa a primario y monta los datos
+root@srv-linux2:~# drbdadm primary espejo; mkdir -p /srv/espejo; mount /dev/drbd0 /srv/espejo
+montado
+# Tiempo de relevo (desde la caída hasta los datos montados en srv-linux2): 3.5 s
+
+root@srv-linux2:~# cd /srv/espejo/administracion; sha256sum -c ../sumas.sha256; cat LEEME.txt
+facturas-2026.bin: La suma coincide
+LEEME.txt: La suma coincide
+Documento escrito en srv-linux el dom 22 nov 2026 18:56:05 CET
+
+## 4. Se sigue trabajando en srv-linux2 mientras srv-linux está caído
+total 51208
+-rw-r--r-- 1 root root       96 nov 22 18:56 factura-durante-la-caida.txt
+-rw-r--r-- 1 root root 52428800 nov 22 18:56 facturas-2026.bin
+-rw-r--r-- 1 root root       63 nov 22 18:56 LEEME.txt
+ 0: cs:WFConnection ro:Primary/Unknown ds:UpToDate/DUnknown C r-----
+    ns:0 nr:1100664 dw:1121316 dr:52277 al:11 bm:0 lo:0 pe:0 ua:0 ap:0 ep:1 wo:f oos:36
+
+## 5. Vuelve srv-linux: entra como secundario y recibe los cambios
+root@srv-linux:~# drbdadm up espejo; cat /proc/drbd
+Marked additional 100 MB as out-of-sync based on AL.
+	[=>..................] sync'ed: 11.2% (102268/110524)K
+	finish: 0:00:48 speed: 2,064 (2,064) want: 3,480 K/sec
+
+## 6. Se devuelve el rol de primario a srv-linux
+root@srv-linux2:~# umount /srv/espejo; drbdadm secondary espejo
+ok
+root@srv-linux:~# drbdadm primary espejo; mount /dev/drbd0 /srv/espejo; ls; cat factura-durante-la-caida.txt; sha256sum -c
+total 51208
+-rw-r--r-- 1 root root       96 nov 22 18:56 factura-durante-la-caida.txt
+-rw-r--r-- 1 root root 52428800 nov 22 18:56 facturas-2026.bin
+-rw-r--r-- 1 root root       63 nov 22 18:56 LEEME.txt
+Factura nueva creada en srv-linux2 durante la caída de srv-linux: dom 22 nov 2026 18:56:46 CET
+facturas-2026.bin: La suma coincide
+LEEME.txt: La suma coincide
+	[=>..................] sync'ed: 14.9% (97440/110524)K
+	finish: 0:00:44 speed: 2,180 (2,180) want: 1,120 K/sec
+
+## 7. Que el recurso se levante solo al arrancar
+Created symlink '/etc/systemd/system/multi-user.target.wants/drbd.service' → '/usr/lib/systemd/system/drbd.service'.
+enabled
+Created symlink '/etc/systemd/system/multi-user.target.wants/drbd.service' → '/usr/lib/systemd/system/drbd.service'.
+enabled
+
+## 8. Estado final (resincronización terminada) — 2026-11-22T18:58:33+01:00
+root@srv-linux:~# cat /proc/drbd
+ 0: cs:Connected ro:Primary/Secondary ds:UpToDate/UpToDate C r-----
+    ns:32 nr:162272 dw:110552 dr:433 al:2 bm:0 lo:0 pe:0 ua:0 ap:0 ep:1 wo:f oos:0

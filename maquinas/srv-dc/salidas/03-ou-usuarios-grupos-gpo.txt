@@ -1,0 +1,105 @@
+# srv-dc · unidades organizativas, grupos, usuarios y GPO — 2026-11-22T20:17:23+01:00
+PS> New-ADOrganizationalUnit Empresa + Departamentos (5), Equipos, Grupos, Administradores
+PS> Un grupo global por departamento (GG-<departamento>) en OU=Grupos
+PS> Un usuario de ejemplo por departamento; contraseña inicial que deben cambiar al entrar
+New-ADUser : The name provided is not a properly formed account name
+At C:\lab\cmd.ps1:18 char:3
++   New-ADUser -Name $u -SamAccountName $u -UserPrincipalName "$u@iso29 ...
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (CN=empleado2.ad...DC=iso29,DC=lan:String) [New-ADUser], ADException
+    + FullyQualifiedErrorId : ActiveDirectoryServer:1315,Microsoft.ActiveDirectory.Management.Commands.NewADUser
+ 
+Add-ADGroupMember : Cannot find an object with identity: 'empleado2.administracion' under: 'DC=iso29,DC=lan'.
+At C:\lab\cmd.ps1:19 char:3
++   Add-ADGroupMember -Identity "GG-$d" -Members $u
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (empleado2.administracion:ADPrincipal) [Add-ADGroupMember], ADIdentityNo 
+   tFoundException
+    + FullyQualifiedErrorId : SetADGroupMember.ValidateMembersParameter,Microsoft.ActiveDirectory.Management.Commands. 
+   AddADGroupMember
+ 
+New-ADUser : The name provided is not a properly formed account name
+At C:\lab\cmd.ps1:18 char:3
++   New-ADUser -Name $u -SamAccountName $u -UserPrincipalName "$u@iso29 ...
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (CN=empleado5.in...DC=iso29,DC=lan:String) [New-ADUser], ADException
+    + FullyQualifiedErrorId : ActiveDirectoryServer:1315,Microsoft.ActiveDirectory.Management.Commands.NewADUser
+ 
+Add-ADGroupMember : Cannot find an object with identity: 'empleado5.informatica' under: 'DC=iso29,DC=lan'.
+At C:\lab\cmd.ps1:19 char:3
++   Add-ADGroupMember -Identity "GG-$d" -Members $u
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (empleado5.informatica:ADPrincipal) [Add-ADGroupMember], ADIdentityNotFo 
+   undException
+    + FullyQualifiedErrorId : SetADGroupMember.ValidateMembersParameter,Microsoft.ActiveDirectory.Management.Commands. 
+PS> mauro (cuenta creada en la instalación) → OU=Administradores y grupo Domain Admins
+   AddADGroupMember
+ 
+PS> GPO: bloqueo de pantalla a los 10 min en los equipos de los empleados (OU=Departamentos)
+PS> Directiva de contraseñas del dominio (Default Domain Policy)
+
+===== COMPROBACIÓN =====
+PS> Get-ADOrganizationalUnit -Filter * | Select DistinguishedName
+OU=Administracion,OU=Departamentos,OU=Empresa,DC=iso29,DC=lan
+OU=Administradores,OU=Empresa,DC=iso29,DC=lan
+OU=Comercial,OU=Departamentos,OU=Empresa,DC=iso29,DC=lan
+OU=Departamentos,OU=Empresa,DC=iso29,DC=lan
+OU=Direccion,OU=Departamentos,OU=Empresa,DC=iso29,DC=lan
+OU=Empresa,DC=iso29,DC=lan
+OU=Equipos,OU=Empresa,DC=iso29,DC=lan
+OU=Grupos,OU=Empresa,DC=iso29,DC=lan
+OU=Informatica,OU=Departamentos,OU=Empresa,DC=iso29,DC=lan
+OU=Produccion,OU=Departamentos,OU=Empresa,DC=iso29,DC=lan
+
+PS> Get-ADUser -Filter * -SearchBase OU=Empresa (nombre, OU, habilitado, grupos)
+mauro                                        habilitado=True  grupos=Domain Admins,Users,Administrators
+empleado1.direccion          Direccion       habilitado=True  grupos=GG-Direccion
+empleado3.comercial          Comercial       habilitado=True  grupos=GG-Comercial
+empleado4.produccion         Produccion      habilitado=True  grupos=GG-Produccion
+
+PS> Get-ADGroupMember Domain Admins
+Administrator
+mauro
+
+PS> Get-GPO -All | Select DisplayName, GpoStatus; (Get-GPInheritance OU=Departamentos).GpoLinks
+
+DisplayName                                   GpoStatus
+-----------                                   ---------
+Default Domain Policy                AllSettingsEnabled
+Default Domain Controllers Policy    AllSettingsEnabled
+Empresa - Bloqueo de pantalla 10 min AllSettingsEnabled
+
+
+
+
+DisplayName                          Enabled Enforced Target                                     
+-----------                          ------- -------- ------                                     
+Empresa - Bloqueo de pantalla 10 min    True    False ou=departamentos,ou=empresa,dc=iso29,dc=lan
+
+
+
+PS> Get-ADDefaultDomainPasswordPolicy
+
+
+MinPasswordLength : 10
+ComplexityEnabled : True
+LockoutThreshold  : 5
+LockoutDuration   : 00:15:00
+MaxPasswordAge    : 42.00:00:00
+
+
+
+
+
+# ===== Corrección: sAMAccountName admite como máximo 20 caracteres =====
+# 'empleado2.administracion' (24) y 'empleado5.informatica' (21) fallaron con «The name provided is not a properly formed account name».
+PS> New-ADUser -SamAccountName empleado2.admon (OU=Administracion)
+PS> New-ADUser -SamAccountName empleado5.inform (OU=Informatica)
+
+PS> Get-ADUser -Filter * -SearchBase OU=Empresa (comprobación final)
+mauro                                iso29.lan/Empresa/Administradores/mauro                 grupos=Domain Admins,Users,Administrators
+empleado2.admon      Administracion  iso29.lan/Empresa/Departamentos/Administracion/empleado2.admon grupos=GG-Administracion
+empleado3.comercial  Comercial       iso29.lan/Empresa/Departamentos/Comercial/empleado3.comercial grupos=GG-Comercial
+empleado1.direccion  Direccion       iso29.lan/Empresa/Departamentos/Direccion/empleado1.direccion grupos=GG-Direccion
+empleado5.inform     Informatica     iso29.lan/Empresa/Departamentos/Informatica/empleado5.inform grupos=GG-Informatica
+empleado4.produccion Produccion      iso29.lan/Empresa/Departamentos/Produccion/empleado4.produccion grupos=GG-Produccion

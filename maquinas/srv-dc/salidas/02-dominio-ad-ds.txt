@@ -1,0 +1,109 @@
+# srv-dc · instalación de AD DS y creación del bosque iso29.lan — 2026-11-22T19:56:59+01:00
+PS> Install-WindowsFeature AD-Domain-Services, Windows-Server-Backup -IncludeManagementTools
+
+Success RestartNeeded ExitCode FeatureResult                                                                                                                             
+------- ------------- -------- -------------                                                                                                                             
+   True            No  Success {Active Directory Domain Services, Group Policy Management, Remote Server Administration Tools, Active Directory Administrative Center...}
+
+
+
+PS> Install-ADDSForest -DomainName iso29.lan -DomainNetbiosName ISO29 -InstallDns -SafeModeAdministratorPassword ******** -Force
+
+
+Status         : Success
+Message        : You must restart this computer to complete the operation.
+                 
+RebootRequired : True
+
+
+
+
+
+# --- Tras el reinicio — 2026-11-22T20:13:28+01:00 ---
+PS> whoami
+iso29\administrator
+PS> Get-ADDomain | Select DNSRoot, NetBIOSName, DomainMode, PDCEmulator
+Get-ADDomain : Unable to find a default server with Active Directory Web Services running.
+PS> Get-ADForest | Select Name, ForestMode, SchemaMaster
+At C:\lab\cmd.ps1:5 char:1
++ Get-ADDomain | Select-Object DNSRoot,NetBIOSName,DomainMode,PDCEmulat ...
++ ~~~~~~~~~~~~
+    + CategoryInfo          : ResourceUnavailable: (ISO29:ADDomain) [Get-ADDomain], ADServerDownException
+    + FullyQualifiedErrorId : ActiveDirectoryServer:1355,Microsoft.ActiveDirectory.Management.Commands.GetADDomain
+ 
+Get-ADForest : Could not find a forest identified by: 'ISO29'.
+At C:\lab\cmd.ps1:7 char:1
++ Get-ADForest | Select-Object Name,ForestMode,SchemaMaster | Format-Li ...
++ ~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (ISO29:ADForest) [Get-ADForest], ADIdentityNotFoundException
+    + FullyQualifiedErrorId : ActiveDirectoryCmdlet:Microsoft.ActiveDirectory.Management.ADIdentityNotFoundException,M 
+   icrosoft.ActiveDirectory.Management.Commands.GetADForest
+ 
+PS> Get-Service NTDS, DNS, Netlogon, ADWS, KDC
+
+Name      Status DisplayName                     
+----      ------ -----------                     
+ADWS     Running Active Directory Web Services   
+DNS      Running DNS Server                      
+Kdc      Running Kerberos Key Distribution Center
+Netlogon Running Netlogon                        
+NTDS     Running Active Directory Domain Services
+
+
+
+PS> Get-DnsClientServerAddress (el DC usa su propio DNS)
+
+InterfaceAlias ServerAddresses
+-------------- ---------------
+Ethernet       {127.0.0.1}    
+
+
+
+PS> Resolve-DnsName srv-dc.iso29.lan; Resolve-DnsName _ldap._tcp.iso29.lan -Type SRV
+192.168.29.13
+
+Name                 NameTarget       Port
+----                 ----------       ----
+_ldap._tcp.iso29.lan srv-dc.iso29.lan  389
+
+
+
+PS> dcdiag /test:Advertising /test:Services /test:NetLogons (resumen)
+
+         ......................... SRV-DC passed test Connectivity
+         ......................... SRV-DC failed test Advertising
+         ......................... SRV-DC failed test NetLogons
+         ......................... SRV-DC failed test Services
+
+
+
+# --- Unos minutos después (inicialización del DC terminada) — 2026-11-22T20:17:02+01:00 ---
+PS> Get-ADDomain | Select DNSRoot, NetBIOSName, DomainMode, PDCEmulator
+
+
+DNSRoot     : iso29.lan
+NetBIOSName : ISO29
+DomainMode  : Windows2025Domain
+PDCEmulator : srv-dc.iso29.lan
+
+
+
+
+PS> Get-ADForest | Select Name, ForestMode, SchemaMaster
+
+
+Name         : iso29.lan
+ForestMode   : Windows2025Forest
+SchemaMaster : srv-dc.iso29.lan
+
+
+
+
+PS> dcdiag /test:Advertising /test:Services /test:NetLogons
+
+         ......................... SRV-DC passed test Connectivity
+         ......................... SRV-DC passed test Advertising
+         ......................... SRV-DC passed test NetLogons
+         ......................... SRV-DC passed test Services
+
+

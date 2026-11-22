@@ -1,0 +1,62 @@
+# srv-dc Â· versiÃ³n, zona horaria e IP fija â€” 2026-11-22T19:56:31+01:00
+PS> Get-CimInstance Win32_OperatingSystem
+
+
+Caption        : Microsoft Windows Server 2025 Standard Evaluation
+Version        : 10.0.26100
+BuildNumber    : 26100
+CSName         : SRV-DC
+OSArchitecture : 64-bit
+
+
+
+
+PS> Set-TimeZone -Id Romance Standard Time; Get-TimeZone
+(UTC+01:00) Brussels, Copenhagen, Madrid, Paris
+
+domingo, 22 de noviembre de 2026 19:56:34
+
+PS> (antes) Get-NetIPConfiguration
+
+
+InterfaceAlias     : Ethernet
+IPv4Address        : {192.168.29.167}
+IPv4DefaultGateway : {MSFT_NetRoute (InstanceID = ":8:8:8:9:55?55;C?8;@B8?C8;55;")}
+DNSServer          : {MSFT_DNSClientServerAddress (Name = "5", CreationClassName = "", SystemCreationClassName = "", SystemName = "23"), MSFT_DNSClientServerAddress (Name = "5", CreationClassName = 
+                     "", SystemCreationClassName = "", SystemName = "2")}
+
+
+
+
+PS> IP fija 192.168.29.13/24, puerta de enlace 192.168.29.1, DNS 192.168.29.1 (pasar  a 127.0.0.1 al ser controlador de dominio)
+PS> (despu‚s) Get-NetIPConfiguration; ipconfig
+
+
+InterfaceAlias : Ethernet
+IPv4           : 192.168.29.13
+Gateway        : 192.168.29.1
+DNS            : 192.168.29.1
+
+
+
+
+PS> Test-Connection 192.168.29.1 / 1.1.1.1; Resolve-DnsName www.debian.org
+
+Address      Latency Status
+-------      ------- ------
+192.168.29.1               
+192.168.29.1               
+
+
+
+
+Address Latency Status
+------- ------- ------
+1.1.1.1               
+1.1.1.1               
+
+
+
+130.89.148.77
+
+

@@ -1,0 +1,12 @@
+# r-opnsense · versión, actualización y usuario de administración (API REST) — 2026-11-22T20:14:14+01:00
+
+$ GET /api/core/firmware/info  (después de actualizar)
+{'product_name': 'OPNsense', 'product_version': '26.7.9_3', 'product_arch': 'amd64', 'product_mirror': 'https://pkg.opnsense.org/FreeBSD:15:amd64/26.7'}
+# Antes de actualizar: OPNsense 26.7 con 96 actualizaciones pendientes (298,8 MiB, requería reinicio) → captura opn-08
+
+$ POST /api/auth/user/add  {name: mauro, password: ********, group_memberships: 1999 (admins), descr: Administrador personal}
+{"result":"saved","uuid":"40deed34-68b0-49a9-8f36-7d5fd70c8251"}
+
+$ GET /api/auth/user/search
+root | uid 0 | grupos: 1999 | deshabilitado: 0 | System Administrator
+mauro | uid 2000 | grupos: 1999 | deshabilitado: 0 | Administrador personal

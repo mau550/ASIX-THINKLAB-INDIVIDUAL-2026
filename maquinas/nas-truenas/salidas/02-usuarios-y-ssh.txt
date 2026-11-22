@@ -21,3 +21,14 @@ drwx------ 3 3001 3001 6 Nov 22 18:05 r-nftables
 drwxr-xr-x 2    0    0 2 Nov 22 18:05 r-opnsense
 drwxr-xr-x 2    0    0 2 Nov 22 18:05 srv-dc
 drwx------ 3 3002 3002 6 Nov 22 18:05 srv-linux
+
+# --- Ampliación 2026-11-22T20:23:00+01:00: usuarios para r-opnsense y srv-dc ---
+truenas_admin@nas-truenas:~$ midclt call user.create {username: c-opnsense, home: /mnt/copias/r-opnsense, sshpubkey: ssh-ed25519…, password_disabled}
+  -> creado
+truenas_admin@nas-truenas:~$ midclt call user.create {username: c-srvdc, home: /mnt/copias/srv-dc, sshpubkey: ssh-ed25519…, password_disabled}
+  -> creado
+c-mikrotik  uid=3000 home=/mnt/copias/r-mikrotik   clave_ssh=no password_ssh=sí
+c-nftables  uid=3001 home=/mnt/copias/r-nftables   clave_ssh=sí (copia-r-nftables) password_ssh=no
+c-srvlinux  uid=3002 home=/mnt/copias/srv-linux    clave_ssh=sí (copia-srv-linux) password_ssh=no
+c-opnsense  uid=3003 home=/mnt/copias/r-opnsense   clave_ssh=sí (copia-r-opnsense) password_ssh=no
+c-srvdc     uid=3004 home=/mnt/copias/srv-dc       clave_ssh=sí (copia-srv-dc) password_ssh=no

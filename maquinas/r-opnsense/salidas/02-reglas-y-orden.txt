@@ -1,0 +1,47 @@
+# r-opnsense · reglas de la LAN y orden de evaluación — 2026-11-22T20:14:28+01:00
+
+$ POST /api/firewall/filter/add_rule  {sequence 50, pass, lan, TCP, lan → any :443, log, "PERMITIDO-HTTPS"}
+{"result":"saved","uuid":"dfb7bea4-7a73-4d22-beb5-5ce188845649"}
+$ POST /api/firewall/filter/add_rule  {sequence 51, block, lan, TCP, lan → any :80, log, "BLOQUEO-HTTP"}
+{"result":"saved","uuid":"626a07a6-2271-47a1-8027-531f6f775804"}
+$ POST /api/firewall/filter/apply
+{"status":"OK\n\n"}
+## Prueba 1 (reglas DETRÁS de «Default allow LAN», secuencia 1) desde srv-linux
+mauro@srv-linux:~$ curl -4 -sS -o /dev/null -w "%{http_code}" --max-time 8 https://www.debian.org
+HTTPS -> 200
+mauro@srv-linux:~$ curl -4 -sS -o /dev/null -w "%{http_code}" --max-time 8 http://www.debian.org
+HTTP -> 302
+
+$ GET /api/diagnostics/firewall/log (últimas líneas de la LAN)
+
+# Diagnóstico: «Default allow LAN to any» (secuencia 1) coincide ANTES que nuestras reglas (50, 51): HTTP pasa y no hay registro.
+## Corrección: mover las reglas por defecto detrás (secuencias 100 y 101)
+$ POST /api/firewall/filter/set_rule/75f7d640-5dd9-4912-b0e6-b77e9ad1b51a  {sequence: 100}   (Default_allow_LAN_to_any_rule)
+{"result":"saved"}
+$ POST /api/firewall/filter/set_rule/a93c39ec-4aea-4387-8432-a8a1e3dbb8a5  {sequence: 101}   (Default_allow_LAN_IPv6_to_any_rule)
+{"result":"saved"}
+$ POST /api/firewall/filter/apply
+{"status":"OK\n\n"}
+$ GET /api/firewall/filter/search_rule (reglas editables, por secuencia)
+  seq   50  pass  lan TCP  lan -> any:443  log=1  PERMITIDO-HTTPS
+  seq   51  block lan TCP  lan -> any:80  log=1  BLOQUEO-HTTP
+  seq  100  pass  lan any  lan -> any:*  log=0  Default allow LAN to any rule
+  seq  101  pass  lan any  lan -> any:*  log=0  Default allow LAN IPv6 to any rule
+
+## Prueba 2 (reglas DELANTE) desde srv-linux
+mauro@srv-linux:~$ curl -4 -sS -o /dev/null --max-time 8 https://www.debian.org
+HTTPS -> 200
+mauro@srv-linux:~$ curl -4 -sS -o /dev/null --max-time 8 http://www.debian.org
+curl: (28) Connection timHTTP -> 000
+HTTP BLOQUEADO (sin respuesta en 8 s)
+ed out after 8002 milliseconds
+
+$ GET /api/diagnostics/firewall/log  (entradas de 192.168.29.14)
+2026-11-22T19:15:23 block em1 in tcp 192.168.29.14 -> 130.89.148.77:80 S | BLOQUEO-HTTP
+2026-11-22T19:15:21 block em1 in tcp 192.168.29.14 -> 130.89.148.77:80 S | BLOQUEO-HTTP
+2026-11-22T19:15:20 block em1 in tcp 192.168.29.14 -> 130.89.148.77:80 S | BLOQUEO-HTTP
+2026-11-22T19:15:19 block em1 in tcp 192.168.29.14 -> 130.89.148.77:80 S | BLOQUEO-HTTP
+2026-11-22T19:15:18 block em1 in tcp 192.168.29.14 -> 130.89.148.77:80 S | BLOQUEO-HTTP
+2026-11-22T19:15:17 block em1 in tcp 192.168.29.14 -> 130.89.148.77:80 S | BLOQUEO-HTTP
+2026-11-22T19:15:16 block em1 in tcp 192.168.29.14 -> 130.89.148.77:80 S | BLOQUEO-HTTP
+2026-11-22T19:15:15 pass em1 in tcp 192.168.29.14 -> 130.89.148.77:443 S | PERMITIDO-HTTPS

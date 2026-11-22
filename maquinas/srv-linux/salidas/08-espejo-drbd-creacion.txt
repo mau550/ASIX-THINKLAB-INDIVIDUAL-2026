@@ -1,0 +1,30 @@
+# Espejo DRBD entre srv-linux (.14) y srv-linux2 (.16) — creación — 2026-11-22T18:54:57+01:00
+
+root@srv-linux:~# drbdadm create-md espejo; drbdadm up espejo
+Writing meta data...
+New drbd meta data block successfully created.
+
+root@srv-linux2:~# drbdadm create-md espejo; drbdadm up espejo
+Writing meta data...
+New drbd meta data block successfully created.
+
+root@srv-linux:~# cat /proc/drbd   (conectados, los dos secundarios, sin sincronizar)
+version: 8.4.11 (api:1/proto:86-101)
+srcversion: 637677C4EAFCF5D1D5446B0 
+ 0: cs:Connected ro:Secondary/Secondary ds:Inconsistent/Inconsistent C r-----
+    ns:0 nr:0 dw:0 dr:0 al:8 bm:0 lo:0 pe:0 ua:0 ap:0 ep:1 wo:f oos:1048508
+
+root@srv-linux:~# drbdadm primary --force espejo   # srv-linux será el primario
+# Sincronización inicial de 1 GB completada en 55 s
+
+root@srv-linux:~# cat /proc/drbd
+ 0: cs:Connected ro:Primary/Secondary ds:UpToDate/UpToDate C r-----
+    ns:1048508 nr:0 dw:0 dr:1048508 al:8 bm:0 lo:0 pe:0 ua:0 ap:0 ep:1 wo:f oos:0
+
+root@srv-linux:~# mkfs.ext4 -L espejo /dev/drbd0; mkdir -p /srv/espejo; mount /dev/drbd0 /srv/espejo
+S.ficheros     Tamaño Usados  Disp Uso% Montado en
+/dev/drbd0       990M   276K  922M   1% /srv/espejo
+
+root@srv-linux:~# (datos de la empresa de prueba + suma SHA256)
+05f6bb9497276e87e7ede24d506ebace85c8b2bc84d4db33543f12d029e14fe0  facturas-2026.bin
+5b5391a7c0fd59d76d4802c0223df534fb7b9830a50b9b218b8fcb0c8d788885  LEEME.txt

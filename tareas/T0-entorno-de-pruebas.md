@@ -39,9 +39,9 @@ Todas en el grupo de VirtualBox `/ISO-individual`, con discos VDI **dinámicos**
 | [`r-opnsense`](../maquinas/r-opnsense/README.md) | Router 2 | OPNsense 26.7.9_3 | 2 | 2 GB | 20 GB | BIOS | NAT + `lan-iso` | ✅ Configurado y probado |
 | [`r-nftables`](../maquinas/r-nftables/README.md) | Router 3 | Debian 13.8 + nftables | 1 | 1 GB | 8 GB | BIOS | NAT + `lan-iso` | ✅ Configurado y probado |
 | [`nas-truenas`](../maquinas/nas-truenas/README.md) | NAS / copias | TrueNAS 25.10.7 | 2 | 8 GB | 20 + 20 GB | BIOS | `lan-iso` | ✅ Configurado; recibe copias |
-| [`pve1`](../maquinas/pve1/README.md) | Nodo Proxmox | Proxmox VE 9.2.2 | 2 | 2 GB (4 previstos) | 32 GB | UEFI, VT-x anidada | `lan-iso` | ✅ En `cluster-iso29` |
-| [`pve2`](../maquinas/pve2/README.md) | Nodo Proxmox | Proxmox VE 9.2.2 | 2 | 2 GB (4 previstos) | 32 GB | UEFI, VT-x anidada | `lan-iso` | ✅ En `cluster-iso29` |
-| [`pve3`](../maquinas/pve3/README.md) | Nodo Proxmox | Proxmox VE 9.2.2 | 2 | 2 GB (4 previstos) | 32 GB | UEFI, VT-x anidada | `lan-iso` | ✅ En `cluster-iso29` |
+| [`pve1`](../maquinas/pve1/README.md) | Nodo Proxmox | Proxmox VE 9.2.32 | 2 | 2 GB (4 previstos) | 32 GB | UEFI, VT-x anidada | `lan-iso` | ✅ En `cluster-iso29` |
+| [`pve2`](../maquinas/pve2/README.md) | Nodo Proxmox | Proxmox VE 9.2.32 | 2 | 2 GB (4 previstos) | 32 GB | UEFI, VT-x anidada | `lan-iso` | ✅ En `cluster-iso29` |
+| [`pve3`](../maquinas/pve3/README.md) | Nodo Proxmox | Proxmox VE 9.2.32 | 2 | 2 GB (4 previstos) | 32 GB | UEFI, VT-x anidada | `lan-iso` | ✅ En `cluster-iso29` |
 | [`srv-dc`](../maquinas/srv-dc/README.md) | Dominio `iso29.lan` | Windows Server 2025 Eval. | 2 | 4 GB | 50 GB | UEFI + TPM 2.0 | `lan-iso` | ✅ DC, OU, GPO y copias |
 | [`srv-linux`](../maquinas/srv-linux/README.md) | Servidor Linux + RAID | Debian 13.8 sin escritorio | 1 | 1 GB | 10 GB + 5 × 1 GB | BIOS | `lan-iso` | ✅ RAID 0/1/5 y DRBD |
 | [`srv-linux2`](../maquinas/srv-linux2/README.md) | Espejo DRBD (T6) | Debian 13.8 (clon) | 1 | 1 GB | 10 GB + 1 GB | BIOS | `lan-iso` | ✅ Relevo probado |

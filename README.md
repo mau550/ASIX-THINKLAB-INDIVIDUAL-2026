@@ -7,7 +7,7 @@ Entorno de pruebas propio en VirtualBox que reproduce, a escala, la infraestruct
 
 > 📄 **PDF de entrega, uno por tarea:** [`entregas/`](entregas/) + **memoria completa en un solo PDF** (generados con [`scripts/tareas-a-pdf.py`](scripts/tareas-a-pdf.py); cada PDF enlaza a este repositorio).
 >
-> 📸 **[Índice de todas las evidencias](EVIDENCIAS.md)** — 110 capturas y 51 salidas de comandos, por máquina. Cada máquina muestra al final de su README su **galería completa**, en el orden en que se hizo el trabajo.
+> 📸 **[Índice de todas las evidencias](EVIDENCIAS.md)** — 110 capturas y 52 salidas de comandos, por máquina. Cada máquina muestra al final de su README su **galería completa**, en el orden en que se hizo el trabajo.
 
 ## Estado de un vistazo
 
@@ -54,7 +54,7 @@ flowchart TB
 | `r-opnsense` | Router 2 | OPNsense 26.7.9_3 | ✅ Actualizado, usuario, reglas con registro (y orden), copia cifrada y recuperación en 69 s | [→](maquinas/r-opnsense/README.md) |
 | `r-nftables` | Router 3 | Debian 13.8 + nftables + dnsmasq | ✅ Igual que el MikroTik | [→](maquinas/r-nftables/README.md) |
 | `nas-truenas` | NAS y copias | TrueNAS 25.10.7 | ✅ IP fija, pool `copias`, usuario y carpeta por máquina | [→](maquinas/nas-truenas/README.md) |
-| `pve1`–`pve3` | Clúster de virtualización | Proxmox VE 9.2.2 | ✅ Clúster `cluster-iso29` con quórum probado, migración de CT y VM medida, `vzdump` | [→](maquinas/pve1/README.md) |
+| `pve1`–`pve3` | Clúster de virtualización | Proxmox VE 9.2.32 | ✅ Clúster `cluster-iso29` con quórum probado, migración de CT y VM medida, `vzdump` | [→](maquinas/pve1/README.md) |
 | `srv-dc` | Dominio `iso29.lan` | Windows Server 2025 | ✅ DC, OU y grupos por departamento, GPO y copia diaria de AD | [→](maquinas/srv-dc/README.md) |
 | `srv-linux` | Servidor Linux | Debian 13.8 sin escritorio | ✅ IP fija, RAID 0/1/5 con avería y reconstrucción, copias | [→](maquinas/srv-linux/README.md) |
 | `srv-linux2` | Espejo entre equipos | Debian 13.8 (clon) | ✅ DRBD: caída del primario y relevo en 3,5 s | [→](maquinas/srv-linux2/README.md) |

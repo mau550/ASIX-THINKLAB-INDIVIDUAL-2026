@@ -2,7 +2,7 @@
 
 | Dato | `pve1` | `pve2` | `pve3` |
 |---|---|---|---|
-| Sistema | **Proxmox VE 9.2.2** (núcleo 7.0.2-6-pve) | igual | igual |
+| Sistema | **Proxmox VE 9.2.32** (núcleo 7.0.14-30-pve; instalado como 9.2.2 y actualizado el 22/11) | igual | igual |
 | IP fija (`vmbr0` sobre `nic0`) | 192.168.29.11 | 192.168.29.12 | 192.168.29.15 |
 | Recursos | 2 vCPU · **2 GB** · 32 GB · UEFI · VT-x anidada | igual | igual |
 | Imagen | `proxmox-ve_9.2-1.iso`, SHA256 `4e88fe41…3ef2c6c` = **coincide** con `SHA256SUMS` oficial | | |
@@ -22,7 +22,7 @@ Toda la configuración posterior a la instalación se hizo por la **API REST de 
 | **a235** Migrar un contenedor y una VM (Debian sin escritorio) | ✅ | CT 100 pve1 → pve2 (restart) · VM 101 pve1 → pve3 **en caliente** · [04-migraciones-medidas.txt](salidas/04-migraciones-medidas.txt) |
 | **a236** Tiempo y espacio de la migración; interpretar y proponer mejoras | ✅ | §4 |
 | **a231** Copiar configuraciones o imágenes al servidor correspondiente | ✅ | `vzdump` del CT 100 (161 MB) y de la VM 101 (550 MB) **en el NAS** por NFS (`nas-copias`) + `/etc/pve` en tar.gz + tarea diaria `copia-diaria-nas` 03:00 (7 copias) · [06-copias-al-nas-nfs.txt](salidas/06-copias-al-nas-nfs.txt) · [05-copia-vzdump-y-quorum.txt](salidas/05-copia-vzdump-y-quorum.txt) |
-| a79 Actualizar | 🟡 | Repositorio `pve-no-subscription` añadido; `apt update` → **229 paquetes pendientes**, sin instalar por tiempo |
+| **a79** Actualizar y comprobar antes de producción | ✅ | Repositorio `pve-no-subscription`; **9.2.2 → 9.2.32**, núcleo **7.0.2-6 → 7.0.14-30** en los tres nodos; la primera actualización se cortó al apagar las VM y se **reparó** (`dpkg --configure -a`, `apt-get -f install`); reinicio de uno en uno sin perder el quórum; `dpkg --audit` vacío, 0 paquetes pendientes · [07-actualizacion-de-los-nodos.txt](salidas/07-actualizacion-de-los-nodos.txt) |
 
 ## 1. Instalación (Terminal UI)
 
@@ -109,6 +109,7 @@ Todas las pruebas de esta máquina, en el orden en que se hicieron. Las capturas
 | 4 | [`04-migraciones-medidas.txt`](salidas/04-migraciones-medidas.txt) | Clúster · migraciones medidas — 2026-11-22T21:22:48+01:00 |
 | 5 | [`05-copia-vzdump-y-quorum.txt`](salidas/05-copia-vzdump-y-quorum.txt) | Clúster · copia vzdump del contenedor y prueba de quórum — 2026-11-22T21:27:43+01:00 |
 | 6 | [`06-copias-al-nas-nfs.txt`](salidas/06-copias-al-nas-nfs.txt) | Clúster Proxmox · copias al NAS por NFS — 2026-11-22T21:46:39+01:00 |
+| 7 | [`07-actualizacion-de-los-nodos.txt`](salidas/07-actualizacion-de-los-nodos.txt) | Clúster Proxmox · actualización de los tres nodos antes de producción — 2026-11-22T23:20:28+01:00 |
 
 ### Capturas
 

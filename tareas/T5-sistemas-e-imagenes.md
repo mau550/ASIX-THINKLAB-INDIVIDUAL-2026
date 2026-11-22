@@ -7,7 +7,7 @@ Documentos relacionados: [comparación de los tres routers](T5-comparacion-route
 | RA | Criterio | Estado |
 |---|---|---|
 | ISO RA1 | a78 Requisitos y origen de las imágenes; verificar su integridad | ✅ §1 y §2 |
-| ISO RA1 | a79 Actualizar y comprobar antes de poner en producción | ✅ `r-nftables`, `srv-linux`, `cli-linux` (13.8), `r-opnsense` (26.7 → 26.7.9_3) · ⏳ Proxmox |
+| ISO RA1 | a79 Actualizar y comprobar antes de poner en producción | ✅ `r-nftables`, `srv-linux`, `cli-linux` (13.8), `r-opnsense` (26.7 → 26.7.9_3) · Proxmox 9.2.2 → **9.2.32** en los tres nodos ([salida](../maquinas/pve1/salidas/07-actualizacion-de-los-nodos.txt)) |
 | ISO RA1 | a258 Posibles problemas, configuraciones críticas y tiempos de respuesta | ✅ §4 |
 | ISO RA1 | a259 Preparar el espacio de copias en TrueNAS: qué, cómo y dónde | ✅ [nas-truenas §2](../maquinas/nas-truenas/README.md) |
 | ISO RA3 | a105 (Apte+) Automatizar las copias | ✅ §3 |
@@ -22,7 +22,7 @@ Documentos relacionados: [comparación de los tres routers](T5-comparacion-route
 | Router 2 | [`r-opnsense`](../maquinas/r-opnsense/README.md) | OPNsense **26.7.9_3** | BSD-2 | ✅ Instalado y configurado |
 | Router 3 | [`r-nftables`](../maquinas/r-nftables/README.md) | Debian **13.8** sin escritorio + nftables + dnsmasq | Libre (DFSG) | ✅ Instalado y configurado |
 | NAS / copias | [`nas-truenas`](../maquinas/nas-truenas/README.md) | TrueNAS **25.10.7** Community «Goldeye» | GPL; soporte de pago opcional | ✅ Instalado y configurado |
-| Virtualización | [`pve1-3`](../maquinas/pve1/README.md) | Proxmox VE **9.2.2** | AGPLv3; repositorio *enterprise* de pago | ✅ Clúster de 3 nodos con quórum y migraciones |
+| Virtualización | [`pve1-3`](../maquinas/pve1/README.md) | Proxmox VE **9.2.2** (instalación) → **9.2.32** (actualizado) | AGPLv3; repositorio *enterprise* de pago | ✅ Clúster de 3 nodos con quórum y migraciones |
 | Dominio | [`srv-dc`](../maquinas/srv-dc/README.md) | Windows Server 2025 Standard Evaluation (26100) | Propietaria; evaluación 180 días | ✅ DC de `iso29.lan` |
 | Servidor Linux | [`srv-linux`](../maquinas/srv-linux/README.md) | Debian **13.8** sin escritorio | Libre (DFSG) | ✅ Instalado, configurado, RAID |
 | Cliente Windows | [`cli-win11`](../maquinas/cli-win11/README.md) | Windows 11 (`w11.iso`) | Propietaria; sin activar | ✅ Windows 11 Pro 23H2, instalación desatendida, unido a `iso29.lan` |

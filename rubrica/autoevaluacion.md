@@ -47,7 +47,7 @@ Leyenda: ✅ hecho y con evidencia · 🟡 parcial · ⏳ pendiente (con guía) 
 | ID | Nivel | RA | Criterio | Estado | Evidencia |
 |---|---|---|---|---|---|
 | a78 | Apte | ISO-RA1 | Comprovar els requisits i l’origen de les imatges d’instal·lació (arquitectura, fiabilitat de l'origen, etc). Verificar la integritat de les imatges quan el fabricant publique el mecanisme | ✅ Hecho | [T5 §2](../tareas/T5-sistemas-e-imagenes.md) · [SHA256](../anexos/sha256-imagenes-20261122.txt) |
-| a79 | Apte | ISO-RA1 | Abans de ficar en producció, realitzar l'actualització i comprovació del correcte funcionament del sistemes instal·lats. | ✅ Hecho | r-nftables, srv-linux, cli-linux → Debian 13.8; r-opnsense 26.7 → 26.7.9_3 ([T5](../tareas/T5-sistemas-e-imagenes.md)); Proxmox ⏳ |
+| a79 | Apte | ISO-RA1 | Abans de ficar en producció, realitzar l'actualització i comprovació del correcte funcionament del sistemes instal·lats. | ✅ Hecho | r-nftables, srv-linux, cli-linux → Debian 13.8; r-opnsense 26.7 → 26.7.9_3 ([T5](../tareas/T5-sistemas-e-imagenes.md)); Proxmox 9.2.2 → 9.2.32 en los 3 nodos ([salida](../maquinas/pve1/salidas/07-actualizacion-de-los-nodos.txt)) |
 | a203 | Apte | ISO-RA1 | MikroTik: instal·lar el sistema previst i comprovar-ne la versió i el funcionament. | ✅ Hecho | [r-mikrotik](../maquinas/r-mikrotik/README.md) |
 | a204 | Apte | ISO-RA1 | MikroTik: configurar l’usuari o usuaris d’administració. | ✅ Hecho | [r-mikrotik](../maquinas/r-mikrotik/README.md) |
 | a205 | Apte | ISO-RA1 | MikroTik: configurar els paràmetres de xarxa de les interfícies WAN i LAN. | ✅ Hecho | [r-mikrotik](../maquinas/r-mikrotik/README.md) |

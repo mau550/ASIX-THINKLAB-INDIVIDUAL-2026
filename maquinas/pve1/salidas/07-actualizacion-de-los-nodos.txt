@@ -1,0 +1,65 @@
+# Clúster Proxmox · actualización de los tres nodos antes de producción — 2026-11-22T23:20:28+01:00
+# Contexto: la primera actualización (229 paquetes) se interrumpió al apagar las VM a mitad de dpkg;
+# se reparó con dpkg --configure -a + apt-get -f install y se completó con apt-get full-upgrade.
+
+root@pve1:~# dpkg --configure -a; apt-get -f install -y; apt-get full-upgrade -y   (resumen del registro)
+11 upgraded, 0 newly installed, 0 to remove and 49 not upgraded.
+The following packages will be upgraded:
+49 upgraded, 1 newly installed, 0 to remove and 0 not upgraded.
+=== FIN 2026-11-22T23:17:59+01:00 rc=0
+--- comprobación:
+dpkg --audit -> 0 líneas (0 = sin paquetes a medias)
+apt list --upgradable -> 0 pendientes
+pve-manager/9.2.32/60a22e26e411402f (running kernel: 7.0.2-6-pve)
+
+root@pve2:~# dpkg --configure -a; apt-get -f install -y; apt-get full-upgrade -y   (resumen del registro)
+23 upgraded, 1 newly installed, 0 to remove and 58 not upgraded.
+The following packages will be upgraded:
+58 upgraded, 2 newly installed, 0 to remove and 0 not upgraded.
+=== FIN 2026-11-22T23:18:51+01:00 rc=0
+--- comprobación:
+dpkg --audit -> 0 líneas (0 = sin paquetes a medias)
+apt list --upgradable -> 0 pendientes
+pve-manager/9.2.32/60a22e26e411402f (running kernel: 7.0.2-6-pve)
+
+root@pve3:~# dpkg --configure -a; apt-get -f install -y; apt-get full-upgrade -y   (resumen del registro)
+0 upgraded, 0 newly installed, 0 to remove and 84 not upgraded.
+The following packages will be upgraded:
+84 upgraded, 3 newly installed, 0 to remove and 0 not upgraded.
+=== FIN 2026-11-22T23:19:59+01:00 rc=0
+--- comprobación:
+dpkg --audit -> 0 líneas (0 = sin paquetes a medias)
+apt list --upgradable -> 0 pendientes
+pve-manager/9.2.32/60a22e26e411402f (running kernel: 7.0.2-6-pve)
+
+## Reinicio de uno en uno (el clúster conserva el quórum con 2 de 3) y comprobación — 2026-11-22T23:20:42+01:00
+
+root@pve1:~# for n in pve1 pve2 pve3; do ssh $n 'uname -r; pveversion'; done
+pve1: 7.0.14-30-pve · pve-manager/9.2.32/60a22e26e411402f (running kernel: 7.0.14-30-pve)
+pve2: 7.0.14-30-pve · pve-manager/9.2.32/60a22e26e411402f (running kernel: 7.0.14-30-pve)
+pve3: 7.0.14-30-pve · pve-manager/9.2.32/60a22e26e411402f (running kernel: 7.0.14-30-pve)
+
+root@pve1:~# pvecm status | grep -E 'Quorate|Nodes|Expected|Total'
+Nodes:            3
+Quorate:          Yes
+Expected votes:   3
+Total votes:      3
+Flags:            Quorate 
+
+root@pve1:~# pvesm status
+storage 'nas-copias' is not online      # normal: nas-truenas está apagado en este escenario para liberar RAM
+Name              Type     Status     Total (KiB)      Used (KiB) Available (KiB)        %
+local              dir     active        15165320         6789060         7584096   44.77%
+local-lvm      lvmthin     active        13410304               0        13410304    0.00%
+nas-copias         nfs   inactive               0               0               0    0.00%
+
+root@pve1:~# pvesh get /cluster/resources --type vm  (resumen)
+  lxc/100  ct-debian  nodo=pve2 estado=stopped
+  qemu/101 vm-debian  nodo=pve3 estado=stopped
+
+root@pve2:~# pct start 100; pct exec 100 -- hostname, IP y ping al router   # el contenedor funciona tras la actualización
+WARN: Systemd 257 detected. You may need to enable nesting.
+Task finished with 1 warning(s)!
+ct-debian
+eth0@if4         UP             192.168.29.20/24 
+rtt min/avg/max/mdev = 0.540/0.540/0.540/0.000 ms

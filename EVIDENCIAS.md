@@ -7,7 +7,7 @@ Todas las capturas y salidas de comandos del laboratorio, por máquina. Cada má
 | [`cli-linux`](maquinas/cli-linux/README.md) | 19 | 3 | [ver galería](maquinas/cli-linux/README.md#galería-de-evidencias) |
 | [`cli-win11`](maquinas/cli-win11/README.md) | 7 | 4 | [ver galería](maquinas/cli-win11/README.md#galería-de-evidencias) |
 | [`nas-truenas`](maquinas/nas-truenas/README.md) | 11 | 6 | [ver galería](maquinas/nas-truenas/README.md#galería-de-evidencias) |
-| [`pve1`](maquinas/pve1/README.md) | 8 | 6 | [ver galería](maquinas/pve1/README.md#galería-de-evidencias) |
+| [`pve1`](maquinas/pve1/README.md) | 8 | 7 | [ver galería](maquinas/pve1/README.md#galería-de-evidencias) |
 | [`pve2`](maquinas/pve2/README.md) | 1 | 0 | [ver galería](maquinas/pve2/README.md#galería-de-evidencias) |
 | [`pve3`](maquinas/pve3/README.md) | 1 | 0 | [ver galería](maquinas/pve3/README.md#galería-de-evidencias) |
 | [`r-mikrotik`](maquinas/r-mikrotik/README.md) | 20 | 7 | [ver galería](maquinas/r-mikrotik/README.md#galería-de-evidencias) |
@@ -16,7 +16,7 @@ Todas las capturas y salidas de comandos del laboratorio, por máquina. Cada má
 | [`srv-dc`](maquinas/srv-dc/README.md) | 8 | 4 | [ver galería](maquinas/srv-dc/README.md#galería-de-evidencias) |
 | [`srv-linux`](maquinas/srv-linux/README.md) | 10 | 9 | [ver galería](maquinas/srv-linux/README.md#galería-de-evidencias) |
 | [`srv-linux2`](maquinas/srv-linux2/README.md) | 1 | 1 | [ver galería](maquinas/srv-linux2/README.md#galería-de-evidencias) |
-| **Total** | **110** | **51** | |
+| **Total** | **110** | **52** | |
 
 ## `cli-linux`
 
@@ -85,6 +85,7 @@ Todas las capturas y salidas de comandos del laboratorio, por máquina. Cada má
 - 📄 [`04-migraciones-medidas.txt`](maquinas/pve1/salidas/04-migraciones-medidas.txt) — Clúster · migraciones medidas — 2026-11-22T21:22:48+01:00
 - 📄 [`05-copia-vzdump-y-quorum.txt`](maquinas/pve1/salidas/05-copia-vzdump-y-quorum.txt) — Clúster · copia vzdump del contenedor y prueba de quórum — 2026-11-22T21:27:43+01:00
 - 📄 [`06-copias-al-nas-nfs.txt`](maquinas/pve1/salidas/06-copias-al-nas-nfs.txt) — Clúster Proxmox · copias al NAS por NFS — 2026-11-22T21:46:39+01:00
+- 📄 [`07-actualizacion-de-los-nodos.txt`](maquinas/pve1/salidas/07-actualizacion-de-los-nodos.txt) — Clúster Proxmox · actualización de los tres nodos antes de producción — 2026-11-22T23:20:28+01:00
 - 🖼️ [01. Arranque iso 9.2](maquinas/pve1/capturas/pve-01-arranque-iso-9.2.png)
 - 🖼️ [02. Disco destino](maquinas/pve1/capturas/pve-02-disco-destino.png)
 - 🖼️ [03. Red ip fija](maquinas/pve1/capturas/pve-03-red-ip-fija.png)

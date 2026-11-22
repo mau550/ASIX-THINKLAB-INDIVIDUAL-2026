@@ -28,7 +28,7 @@ flowchart TB
     NAT -. "WAN" .-> OPN["r-opnsense<br/>192.168.29.1<br/>(pendiente)"]
     MK --- SW{{"switch virtual · red interna lan-iso<br/>192.168.29.0/24"}}
     NFT -. "un router a la vez" .- SW
-    OPN -. .- SW
+    OPN -.- SW
     SW --- NAS["nas-truenas<br/>192.168.29.10"]
     SW --- SRV["srv-linux<br/>192.168.29.14<br/>RAID 0/1/5"]
     SW --- DC["srv-dc<br/>192.168.29.13"]
